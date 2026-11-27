@@ -1,7 +1,7 @@
 // POST   /api/upload?kind=posters&key=im&ext=webp   (raw image body) → { url }   admin only
 // DELETE /api/upload?url=<blob url>                                   → { ok }    admin only
 import { put, del } from "@vercel/blob";
-import { json, storageReady, isAdmin, KINDS, isOurBlob } from "./_lib.js";
+import { json, storageReady, isAdmin, KINDS, BRAND_KEYS, isOurBlob } from "./_lib.js";
 
 const MAX = 4_400_000; // Vercel Functions accept request bodies up to ~4.5 MB
 const EXT = { "image/webp": "webp", "image/jpeg": "jpg", "image/png": "png", "image/avif": "avif", "image/gif": "gif" };
@@ -13,11 +13,14 @@ export async function POST(request) {
   const kind = q.get("kind"), key = q.get("key") || "";
   const type = (request.headers.get("content-type") || "").split(";")[0].trim();
   if (!KINDS.includes(kind) || !/^[\w-]{1,60}$/.test(key)) return json({ error: "Unknown image slot." }, 400);
-  if (!EXT[type]) return json({ error: "Use a JPG, PNG, WebP, AVIF or GIF image." }, 415);
+  if (kind === "brand" && !BRAND_KEYS.includes(key)) return json({ error: "Unknown image slot." }, 400);
+  // SVG is accepted only for the logo and favicon (shown through <img>/<link>, never inlined).
+  const ext = EXT[type] || (kind === "brand" && type === "image/svg+xml" ? "svg" : null);
+  if (!ext) return json({ error: kind === "brand" ? "Use an SVG, PNG, WebP or JPG image." : "Use a JPG, PNG, WebP, AVIF or GIF image." }, 415);
   const buf = Buffer.from(await request.arrayBuffer());
   if (!buf.length) return json({ error: "The file is empty." }, 400);
   if (buf.length > MAX) return json({ error: "The image is larger than 4.4 MB after compression." }, 413);
-  const blob = await put(`images/${kind}/${key}-${Date.now()}.${EXT[type]}`, buf, {
+  const blob = await put(`images/${kind}/${key}-${Date.now()}.${ext}`, buf, {
     access: "public", contentType: type, addRandomSuffix: false, cacheControlMaxAge: 31536000,
   });
   return json({ url: blob.url });

@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 
-export const KINDS = ["posters", "characters", "other"];
+export const KINDS = ["posters", "characters", "other", "brand"];
+export const BRAND_KEYS = ["logo", "favicon"];
 export const VIDEO_TYPES = ["trailer", "teaser", "bts", "clip"];
 
 export const json = (data, status = 200) =>
@@ -25,10 +26,10 @@ const isBlobUrl = (v) => typeof v === "string" && v.length < 600 && /^https:\/\/
 
 /** Keep only well-formed fields so nothing unexpected is ever served to visitors. */
 export function cleanContent(body) {
-  const out = { posters: {}, characters: {}, other: {}, videos: {} };
+  const out = { posters: {}, characters: {}, other: {}, brand: {}, videos: {} };
   for (const kind of KINDS) {
     const src = body && typeof body[kind] === "object" ? body[kind] : {};
-    for (const [k, v] of Object.entries(src).slice(0, 600)) if (KEY_RE.test(k) && isBlobUrl(v)) out[kind][k] = v;
+    for (const [k, v] of Object.entries(src).slice(0, 600)) if (KEY_RE.test(k) && isBlobUrl(v) && (kind !== "brand" || BRAND_KEYS.includes(k))) out[kind][k] = v;
   }
   const vids = body && typeof body.videos === "object" ? body.videos : {};
   for (const [id, list] of Object.entries(vids).slice(0, 200)) {

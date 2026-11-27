@@ -117,6 +117,22 @@ code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;font-siz
 .vmodal .fr{position:relative;aspect-ratio:16/9}.vmodal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .vmodal .bar{display:flex;justify-content:flex-end;padding:10px;background:var(--s1)}
 @media(max-width:560px){.top{gap:8px;padding:0 12px}.brand b{font-size:18px;white-space:nowrap}.badge span{display:none}.badge{padding:0 10px}}
+.brandgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+@media(max-width:1000px){.brandgrid{grid-template-columns:minmax(0,1fr)}}
+.mock{border-radius:14px;overflow:hidden;border:1px solid var(--line2);background:#07080c}
+.mock .mbar{display:flex;align-items:center;gap:14px;height:64px;padding:0 18px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--line)}
+.mock .mbar img{height:36px;max-width:200px;object-fit:contain}
+.mock .mbar .ghost{display:flex;gap:8px;margin-left:auto}.mock .mbar .ghost i{width:64px;height:28px;border-radius:999px;background:rgba(255,255,255,.06)}
+.mock.light{background:#f5f2ed}.mock.light .mbar{border-color:rgba(0,0,0,.08)}
+.tabs{display:flex;gap:6px;padding:10px 10px 0;background:#1d212c}
+.tabs .tb{display:flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:10px 10px 0 0;font-size:13px;font-weight:600;color:#d6d3cf;max-width:220px}
+.tabs .tb.on{background:#0f1118;color:#fff}.tabs .tb img,.tabs .tb svg{width:16px;height:16px;flex:none;object-fit:contain}
+.favs{display:flex;gap:18px;align-items:flex-end;padding:18px;flex-wrap:wrap}
+.favs div{text-align:center;font-size:12px;color:var(--dim)}
+.favs img,.favs svg{display:block;margin:0 auto 6px;object-fit:contain;border-radius:6px}
+.brandacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.drop{border:1.5px dashed var(--line2);border-radius:14px;padding:16px;margin-top:14px;text-align:center;color:var(--mut);font-size:14px;transition:border-color .2s,background .2s}
+.drop.drag{border-color:var(--red2);background:rgba(226,35,42,.08)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140px);background:var(--ink);color:#0b0b0f;font-weight:700;padding:12px 20px;border-radius:999px;z-index:130;transition:transform .35s var(--ease);max-width:calc(100vw - 32px);text-align:center}
 .toast.on{transform:translate(-50%,0)}.toast.bad{background:#ff6a6e;color:#fff}
 </style>
@@ -165,8 +181,8 @@ const KINDS={posters:{label:"Posters",ar:"2/3",cw:"160px",max:1600,desc:"One pos
  characters:{label:"Characters",ar:"1/1",cw:"150px",max:1000,desc:"Portraits for the characters page, relationship web and cast lists. Square or 4:5 portrait.",slots:()=>Object.entries(CH).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>[k,v,""])},
  other:{label:"Other images",ar:"16/9",cw:"260px",max:2400,desc:"Backdrops and artwork used around the site.",slots:()=>OTHER}};
 const VT=[["trailer","Official trailer"],["teaser","Teaser"],["bts","Behind the scenes"],["clip","Clip"]];
-const ICO={img:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>',play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>',gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4m0 0-5 5m5-5 5 5M4 20h16"/></svg>',playf:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.55)"/><path d="M10 8v8l6-4z"/></svg>'};
-let KEY="",C={posters:{},characters:{},other:{},videos:{},updated:""},STATUS={},view="posters",filt={q:"",show:"all"},VSEL=ORDER.find(t=>t.id==="doom")?.id||ORDER[0].id;
+const ICO={star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 14.6 8.6 20.7 9.3 16.2 13.4 17.4 19.5 12 16.5 6.6 19.5 7.8 13.4 3.3 9.3 9.4 8.6z"/></svg>',img:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>',play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>',gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4m0 0-5 5m5-5 5 5M4 20h16"/></svg>',playf:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.55)"/><path d="M10 8v8l6-4z"/></svg>'};
+let KEY="",C={posters:{},characters:{},other:{},brand:{},videos:{},updated:""},STATUS={},view="posters",filt={q:"",show:"all"},VSEL=ORDER.find(t=>t.id==="doom")?.id||ORDER[0].id;
 let tT;const toast=(m,bad)=>{const e=$("#toast");e.textContent=m;e.classList.toggle("bad",!!bad);e.classList.add("on");clearTimeout(tT);tT=setTimeout(()=>e.classList.remove("on"),2600)};
 const hdr=()=>({"x-admin-key":KEY});
 async function api(path,opt={}){const r=await fetch(path,{...opt,headers:{...(opt.headers||{}),...hdr()},cache:"no-store"});let j={};try{j=await r.json()}catch(e){}if(!r.ok)throw new Error(j.error||("Request failed ("+r.status+")"));return j}
@@ -184,13 +200,13 @@ $("#gf").onsubmit=async e=>{e.preventDefault();const k=$("#pw").value;$("#gerr")
   else{KEY=k;try{sessionStorage.setItem("mcu-admin",k)}catch(e){}start(s)}}
  catch(err){$("#gerr").textContent=err.message}finally{$("#gbtn").disabled=false;$("#gbtn").textContent="Sign in"}};
 $("#out").onclick=()=>{try{sessionStorage.removeItem("mcu-admin")}catch(e){}location.reload()};
-function start(s){C=Object.assign({posters:{},characters:{},other:{},videos:{},updated:""},s.content||{});["posters","characters","other","videos"].forEach(k=>C[k]=C[k]||{});
- $("#gate").classList.add("hide");$("#app").classList.remove("hide");side();render()}
+function start(s){C=Object.assign({posters:{},characters:{},other:{},brand:{},videos:{},updated:""},s.content||{});["posters","characters","other","brand","videos"].forEach(k=>C[k]=C[k]||{});
+ $("#gate").classList.add("hide");$("#app").classList.remove("hide");applyAdminBrand();side();render()}
 /* ---- navigation ---- */
 function side(){const n=k=>Object.keys(C[k]).length;const vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);
- $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><div class="lab">Site</div><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
+ $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><div class="lab">Site</div><button data-v="brand" class="${view==="brand"?"on":""}">${ICO.star}Logo &amp; favicon<em>${Object.keys(C.brand).length}/2</em></button><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
  $$("#side [data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;filt={q:"",show:"all"};side();render();scrollTo(0,0)})}
-function render(){if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
+function render(){if(view==="brand")return vBrand();if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
 /* ---- image sections ---- */
 function current(kind,key){return C[kind][key]||DEF[kind][key]||""}
 function slotHTML(kind,[key,name,sub]){const custom=C[kind][key],u=current(kind,key),t=BY[key];
@@ -250,6 +266,41 @@ function vVideos(){const q=filt.q.toLowerCase();const list=ORDER.filter(t=>!q||t
   $("[data-del]",row).onclick=()=>{const gone=vs.splice(i,1)[0];if(!vs.length)delete C.videos[VSEL];save().then(()=>toast("Video removed")).catch(()=>{});side();vVideos()}});
  $$("[data-pv]").forEach(b=>b.onclick=e=>{e.preventDefault();preview(b.dataset.pv)})}
 function preview(id){const d=document.createElement("div");d.className="vmodal";d.innerHTML=`<div class="box"><div class="fr"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="bar"><button class="btn sm">Close</button></div></div>`;document.body.append(d);const c=()=>{d.remove();removeEventListener("keydown",k)},k=e=>{if(e.key==="Escape")c()};addEventListener("keydown",k);d.onclick=e=>{if(e.target===d||e.target.closest(".bar button"))c()};$(".bar button",d).focus()}
+/* ---- branding ---- */
+const MARK='<svg viewBox="0 0 64 64"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d52"/><stop offset="1" stop-color="#b3141a"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#fg)"/><path d="M43.5 21.5A15 15 0 1 0 43.5 42.5" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="32" cy="32" r="4.4" fill="#fff"/></svg>';
+const DEFLOGO=`<span class="brand" style="pointer-events:none"><svg viewBox="0 0 40 40" style="width:32px;height:32px"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M27 13.5A9 9 0 1 0 27 26.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg><b>MCU <span>Codex</span></b></span>`;
+function applyAdminBrand(){const a=$(".top .brand");if(!a.dataset.def)a.dataset.def=a.innerHTML;a.innerHTML=C.brand.logo?`<img src="${esc(C.brand.logo)}" alt="MCU Codex" style="height:32px;max-width:180px;object-fit:contain">`:a.dataset.def;
+ const f=C.brand.favicon||"favicon.svg";$$('link[rel="icon"]').forEach(l=>l.setAttribute("href",f))}
+function vBrand(){const lg=C.brand.logo,fv=C.brand.favicon,fimg=(sz)=>fv?`<img src="${esc(fv)}" alt="" style="width:${sz}px;height:${sz}px">`:MARK.replace("<svg",`<svg style="width:${sz}px;height:${sz}px"`);
+ const logoView=lg?`<img src="${esc(lg)}" alt="Logo preview">`:DEFLOGO;
+ $("#main").innerHTML=`<div class="head"><div><h1>Logo &amp; favicon</h1><p>Replace the site's logo and browser icon. Changes go live within a minute. Remove an upload to go back to the built-in MCU Codex mark.</p></div></div>
+ <div class="brandgrid">
+ <div class="panel"><h3 style="font-size:26px">Logo</h3><p class="tiny" style="margin:6px 0 14px">Shown in the header on every page, 36 px tall (up to 200 px wide). Best as an SVG or a transparent PNG at least 600 px wide.</p>
+  <div class="mock"><div class="mbar">${logoView}<span class="ghost"><i></i><i></i><i></i></span></div></div>
+  <div class="mock light" style="margin-top:10px"><div class="mbar">${logoView}<span class="ghost"><i style="background:rgba(0,0,0,.06)"></i><i style="background:rgba(0,0,0,.06)"></i></span></div></div>
+  <p class="tiny" style="margin:8px 0 0">Light preview shown for reference — the site itself is dark.</p>
+  <div class="drop" data-drop="logo">Drop an image here, or use the button below</div>
+  <div class="brandacts"><label class="btn red">${ICO.up}${lg?"Replace logo":"Upload logo"}<input type="file" class="hide" accept="image/svg+xml,image/png,image/webp,image/jpeg" data-bup="logo"></label>${lg?`<button class="btn danger" data-brm="logo">Remove</button>`:""}<span class="tiny" style="align-self:center">${lg?"Custom logo is live":"Using the built-in logo"}</span></div></div>
+ <div class="panel"><h3 style="font-size:26px">Favicon</h3><p class="tiny" style="margin:6px 0 14px">The icon in browser tabs, bookmarks and home-screen shortcuts. Use a square SVG or PNG, at least 512 × 512.</p>
+  <div class="mock"><div class="tabs"><span class="tb on">${fimg(16)}<span>MCU Codex</span></span><span class="tb">${ICO.img}<span>New tab</span></span></div><div class="favs">${[16,32,64,128].map(z=>`<div>${fimg(z)}${z}px</div>`).join("")}</div></div>
+  <div class="drop" data-drop="favicon">Drop an image here, or use the button below</div>
+  <div class="brandacts"><label class="btn red">${ICO.up}${fv?"Replace favicon":"Upload favicon"}<input type="file" class="hide" accept="image/svg+xml,image/png,image/webp,image/jpeg" data-bup="favicon"></label>${fv?`<button class="btn danger" data-brm="favicon">Remove</button>`:""}<span class="tiny" style="align-self:center">${fv?"Custom favicon is live":"Using the built-in icon"}</span></div></div>
+ </div>`;
+ $$("[data-bup]").forEach(i=>i.onchange=()=>{const f=i.files[0];if(f)uploadBrand(i.dataset.bup,f);i.value=""});
+ $$("[data-brm]").forEach(b=>b.onclick=()=>removeBrand(b.dataset.brm));
+ $$("[data-drop]").forEach(d=>{d.ondragover=e=>{e.preventDefault();d.classList.add("drag")};d.ondragleave=()=>d.classList.remove("drag");d.ondrop=e=>{e.preventDefault();d.classList.remove("drag");const f=[...e.dataTransfer.files].find(f=>f.type.startsWith("image/"));f?uploadBrand(d.dataset.drop,f):toast("Drop an image file",true)}})}
+async function brandBlob(key,file){if(file.type==="image/svg+xml"){if(file.size>1_000_000)throw new Error("That SVG is over 1 MB.");return file}
+ let bmp;try{bmp=await createImageBitmap(file)}catch(e){throw new Error("That file couldn't be read as an image.")}
+ const max=key==="logo"?1200:512,s=Math.min(1,max/Math.max(bmp.width,bmp.height)),w=Math.round(bmp.width*s),h=Math.round(bmp.height*s);
+ let cw=w,ch=h,dx=0,dy=0;if(key==="favicon"){const m=Math.max(w,h);cw=ch=m;dx=(m-w)/2;dy=(m-h)/2}
+ const c=document.createElement("canvas");c.width=cw;c.height=ch;c.getContext("2d").drawImage(bmp,dx,dy,w,h);
+ return await new Promise(r=>c.toBlob(r,"image/png"))}
+async function uploadBrand(key,file){const d=$(`[data-drop="${key}"]`);if(d)d.textContent="Uploading…";
+ try{const blob=await brandBlob(key,file);const j=await api(`/api/upload?kind=brand&key=${key}`,{method:"POST",headers:{"content-type":blob.type},body:blob});
+  const old=C.brand[key];C.brand[key]=j.url;await save();if(old)api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});
+  toast((key==="logo"?"Logo":"Favicon")+" updated — live on the site")}
+ catch(e){toast(e.message,true)}finally{applyAdminBrand();side();if(view==="brand")vBrand()}}
+async function removeBrand(key){const old=C.brand[key];if(!old)return;delete C.brand[key];try{await save();api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});toast("Removed — the built-in "+(key==="logo"?"logo":"icon")+" is back")}catch(e){C.brand[key]=old}applyAdminBrand();side();vBrand()}
 /* ---- setup ---- */
 async function vSetup(){let s=STATUS;try{s=await probe(KEY)}catch(e){}
  const n=k=>Object.keys(C[k]).length,vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);

@@ -4,7 +4,7 @@
 import { put, list, del } from "@vercel/blob";
 import { json, storageReady, passwordSet, isAdmin, cleanContent } from "./_lib.js";
 
-const EMPTY = { posters: {}, characters: {}, other: {}, videos: {}, updated: "" };
+const EMPTY = { posters: {}, characters: {}, other: {}, brand: {}, videos: {}, updated: "" };
 
 async function versions() {
   const { blobs } = await list({ prefix: "content/", limit: 1000 });
