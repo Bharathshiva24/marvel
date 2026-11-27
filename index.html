@@ -515,6 +515,8 @@ footer .byme em{font-style:normal;font:600 14px var(--fb);color:var(--red2);marg
 .uv .upanel .app button{width:clamp(96px,9vw,132px)}
 .uv .upanel .app .poster{font-size:13px}
 @media (max-width:900px){.uv .upanel{inset:16px;top:16px;right:16px;bottom:16px;left:16px}.uv .upanel .uin{padding:22px}.uv .upanel .uin.earth{grid-template-columns:1fr;gap:20px}.uv .upanel #elist{position:static}.uv .upanel .app button{width:84px}}
+/* Spoiler toggle keeps one width: both labels share a cell, the inactive one is invisible */
+#spl .sw{display:inline-grid}#spl .sw>span{grid-area:1/1;text-align:left}#spl .sw>.off{visibility:hidden}
 </style>
 </head>
 <body>
@@ -608,7 +610,7 @@ function shell(){document.documentElement.lang=S.lang;
  const links=VIEWS.map(v=>`<a href="#${v}" data-v="${v}">${esc(t("nav_"+v))}</a>`).join("");$("#nav").innerHTML=links;$("#nav2").innerHTML=links;markNav();
  $$("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));
  const EN={en:"English",hi:"Hindi",es:"Spanish",fr:"French",ja:"Japanese",ta:"Tamil",te:"Telugu",kn:"Kannada",ml:"Malayalam"};UIDD.mount("lang",{items:LANGS.map(([c,n])=>[c,n,`<b class="lc">${c.toUpperCase()}</b>`,c===S.lang?"":EN[c]]),value:S.lang,label:t("language"),icon:'<svg class="dd-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h9M7.5 3v2M5 5c.6 3.2 2.8 6 6 7.5"/><path d="M10 5c-.6 3.4-2.9 6.4-6.5 8"/><path d="m12.5 21 4.2-9.5L21 21"/><path d="M14 17.8h5.4"/></svg>',alignRight:true,onChange:setLang});
- $("#spoil").setAttribute("aria-pressed",S.sp);$("#spl").textContent=S.sp?t("spoil_on"):t("spoil_off");$("#spoil").setAttribute("aria-label",S.sp?t("spoil_on"):t("spoil_off"));
+ $("#spoil").setAttribute("aria-pressed",S.sp);$("#spl").innerHTML=`<span class="sw"><span${S.sp?' class="off"':""}>${esc(t("spoil_off"))}</span><span${S.sp?"":' class="off"'}>${esc(t("spoil_on"))}</span></span>`;$("#spoil").setAttribute("aria-label",S.sp?t("spoil_on"):t("spoil_off"));
  const f={hi:"Noto+Sans+Devanagari:wght@400;600;700;800",ja:"Noto+Sans+JP:wght@400;600;700;800",ta:"Noto+Sans+Tamil:wght@400;600;700;800",te:"Noto+Sans+Telugu:wght@400;600;700;800",kn:"Noto+Sans+Kannada:wght@400;600;700;800",ml:"Noto+Sans+Malayalam:wght@400;600;700;800"}[S.lang];$("#xfont").href=f?`https://fonts.googleapis.com/css2?family=${f}&display=swap`:"data:text/css,"}
 function markNav(){$$(".nav a").forEach(a=>a.classList.toggle("on",a.dataset.v===cur));const a=$(`#nav2 a[data-v="${cur}"]`);a&&a.scrollIntoView({block:"nearest",inline:"center"})}
 function setLang(v){S.lang=v;save();loadTX();shell();const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters"&&CG.open)PEND=CG.id;stopVO();$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true);translateAll()}
