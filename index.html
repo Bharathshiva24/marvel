@@ -501,6 +501,19 @@ footer .byme em{font-style:normal;font:600 14px var(--fb);color:var(--red2);marg
 
 /* Buttons and CTAs: square corners, max 2px */
 .btn,.nav a,.ib,.xlang,.sx,.sxb,.sxk,.sres button,.chip,.seg,.seg button,.zoom,.zoom button,.x,.ctl .big,.tick-b,.lrow .act button,.pal .res button,.bars .row,.in,.dd-b,.dd.pill .dd-b,.dd-o,.dd-s,:focus-visible{border-radius:2px}
+/* Universe: place details as a full-screen popup */
+.uv .upanel{position:fixed;inset:100px;top:100px;right:100px;bottom:100px;left:100px;width:auto;max-height:none;z-index:121;background:rgba(14,16,23,.97);border:1px solid var(--line2);border-radius:6px;box-shadow:0 40px 120px rgba(0,0,0,.7);transform:translateY(16px) scale(.98);opacity:0;visibility:hidden;transition:transform .35s var(--ease),opacity .25s,visibility 0s .35s}
+.uv.open .upanel{transform:none;opacity:1;visibility:visible;transition:transform .35s var(--ease),opacity .25s}
+.uv::before{content:"";position:fixed;inset:0;z-index:120;background:rgba(3,4,8,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.uv.open::before{opacity:1;pointer-events:auto}
+.uv.open .ustage,.uv.open .uhead{right:0}.uv.open .uhead{opacity:1}
+.uv .upanel .uin{padding:36px 40px}
+.uv .upanel .uin.earth{display:grid;grid-template-columns:minmax(260px,400px) minmax(0,1fr);gap:40px;align-items:start}
+.uv .upanel #elist{position:sticky;top:0}
+.uv .upanel .app{gap:14px}
+.uv .upanel .app button{width:clamp(96px,9vw,132px)}
+.uv .upanel .app .poster{font-size:13px}
+@media (max-width:900px){.uv .upanel{inset:16px;top:16px;right:16px;bottom:16px;left:16px}.uv .upanel .uin{padding:22px}.uv .upanel .uin.earth{grid-template-columns:1fr;gap:20px}.uv .upanel #elist{position:static}.uv .upanel .app button{width:84px}}
 </style>
 </head>
 <body>
@@ -972,7 +985,7 @@ function vUniverse(){const cnt=id=>T.filter(x=>x.loc.includes(id)).length,zc=["#
  <aside class="upanel" id="locinfo" aria-live="polite"></aside></section>`;
  const uv=$("#uv");
  $$("#uv .pin").forEach(p=>{p.onclick=e=>{e.stopPropagation();selLoc(p.dataset.loc)};p.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selLoc(p.dataset.loc)}}});
- $("#ustage").onclick=e=>{if(!e.target.closest(".pin"))selLoc(null)};
+ $("#ustage").onclick=e=>{if(!e.target.closest(".pin"))selLoc(null)};uv.addEventListener("click",e=>{if(e.target===uv&&UM.sel)selLoc(null)});
  if(!UM.key){UM.key=e=>{if(e.key==="Escape"&&UM.sel&&$("#uv")&&!DR.id&&!$("#sx.open"))selLoc(null)};document.addEventListener("keydown",UM.key)}
  window.scrollTo(0,0);selLoc(UM.sel,true)}
 function selLoc(id,instant){const uv=$("#uv");if(!uv)return;UM.sel=id;
@@ -983,7 +996,7 @@ function locInfo(){const box=$("#locinfo"),list=id=>T.filter(x=>x.loc.includes(i
  const tl=ts=>ts.length?`<div class="app">${ts.map(x=>`<button data-open="${x.id}" title="${esc(x.t)}" aria-label="${esc(x.t)}">${poster(x,false)}</button>`).join("")}</div>`:`<p class="tiny">${t("none")}</p>`;
  const close=`<button class="ib ux" id="ux" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`;
  const img=u=>u?`<img class="lpi" src="${esc(u)}" alt="" decoding="async" onerror="this.remove()">`:"";
- if(UM.sel==="earth"){const e=LOC.filter(l=>l[2]===0);box.innerHTML=`${close}<div class="uin">${img(IU("planets","earth"))}<div class="tiny">${t("z0")}</div><h2>${t("z0")}</h2><p class="tiny" style="margin:8px 0 16px">${t("places",{n:e.length})}</p><div class="chips">${e.map(([id,n])=>`<button class="chip" data-el="${id}">${esc(n)} <span class="muted">${list(id).length}</span></button>`).join("")}</div><div id="elist" style="margin-top:20px"></div></div>`;
+ if(UM.sel==="earth"){const e=LOC.filter(l=>l[2]===0);box.innerHTML=`${close}<div class="uin earth"><div class="ul">${img(IU("planets","earth"))}<div class="tiny">${t("z0")}</div><h2>${t("z0")}</h2><p class="tiny" style="margin:8px 0 16px">${t("places",{n:e.length})}</p><div class="chips">${e.map(([id,n])=>`<button class="chip" data-el="${id}">${esc(n)} <span class="muted">${list(id).length}</span></button>`).join("")}</div></div><div id="elist"></div></div>`;
   $$("[data-el]",box).forEach(b=>b.onclick=()=>{$$("[data-el]",box).forEach(q=>q.setAttribute("aria-pressed",q===b));$("#elist").innerHTML=`<h3 style="margin-bottom:12px">${esc(LOC.find(l=>l[0]===b.dataset.el)[1])}</h3>`+tl(list(b.dataset.el))});$("[data-el]",box).click()}
  else{const l=LOC.find(q=>q[0]===UM.sel);if(!l){selLoc(null);return}box.innerHTML=`${close}<div class="uin">${img(IU("planets",l[0]))}<div class="tiny">${t("z"+l[2])}</div><h2>${esc(l[1])}</h2><p class="tiny" style="margin:8px 0 16px">${t("n_titles",{n:list(l[0]).length})}</p>${tl(list(l[0]))}</div>`}
  box.scrollTop=0;$("#ux").onclick=()=>selLoc(null)}
