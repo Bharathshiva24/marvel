@@ -479,6 +479,12 @@ html.noscroll{overflow:hidden}
 .dlg .panel{max-width:400px}
 footer{border-top:1px solid var(--line);padding:36px 0 56px;color:var(--dim);font-size:13px}
 footer p{max-width:100ch;margin:6px 0}
+footer .byme{display:inline-flex;align-items:center;gap:14px;margin:0 0 22px;padding:12px 18px 12px 12px;border:1px solid var(--line2);border-radius:4px;background:rgba(255,255,255,.03);color:var(--ink);text-decoration:none;transition:border-color .2s,background .2s,transform .2s}
+footer .byme:hover,footer .byme:focus-visible{border-color:var(--red);background:rgba(226,35,42,.08);transform:translateY(-2px)}
+footer .byme .av{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#ef2b32,#8e0f14);font:800 15px var(--fb);color:#fff;letter-spacing:.02em}
+footer .byme small{display:block;font-size:12px;color:var(--mut)}footer .byme b{display:block;font:700 16px var(--fb)}
+footer .byme em{font-style:normal;font:600 14px var(--fb);color:var(--red2);margin-left:8px}
+@media(max-width:480px){footer .byme{display:flex;flex-wrap:wrap}footer .byme em{margin-left:56px}}
 .view{animation:in .5s var(--ease) both}
 @keyframes in{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
@@ -503,7 +509,7 @@ footer p{max-width:100ch;margin:6px 0}
  <div class="trbar hide" id="trbar" role="status"></div>
 </header>
 <main id="main"></main>
-<footer><div class="wrap"><p data-t="f1"></p><p data-t="f2"></p><p><a href="/privacy" style="color:var(--mut)">Privacy</a></p></div></footer>
+<footer><div class="wrap"><a class="byme" href="https://bharath-ayyappan.vercel.app/?utm_source=marvel-timeline&amp;utm_medium=referral&amp;utm_campaign=footer" target="_blank" rel="noopener"><span class="av" aria-hidden="true">BA</span><span><small>Designed &amp; built by</small><b>Bharath Ayyappan</b></span><em>View portfolio →</em></a><p data-t="f1"></p><p data-t="f2"></p><p><a href="/privacy" style="color:var(--mut)">Privacy</a></p></div></footer>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Details"></aside>
 <div class="tip hide" id="tip"></div>
