@@ -31,7 +31,7 @@
    COLOUR and TYPE: abyss black, signal red, bone white; phase hues only on artwork. Big Shoulders Display + Manrope.
    LAYOUT: glass marquee bar, one wide stage per section, a cinematic side panel for details. */
 :root{color-scheme:dark;--bg:#07080c;--s1:#0f1118;--s2:#151821;--s3:#1d212c;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.14);--ink:#f5f2ed;--mut:#9aa0ad;--dim:#666b78;--red:#e2232a;--red2:#ff4d52;--ok:#43d39a;
---fd:"Big Shoulders Display","Noto Sans Devanagari","Noto Sans JP",Impact,sans-serif;--fb:Manrope,"Noto Sans Devanagari","Noto Sans JP",system-ui,sans-serif;--r:2px;--ease:cubic-bezier(.2,.8,.2,1)}
+--fd:"Big Shoulders Display","Noto Sans Devanagari","Noto Sans JP","Noto Sans Tamil","Noto Sans Telugu","Noto Sans Kannada","Noto Sans Malayalam",Impact,sans-serif;--fb:Manrope,"Noto Sans Devanagari","Noto Sans JP","Noto Sans Tamil","Noto Sans Telugu","Noto Sans Kannada","Noto Sans Malayalam",system-ui,sans-serif;--r:2px;--ease:cubic-bezier(.2,.8,.2,1)}
 :root[data-theme=light],:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html{scroll-padding-top:120px;-webkit-text-size-adjust:100%}
@@ -538,9 +538,9 @@ const VIEWS=["timeline","watch","videos","characters","universe","sagas","credit
 function shell(){document.documentElement.lang=S.lang;
  const links=VIEWS.map(v=>`<a href="#${v}" data-v="${v}">${esc(t("nav_"+v))}</a>`).join("");$("#nav").innerHTML=links;$("#nav2").innerHTML=links;markNav();
  $$("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));
- const EN={en:"English",hi:"Hindi",es:"Spanish",fr:"French",ja:"Japanese"};UIDD.mount("lang",{items:LANGS.map(([c,n])=>[c,n,`<b class="lc">${c.toUpperCase()}</b>`,c===S.lang?"":EN[c]]),value:S.lang,label:t("language"),icon:'<svg class="dd-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h9M7.5 3v2M5 5c.6 3.2 2.8 6 6 7.5"/><path d="M10 5c-.6 3.4-2.9 6.4-6.5 8"/><path d="m12.5 21 4.2-9.5L21 21"/><path d="M14 17.8h5.4"/></svg>',alignRight:true,onChange:setLang});
+ const EN={en:"English",hi:"Hindi",es:"Spanish",fr:"French",ja:"Japanese",ta:"Tamil",te:"Telugu",kn:"Kannada",ml:"Malayalam"};UIDD.mount("lang",{items:LANGS.map(([c,n])=>[c,n,`<b class="lc">${c.toUpperCase()}</b>`,c===S.lang?"":EN[c]]),value:S.lang,label:t("language"),icon:'<svg class="dd-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h9M7.5 3v2M5 5c.6 3.2 2.8 6 6 7.5"/><path d="M10 5c-.6 3.4-2.9 6.4-6.5 8"/><path d="m12.5 21 4.2-9.5L21 21"/><path d="M14 17.8h5.4"/></svg>',alignRight:true,onChange:setLang});
  $("#spoil").setAttribute("aria-pressed",S.sp);$("#spl").textContent=S.sp?t("spoil_on"):t("spoil_off");$("#spoil").setAttribute("aria-label",S.sp?t("spoil_on"):t("spoil_off"));
- const f={hi:"Noto+Sans+Devanagari:wght@400;600;700;800",ja:"Noto+Sans+JP:wght@400;600;700;800"}[S.lang];$("#xfont").href=f?`https://fonts.googleapis.com/css2?family=${f}&display=swap`:"data:text/css,"}
+ const f={hi:"Noto+Sans+Devanagari:wght@400;600;700;800",ja:"Noto+Sans+JP:wght@400;600;700;800",ta:"Noto+Sans+Tamil:wght@400;600;700;800",te:"Noto+Sans+Telugu:wght@400;600;700;800",kn:"Noto+Sans+Kannada:wght@400;600;700;800",ml:"Noto+Sans+Malayalam:wght@400;600;700;800"}[S.lang];$("#xfont").href=f?`https://fonts.googleapis.com/css2?family=${f}&display=swap`:"data:text/css,"}
 function markNav(){$$(".nav a").forEach(a=>a.classList.toggle("on",a.dataset.v===cur));const a=$(`#nav2 a[data-v="${cur}"]`);a&&a.scrollIntoView({block:"nearest",inline:"center"})}
 function setLang(v){S.lang=v;save();loadTX();shell();const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters"&&CG.open)PEND=CG.id;stopVO();$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true);translateAll()}
 $("#spoil").onclick=()=>{S.sp=!S.sp;save();shell();toast(S.sp?t("t_sp_on"):t("t_sp_off"));refresh()};
