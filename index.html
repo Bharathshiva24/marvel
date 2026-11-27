@@ -144,11 +144,20 @@ h3{font-size:24px}
 .pfx{border-bottom:1px solid var(--line);background:radial-gradient(60% 120% at 100% 0,rgba(226,35,42,.14),transparent 60%)}
 .pfx .kick{display:inline-flex;align-items:center;gap:8px;font:700 13px var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--red2)}
 .pfx h2{text-transform:uppercase}
-.pfx .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:thin}
-.pfx .pc{scroll-snap-align:start;position:relative;display:block;aspect-ratio:2/3;border-radius:4px;overflow:hidden;background:var(--s1);border:1px solid var(--line);color:var(--ink);text-decoration:none}
-.pfx .pc img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.pfx .pc:hover img,.pfx .pc:focus-visible img{transform:scale(1.05)}
-.pfx .pc span{position:absolute;inset:auto 0 0;padding:28px 10px 10px;font:600 13px/1.3 var(--fb);background:linear-gradient(0deg,rgba(0,0,0,.85),transparent)}
+.pfx .wall{position:relative;border-radius:6px;overflow:hidden;padding:clamp(28px,5vw,64px) clamp(16px,4vw,48px) clamp(34px,5vw,56px);background:radial-gradient(70% 60% at 50% 0,rgba(255,236,210,.16),transparent 70%),linear-gradient(180deg,#2a2622,#1b1916 78%,#121110);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),inset 0 -40px 60px rgba(0,0,0,.45)}
+.pfx .wall::before{content:"";position:absolute;inset:0;opacity:.35;pointer-events:none;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 2px,transparent 2px 5px),repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 4px)}
+.pfx .wall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(180deg,#3a2a1e,#24190f);box-shadow:0 -2px 0 rgba(255,255,255,.05)}
+.pfx .hang{position:relative;display:flex;justify-content:center;gap:clamp(22px,5vw,72px);overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 4px 18px;scrollbar-width:thin}
+.pfx .pc{flex:0 0 clamp(150px,22vw,250px);scroll-snap-align:center;display:block;color:var(--ink);text-decoration:none;text-align:center}
+.pfx .frame{position:relative;padding:clamp(8px,1vw,12px);background:linear-gradient(145deg,#1c1c1c,#050505);border-radius:2px;box-shadow:0 2px 0 rgba(255,255,255,.08) inset,0 30px 50px rgba(0,0,0,.55),0 10px 18px rgba(0,0,0,.4);transition:transform .35s,box-shadow .35s}
+.pfx .frame::before{content:"";position:absolute;left:50%;top:-34px;width:1px;height:34px;background:rgba(255,255,255,.12)}
+.pfx .mat{background:#f4f1ea;padding:clamp(8px,1.2vw,16px);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),inset 0 2px 6px rgba(0,0,0,.18)}
+.pfx .mat img{display:block;width:100%;aspect-ratio:560/792;object-fit:cover;background:#ddd}
+.pfx .frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.14),transparent 38%)}
+.pfx .pc:hover .frame,.pfx .pc:focus-visible .frame{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 2px 0 rgba(255,255,255,.08) inset,0 44px 70px rgba(0,0,0,.6),0 0 60px rgba(226,35,42,.18)}
+.pfx .cap{margin-top:16px;font:700 16px var(--fb)}.pfx .cap small{display:block;font-weight:500;font-size:13px;color:var(--mut);margin-top:2px}
+.pfx .cap em{display:inline-block;margin-top:8px;font-style:normal;font-size:13px;color:var(--red2)}
+@media(max-width:560px){.pfx .hang{justify-content:flex-start}.pfx .pc{flex-basis:62vw}}
 .pfx .ban{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:26px 28px;border:1px solid var(--line2);border-radius:4px;background:linear-gradient(120deg,rgba(226,35,42,.22),rgba(255,255,255,.02))}
 .pfx .ban b{font-size:20px}
 .pfpop{position:fixed;right:20px;bottom:20px;z-index:80;width:min(360px,calc(100vw - 32px));background:var(--s1,#111);border:1px solid var(--line2);border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.6);padding:18px;transform:translateY(20px);opacity:0;transition:.35s;pointer-events:none}
@@ -156,8 +165,8 @@ h3{font-size:24px}
 .pfpop .x{position:absolute;top:8px;right:8px;background:none;border:0;color:var(--mut);font-size:22px;line-height:1;cursor:pointer;padding:6px}
 .pfpop h3{margin:0 28px 6px 0;font-size:20px;text-transform:uppercase}
 .pfpop p{margin:0 0 14px;color:var(--mut);font-size:15px}
-.pfpop .th{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.pfpop .th img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:3px;background:var(--line)}
+.pfpop .th{display:flex;justify-content:center;gap:16px;margin:4px 0 16px;padding:14px;background:linear-gradient(180deg,#2a2622,#1b1916);border-radius:4px}.pfpop .th img{width:30%}
+.pfpop .th img{width:100%;aspect-ratio:560/792;object-fit:cover;background:#ddd;border:5px solid #f4f1ea;outline:4px solid #0b0b0b;box-shadow:0 8px 16px rgba(0,0,0,.5)}
 .pfpop .row{display:flex;gap:10px;align-items:center}.pfpop .btn{flex:1;justify-content:center}
 .pfpop .later{background:none;border:0;color:var(--mut);font:600 14px var(--fb);cursor:pointer;padding:8px}
 @media(max-width:560px){.pfpop{right:16px;left:16px;bottom:16px;width:auto}}
@@ -651,7 +660,7 @@ function pfLoad(){return PF.req||(PF.req=fetch("/api/posterflix").then(r=>r.ok?r
 function pfHide(root){root.querySelectorAll("img[data-pf]").forEach(i=>i.addEventListener("error",()=>{const c=i.closest("[data-pfc]");if(c)c.remove()},{once:true}))}
 async function drawPF(){const el=$("#pfx");if(!el)return;await pfLoad();if(!el.isConnected)return;const it=PF.items||[];
  const cta=`<a class="btn red" href="${esc(pfLink(PF.url,"home_section"))}" target="_blank" rel="noopener">${esc(t("pf_cta"))} →</a>`;
- el.innerHTML=`<div class="wrap"><div class="head"><div><span class="kick">${esc(t("pf_kick"))}</span><h2>${esc(t("pf_title"))}</h2><p class="lede">${esc(t("pf_lede"))}</p></div>${it.length?cta:""}</div>${it.length?`<div class="rail">${it.map(i=>`<a class="pc" data-pfc href="${esc(pfLink(i.href,"home_section"))}" target="_blank" rel="noopener"><img data-pf src="${esc(i.img)}" alt="${esc(i.title)}" loading="lazy" referrerpolicy="no-referrer"><span>${esc(i.title)}</span></a>`).join("")}</div>`:`<div class="ban"><div><b>${esc(t("pf_ban"))}</b><div class="tiny">posterflix.in</div></div>${cta}</div>`}</div>`;pfHide(el)}
+ el.innerHTML=`<div class="wrap"><div class="head"><div><span class="kick">${esc(t("pf_kick"))}</span><h2>${esc(t("pf_title"))}</h2><p class="lede">${esc(t("pf_lede"))}</p></div>${it.length?cta:""}</div>${it.length?`<div class="wall"><div class="hang">${it.map(i=>`<a class="pc" data-pfc href="${esc(pfLink(i.href,"home_section"))}" target="_blank" rel="noopener"><div class="frame"><div class="mat"><img data-pf src="${esc(i.img)}" alt="${esc(i.title)} poster" loading="lazy" referrerpolicy="no-referrer"></div></div><div class="cap">${esc(i.title)}${i.medium?`<small>${esc(i.medium)}</small>`:""}<em>${esc(t("pf_view"))} →</em></div></a>`).join("")}</div></div>`:`<div class="ban"><div><b>${esc(t("pf_ban"))}</b><div class="tiny">posterflix.in</div></div>${cta}</div>`}</div>`;pfHide(el)}
 function pfPopup(){if(!EMBED||/\/admin|\/migrate/.test(location.pathname))return;let last=0;try{last=+localStorage.getItem("pf_pop")||0}catch(e){}if(Date.now()-last<3*864e5)return;
  setTimeout(async()=>{await pfLoad();if(document.querySelector(".pfpop")||$("#drawer.on"))return;const it=(PF.items||[]).slice(0,3),d=document.createElement("div");d.className="pfpop";d.setAttribute("role","dialog");d.setAttribute("aria-label",t("pf_pop_title"));
   d.innerHTML=`<button class="x" aria-label="${esc(t("close"))}">×</button><h3>${esc(t("pf_pop_title"))}</h3><p>${esc(t("pf_pop_text"))}</p>${it.length?`<div class="th">${it.map(i=>`<img data-pf src="${esc(i.img)}" alt="${esc(i.title)}" referrerpolicy="no-referrer">`).join("")}</div>`:""}<div class="row"><a class="btn red" href="${esc(pfLink(PF.url,"popup"))}" target="_blank" rel="noopener">${esc(t("pf_cta"))}</a><button class="later">${esc(t("pf_later"))}</button></div>`;
