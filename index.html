@@ -158,7 +158,9 @@ h3{font-size:24px}
 .pfx .pc:hover .frame,.pfx .pc:focus-visible .frame{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 2px 0 rgba(255,255,255,.08) inset,0 44px 70px rgba(0,0,0,.6),0 0 60px rgba(226,35,42,.18)}
 .pfx .cap{margin-top:16px;font:700 16px var(--fb)}.pfx .cap small{display:block;font-weight:500;font-size:13px;color:var(--mut);margin-top:2px}
 .pfx .cap em{display:inline-block;margin-top:8px;font-style:normal;font-size:13px;color:var(--red2)}
-@media(max-width:560px){.pfx .hang{justify-content:flex-start}.pfx .pc{flex-basis:62vw}}
+.pfx .hang{overflow:visible}.pfx .pc{flex:0 1 220px;min-width:0}.pfx .wall.photo .pc{flex-basis:200px}
+@media(max-width:900px){.pfx .pc:nth-child(n+3){display:none}}
+@media(max-width:600px){.pfx .pc:nth-child(n+2){display:none}.pfx .pc,.pfx .wall.photo .pc{flex:0 0 min(64vw,260px)}}
 .pfx .ban{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:26px 28px;border:1px solid var(--line2);border-radius:4px;background:linear-gradient(120deg,rgba(226,35,42,.22),rgba(255,255,255,.02))}
 .pfx .ban b{font-size:20px}
 .pfpop{position:fixed;right:20px;bottom:20px;z-index:80;width:min(360px,calc(100vw - 32px));background:var(--s1,#111);border:1px solid var(--line2);border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.6);padding:18px;transform:translateY(20px);opacity:0;transition:.35s;pointer-events:none}
@@ -200,7 +202,12 @@ h3{font-size:24px}
 .zoom{display:flex;align-items:center;gap:4px;background:var(--s1);border:1px solid var(--line2);border-radius:2px;padding:3px}
 .zoom button{width:38px;height:38px;border:0;background:none;border-radius:2px;font-size:20px;color:var(--ink)}
 .zoom button:hover{background:rgba(255,255,255,.08)}
-.zoom input{width:120px;accent-color:var(--red)}
+.zoom input{display:none}
+.zoom .zl{display:flex;align-items:flex-end;gap:4px;height:38px;padding:0 8px}
+.zoom .zl button{width:8px;min-width:8px;padding:0;height:calc(10px + var(--h)*3px);background:var(--line2);border-radius:2px;transition:background .2s,transform .15s;cursor:pointer}
+.zoom .zl button:hover{background:rgba(255,255,255,.35);transform:scaleY(1.1)}
+.zoom .zl button.on{background:var(--red)}
+.zoom .zl button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px}
 @media(min-width:900px){.filters .yrs{grid-column:span 2}}
 .fbox summary{display:none}
@@ -657,7 +664,7 @@ function startCD(){clearInterval(cdT);const tick=()=>{const els=$$("[data-cd]");
 /* ================= POSTERFLIX PROMO ================= */
 const PF={url:"https://posterflix.in/search?q=marvel",items:null,req:null};
 const pfLink=(u,c)=>{try{const x=new URL(u);x.searchParams.set("utm_source","marvel-timeline");x.searchParams.set("utm_medium","referral");x.searchParams.set("utm_campaign",c);return x.href}catch(e){return PF.url}};
-function pfLoad(){return PF.req||(PF.req=fetch("/api/posterflix").then(r=>r.ok?r.json():{}).then(j=>{PF.items=(j&&Array.isArray(j.items)?j.items:[]).filter(i=>i&&/^https:\/\//.test(i.img)&&/^https:\/\/posterflix\.in\//.test(i.href))}).catch(()=>{PF.items=[]}))}
+function pfLoad(){return PF.req||(PF.req=fetch("/api/posterflix").then(r=>r.ok?r.json():{}).then(j=>{const a=(j&&Array.isArray(j.items)?j.items:[]).filter(i=>i&&/^https:\/\//.test(i.img)&&/^https:\/\/posterflix\.in\//.test(i.href));for(let k=a.length-1;k>0;k--){const r=Math.floor(Math.random()*(k+1));[a[k],a[r]]=[a[r],a[k]]}PF.items=a.slice(0,4)}).catch(()=>{PF.items=[]}))}
 function pfHide(root){root.querySelectorAll("img[data-pf]").forEach(i=>i.addEventListener("error",()=>{const c=i.closest("[data-pfc]");if(c)c.remove()},{once:true}))}
 async function drawPF(){const el=$("#pfx");if(!el)return;await pfLoad();if(!el.isConnected)return;const it=PF.items||[];
  const cta=`<a class="btn red" href="${esc(pfLink(PF.url,"home_section"))}" target="_blank" rel="noopener">${esc(t("pf_cta"))} →</a>`;
@@ -682,7 +689,7 @@ function vTimeline(){
  <section class="sec"><div class="wrap">
  <div class="head"><div><h2>${t("tl_title")}</h2><p class="lede">${esc(t("tl_lede",{f:T.filter(y=>y.k==="film").length,s:T.filter(y=>y.k!=="film").length}))}</p></div><div class="legend">${[1,2,3,4,5,6].map(p=>`<span><i style="width:10px;height:10px;border-radius:50%;background:${PC[p]}"></i>${t("phase",{n:p})}</span>`).join("")}</div></div>
  <div class="tlc"><div class="seg" role="group"><button id="mR" aria-pressed="${S.mode==="release"}">${t("release_order")}</button><button id="mC" aria-pressed="${S.mode==="chrono"}">${t("story_order")}</button></div>
- <div class="zoom"><button id="zo" aria-label="${esc(t("zoom_out"))}">−</button><input id="zr" type="range" min="0" max="100" aria-label="${esc(t("zoom"))}"><button id="zi" aria-label="${esc(t("zoom_in"))}">+</button></div><div class="chips" id="jumps"></div></div>
+ <div class="zoom"><button id="zo" aria-label="${esc(t("zoom_out"))}">−</button><input id="zr" type="range" min="0" max="100" aria-label="${esc(t("zoom"))}"><div class="zl" id="zl" role="group" aria-label="${esc(t("zoom"))}">${[0,1,2,3,4,5,6].map(i=>`<button data-zl="${i}" style="--h:${i}" aria-label="${esc(t("zoom"))} ${i+1}/7"></button>`).join("")}</div><button id="zi" aria-label="${esc(t("zoom_in"))}">+</button></div><div class="chips" id="jumps"></div></div>
  <details class="fbox" id="fbox"><summary class="btn">${t("filters")}</summary><div class="filters">
   <div class="full" id="fph"></div>
   <div class="full" id="fk"></div><div class="full" id="ffr"></div><div class="full" id="fch"></div>
@@ -706,6 +713,7 @@ function vTimeline(){
  const sc=$("#sc");
  $("#zi").onclick=()=>zoomBy(1.45);$("#zo").onclick=()=>zoomBy(1/1.45);
  $("#zr").oninput=e=>{const[a,b]=ZR();setZoom(a*Math.pow(b/a,e.target.value/100))};
+ $$("#zl button").forEach(btn=>btn.onclick=()=>{const[a,b]=ZR();setZoom(a*Math.pow(b/a,+btn.dataset.zl/6))});
  sc.addEventListener("wheel",e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();setZoom(S.z*Math.exp(-e.deltaY*.0025),e.clientX)}},{passive:false});
  let drag=null,moved=false;
  sc.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button)return;drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop};moved=false});
@@ -754,7 +762,7 @@ function drawTL(){const tr=$("#tr");if(!tr)return;const z=S.z,rel=S.mode==="rele
   if(!lvl)return`<button class="it l0" data-id="${x.id}" aria-label="${lab}" style="left:${x._x}px;top:${y}px;--c:${PC[x.ph]}">${poster(x,false)}<span class="tx"><b>${esc(x.t)}</b><small>${rel?x.dt.toLocaleDateString(LC(),{month:"short",year:"numeric"}):esc(L(x,"era"))} · ${kindL(x)}</small></span>${isW(x.id)?'<span class="ok">✓</span>':""}</button>`;
   return`<button class="it l${lvl}" data-id="${x.id}" aria-label="${lab}" style="left:${x._x}px;top:${y}px">${poster(x,lvl===2)}${lvl===2?`<div class="cap"><b>${fmt(x)}</b>${rel?esc(L(x,"era")):x.dt.getFullYear()} · ${lenL(x)}</div>`:`<div class="cap">${rel?x.dt.getFullYear():esc(L(x,"era").split(/[ ,–]/)[0])}</div>`}</button>`}).join("");
  $("#tlcount").textContent=t("showing",{n:vis.length,t:T.length})+(vis.length<T.length?" · "+t("filters_on"):"");
- const[a,b]=ZR();$("#zr").value=Math.round(Math.log(z/a)/Math.log(b/a)*100);
+ const[a,b]=ZR();$("#zr").value=Math.round(Math.log(z/a)/Math.log(b/a)*100);{const lv=Math.round(+$("#zr").value/100*6);document.querySelectorAll("#zl button").forEach(b=>{const n=+b.dataset.zl;b.classList.toggle("on",n<=lv);b.setAttribute("aria-pressed",n===lv)})}
  $("#mini").innerHTML=T.map(x=>`<i style="left:${(pos(x)/maxX*100).toFixed(2)}%;background:${PC[x.ph]};opacity:${pass(x)?1:.2}"></i>`).join("")+'<div class="vp" id="vp"></div>';miniVP();
  $("#jumps").innerHTML=(rel?[[t("infinity_saga"),"im"],[t("multiverse_saga"),"wv"],[t("phase",{n:5}),"quant"],[t("phase",{n:6}),"ff"],[t("today"),"vq"]]:[[t("j_40s"),"cafa"],[t("j_90s"),"cm"],[t("j_av"),"avengers"],[t("j_snap"),"iw"],[t("j_after"),"loki1"],[t("phase",{n:6}),"ff"]]).map(([l,id])=>`<button class="chip" data-j="${id}">${esc(l)}</button>`).join("");
  $$("#jumps [data-j]").forEach(b=>b.onclick=()=>$("#sc").scrollTo({left:pos(BY[b.dataset.j])-40,behavior:"smooth"}));
