@@ -1,8 +1,8 @@
 {
-  "name": "mcu-codex",
+  "name": "the-timeline",
   "private": true,
   "type": "module",
-  "description": "MCU Codex — interactive MCU guide with an admin panel for images and videos",
+  "description": "The Timeline — interactive MCU guide with an admin panel for images and videos",
   "dependencies": {
     "@vercel/blob": "^1.1.1"
   },

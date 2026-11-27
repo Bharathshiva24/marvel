@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>MCU Codex · Admin</title>
+<title>The Timeline · Admin</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Manrope:wght@400;500;600;700;800&display=swap">
@@ -140,7 +140,7 @@ code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;font-siz
 <body>
 <div class="gate" id="gate">
  <form id="gf" autocomplete="on">
-  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M27 13.5A9 9 0 1 0 27 26.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg><b>MCU <span>Codex</span></b></a>
+  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></a>
   <h1>Admin sign in</h1>
   <p class="muted" style="margin:0 0 18px">Manage posters, character images, artwork and YouTube videos. Changes go live on the site as soon as they're saved.</p>
   <input type="text" name="username" value="admin" autocomplete="username" class="hide" aria-hidden="true">
@@ -154,7 +154,7 @@ code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;font-siz
 
 <div id="app" class="hide">
  <header class="top">
-  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M27 13.5A9 9 0 1 0 27 26.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg><b>MCU <span>Codex</span></b></a>
+  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></a>
   <span class="tiny vs">Admin</span><span class="sp"></span>
   <span class="badge" id="st" role="status"><i></i><span>All changes live</span></span>
   <a class="btn sm vs" href="/" target="_blank" rel="noopener">View site</a>
@@ -267,13 +267,13 @@ function vVideos(){const q=filt.q.toLowerCase();const list=ORDER.filter(t=>!q||t
  $$("[data-pv]").forEach(b=>b.onclick=e=>{e.preventDefault();preview(b.dataset.pv)})}
 function preview(id){const d=document.createElement("div");d.className="vmodal";d.innerHTML=`<div class="box"><div class="fr"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="bar"><button class="btn sm">Close</button></div></div>`;document.body.append(d);const c=()=>{d.remove();removeEventListener("keydown",k)},k=e=>{if(e.key==="Escape")c()};addEventListener("keydown",k);d.onclick=e=>{if(e.target===d||e.target.closest(".bar button"))c()};$(".bar button",d).focus()}
 /* ---- branding ---- */
-const MARK='<svg viewBox="0 0 64 64"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d52"/><stop offset="1" stop-color="#b3141a"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#fg)"/><path d="M43.5 21.5A15 15 0 1 0 43.5 42.5" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="32" cy="32" r="4.4" fill="#fff"/></svg>';
-const DEFLOGO=`<span class="brand" style="pointer-events:none"><svg viewBox="0 0 40 40" style="width:32px;height:32px"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M27 13.5A9 9 0 1 0 27 26.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg><b>MCU <span>Codex</span></b></span>`;
-function applyAdminBrand(){const a=$(".top .brand");if(!a.dataset.def)a.dataset.def=a.innerHTML;a.innerHTML=C.brand.logo?`<img src="${esc(C.brand.logo)}" alt="MCU Codex" style="height:32px;max-width:180px;object-fit:contain">`:a.dataset.def;
+const MARK='<svg viewBox="0 0 64 64"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d52"/><stop offset="1" stop-color="#b3141a"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#fg)"/><path d="M15 32h34" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".6"/><circle cx="18.4" cy="32" r="4.2" fill="#fff"/><circle cx="32" cy="32" r="6.8" fill="#fff"/><circle cx="45.6" cy="32" r="4.2" fill="#fff"/></svg>';
+const DEFLOGO=`<span class="brand" style="pointer-events:none"><svg viewBox="0 0 40 40" style="width:32px;height:32px"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></span>`;
+function applyAdminBrand(){const a=$(".top .brand");if(!a.dataset.def)a.dataset.def=a.innerHTML;a.innerHTML=C.brand.logo?`<img src="${esc(C.brand.logo)}" alt="The Timeline" style="height:32px;max-width:180px;object-fit:contain">`:a.dataset.def;
  const f=C.brand.favicon||"favicon.svg";$$('link[rel="icon"]').forEach(l=>l.setAttribute("href",f))}
 function vBrand(){const lg=C.brand.logo,fv=C.brand.favicon,fimg=(sz)=>fv?`<img src="${esc(fv)}" alt="" style="width:${sz}px;height:${sz}px">`:MARK.replace("<svg",`<svg style="width:${sz}px;height:${sz}px"`);
  const logoView=lg?`<img src="${esc(lg)}" alt="Logo preview">`:DEFLOGO;
- $("#main").innerHTML=`<div class="head"><div><h1>Logo &amp; favicon</h1><p>Replace the site's logo and browser icon. Changes go live within a minute. Remove an upload to go back to the built-in MCU Codex mark.</p></div></div>
+ $("#main").innerHTML=`<div class="head"><div><h1>Logo &amp; favicon</h1><p>Replace the site's logo and browser icon. Changes go live within a minute. Remove an upload to go back to the built-in The Timeline mark.</p></div></div>
  <div class="brandgrid">
  <div class="panel"><h3 style="font-size:26px">Logo</h3><p class="tiny" style="margin:6px 0 14px">Shown in the header on every page, 36 px tall (up to 200 px wide). Best as an SVG or a transparent PNG at least 600 px wide.</p>
   <div class="mock"><div class="mbar">${logoView}<span class="ghost"><i></i><i></i><i></i></span></div></div>
@@ -282,7 +282,7 @@ function vBrand(){const lg=C.brand.logo,fv=C.brand.favicon,fimg=(sz)=>fv?`<img s
   <div class="drop" data-drop="logo">Drop an image here, or use the button below</div>
   <div class="brandacts"><label class="btn red">${ICO.up}${lg?"Replace logo":"Upload logo"}<input type="file" class="hide" accept="image/svg+xml,image/png,image/webp,image/jpeg" data-bup="logo"></label>${lg?`<button class="btn danger" data-brm="logo">Remove</button>`:""}<span class="tiny" style="align-self:center">${lg?"Custom logo is live":"Using the built-in logo"}</span></div></div>
  <div class="panel"><h3 style="font-size:26px">Favicon</h3><p class="tiny" style="margin:6px 0 14px">The icon in browser tabs, bookmarks and home-screen shortcuts. Use a square SVG or PNG, at least 512 × 512.</p>
-  <div class="mock"><div class="tabs"><span class="tb on">${fimg(16)}<span>MCU Codex</span></span><span class="tb">${ICO.img}<span>New tab</span></span></div><div class="favs">${[16,32,64,128].map(z=>`<div>${fimg(z)}${z}px</div>`).join("")}</div></div>
+  <div class="mock"><div class="tabs"><span class="tb on">${fimg(16)}<span>The Timeline</span></span><span class="tb">${ICO.img}<span>New tab</span></span></div><div class="favs">${[16,32,64,128].map(z=>`<div>${fimg(z)}${z}px</div>`).join("")}</div></div>
   <div class="drop" data-drop="favicon">Drop an image here, or use the button below</div>
   <div class="brandacts"><label class="btn red">${ICO.up}${fv?"Replace favicon":"Upload favicon"}<input type="file" class="hide" accept="image/svg+xml,image/png,image/webp,image/jpeg" data-bup="favicon"></label>${fv?`<button class="btn danger" data-brm="favicon">Remove</button>`:""}<span class="tiny" style="align-self:center">${fv?"Custom favicon is live":"Using the built-in icon"}</span></div></div>
  </div>`;

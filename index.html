@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MCU Codex</title>
+<title>The Timeline</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
 <meta name="theme-color" content="#07080c">
@@ -366,7 +366,7 @@ footer p{max-width:100ch;margin:6px 0}
 <body>
 <header class="top">
  <div class="bar">
-  <a class="brand" href="#timeline" aria-label="MCU Codex"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d52"/><stop offset="1" stop-color="#b3141a"/></linearGradient></defs><rect width="40" height="40" rx="10" fill="url(#bm)"/><path d="M27 13.5A9 9 0 1 0 27 26.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg><b>MCU <span>Codex</span></b></a>
+  <a class="brand" href="#timeline" aria-label="The Timeline"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d52"/><stop offset="1" stop-color="#b3141a"/></linearGradient></defs><rect width="40" height="40" rx="10" fill="url(#bm)"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></a>
   <nav class="nav" id="nav" aria-label="Sections"></nav>
   <div class="tools">
    <div class="sx" id="sx" role="search"><button class="sxb" id="sbtn" aria-label="Search" aria-expanded="false" aria-controls="pres" title="Search (⌘K)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button><input id="pq" type="search" autocomplete="off" tabindex="-1" aria-label="Search"><kbd class="sxk">Esc</kbd><div class="sres hide" id="pres" role="listbox"></div></div>
@@ -870,7 +870,7 @@ async function translateAll(){const lang=S.lang,run=++trRun;if(lang==="en"){trBa
 const IMG0=JSON.parse(JSON.stringify(window.IMG||{posters:{},characters:{},other:{}}));let CUPD="";
 const BRAND0=$(".top .brand").innerHTML,FAV0=$('link[rel="icon"]').getAttribute("href");
 function applyBrand(b){b=b||{};const ok=u=>typeof u==="string"&&/^https:\/\//.test(u);const a=$(".top .brand");
- if(ok(b.logo)){if(a.dataset.logo!==b.logo){a.dataset.logo=b.logo;a.innerHTML=`<img class="brand-logo" src="${esc(b.logo)}" alt="MCU Codex">`;const im=$("img",a);im.onerror=()=>{a.innerHTML=BRAND0;delete a.dataset.logo}}}
+ if(ok(b.logo)){if(a.dataset.logo!==b.logo){a.dataset.logo=b.logo;a.innerHTML=`<img class="brand-logo" src="${esc(b.logo)}" alt="The Timeline">`;const im=$("img",a);im.onerror=()=>{a.innerHTML=BRAND0;delete a.dataset.logo}}}
  else if(a.dataset.logo){a.innerHTML=BRAND0;delete a.dataset.logo}
  const f=ok(b.favicon)?b.favicon:FAV0;$$('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(l=>{if(l.getAttribute("href")!==f){l.setAttribute("href",f);if(f!==FAV0)l.removeAttribute("type")}})}
 async function loadRemote(){if(!EMBED)return;try{const r=await fetch("/api/content",{cache:"no-store"});if(!r.ok)return;const j=await r.json(),c=j&&j.content;if(!c||!c.updated||c.updated===CUPD)return;CUPD=c.updated;applyBrand(c.brand);

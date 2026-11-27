@@ -1,4 +1,4 @@
-# MCU Codex
+# The Timeline
 
 An interactive guide to the Marvel Cinematic Universe: a zoomable timeline, "what to watch before" guides, an in-page trailer player and narration, characters and relationships, a universe map, saga breakdowns, post-credit scenes, upcoming releases and a personal watch tracker. Interface in English, Hindi, Spanish, French and Japanese.
 

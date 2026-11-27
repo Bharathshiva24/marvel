@@ -1,4 +1,4 @@
-/* MCU Codex — custom dropdown (replaces native <select>). Used by index.html and admin.html.
+/* The Timeline — custom dropdown (replaces native <select>). Used by index.html and admin.html.
    UIDD.mount(el, {items:[[value,label,leadingHTML?,hint?]], value, onChange, label, search, placeholder, icon})
    el.value holds the current value; el.set(v) changes it without firing onChange. */
 (function(){

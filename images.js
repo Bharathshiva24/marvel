@@ -1,4 +1,4 @@
-/* MCU Codex — IMAGE LISTS. Fill in file paths (relative to index.html, e.g. "images/posters/iron-man.jpg") or full https:// URLs.
+/* The Timeline — IMAGE LISTS. Fill in file paths (relative to index.html, e.g. "images/posters/iron-man.jpg") or full https:// URLs.
    Leave a value as "" to keep the built-in artwork. Nothing else needs changing.
    Posters: 2:3 portrait, at least 600×900. Characters: 1:1 or 4:5 portrait, at least 600×600. Other: sizes noted per item. */
 window.IMG={
