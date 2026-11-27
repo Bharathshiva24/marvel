@@ -14,27 +14,27 @@
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--fb);-webkit-font-smoothing:antialiased}
 button,input{font:inherit;color:inherit}button{cursor:pointer}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--red2);outline-offset:2px;border-radius:6px}
+:focus-visible{outline:2px solid var(--red2);outline-offset:2px;border-radius:2px}
 .hide{display:none!important}
 h1,h2,h3{font-family:var(--fd);font-weight:900;line-height:1;margin:0;letter-spacing:.3px}
 .muted{color:var(--mut)}.tiny{font-size:13px;color:var(--mut)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.04);font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:background .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 14px;border-radius:2px;border:1px solid var(--line2);background:rgba(255,255,255,.04);font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:background .2s}
 .btn:hover{background:rgba(255,255,255,.09)}
 .btn.red{background:linear-gradient(180deg,#ef2b32,#c8161d);border-color:#ff474d}
 .btn.red:hover{background:linear-gradient(180deg,#ff3a40,#d81c23)}
-.btn.sm{height:34px;padding:0 10px;font-size:13px;border-radius:8px}
+.btn.sm{height:34px;padding:0 10px;font-size:13px;border-radius:2px}
 .btn.ghost{border-color:transparent;background:none}
 .btn.danger{color:#ff9ea1}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .btn svg{width:16px;height:16px;flex:none}
-.in{height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--s1);padding:0 14px;font-size:15px;color:var(--ink);outline:0;width:100%}
+.in{height:44px;border-radius:2px;border:1px solid var(--line2);background:var(--s1);padding:0 14px;font-size:15px;color:var(--ink);outline:0;width:100%}
 .in:focus{border-color:rgba(255,77,82,.6);box-shadow:0 0 0 4px rgba(226,35,42,.14)}
-.seg{display:inline-flex;border:1px solid var(--line2);border-radius:12px;padding:3px;background:var(--s1)}
-.seg button{border:0;background:none;border-radius:9px;padding:7px 12px;font-weight:700;font-size:13px;color:var(--mut)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:2px;padding:3px;background:var(--s1)}
+.seg button{border:0;background:none;border-radius:2px;padding:7px 12px;font-weight:700;font-size:13px;color:var(--mut)}
 .seg button[aria-pressed=true]{background:var(--ink);color:#0b0b0f}
 /* sign-in */
 .gate{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(800px 500px at 30% 0,rgba(226,35,42,.18),transparent 60%)}
-.gate form{width:min(420px,100%);background:var(--s1);border:1px solid var(--line2);border-radius:22px;padding:30px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.gate form{width:min(420px,100%);background:var(--s1);border:1px solid var(--line2);border-radius:2px;padding:30px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
 .gate h1{font-size:40px;text-transform:uppercase;margin:18px 0 6px}
 .err{color:#ff9ea1;font-size:14px;margin:10px 0 0;min-height:20px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
@@ -43,13 +43,13 @@ h1,h2,h3{font-family:var(--fd);font-weight:900;line-height:1;margin:0;letter-spa
 /* app shell */
 .top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;height:62px;padding:0 20px;background:rgba(7,8,12,.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
 .top .sp{flex:1}
-.badge{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:700;background:rgba(255,255,255,.05);border:1px solid var(--line2);white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:2px;font-size:13px;font-weight:700;background:rgba(255,255,255,.05);border:1px solid var(--line2);white-space:nowrap}
 .badge i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
 .badge.saving i{background:var(--warn);animation:bl 1s infinite}.badge.err i{background:var(--red2)}
 @keyframes bl{50%{opacity:.3}}
 .shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:calc(100vh - 62px)}
 .side{border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow:auto}
-.side button{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:12px;border:0;background:none;color:var(--mut);font-weight:700;text-align:left}
+.side button{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:2px;border:0;background:none;color:var(--mut);font-weight:700;text-align:left}
 .side button:hover{color:var(--ink);background:rgba(255,255,255,.04)}
 .side button.on{color:var(--ink);background:rgba(255,255,255,.08)}
 .side button svg{width:18px;height:18px;flex:none}
@@ -64,87 +64,88 @@ main{padding:28px clamp(16px,3vw,40px) 80px}
 @media(max-width:860px){.shell{grid-template-columns:minmax(0,1fr)}.side{position:static;height:auto;display:flex;gap:4px;overflow-x:auto;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}.side button{width:auto;flex:none;padding:9px 12px}.side .lab,.side button em{display:none}.top .vs{display:none}}
 /* image grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cw,170px),1fr));gap:16px}
-.slot{position:relative;background:var(--s1);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.slot{position:relative;background:var(--s1);border:1px solid var(--line);border-radius:2px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
 .slot.drag{border-color:var(--red2);transform:scale(1.02);box-shadow:0 0 0 4px rgba(226,35,42,.2)}
 .pv{position:relative;aspect-ratio:var(--ar,2/3);background:linear-gradient(135deg,#1b1e28,#0c0d12);display:grid;place-items:center;overflow:hidden}
 .pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pv .ph{font:900 34px var(--fd);color:rgba(255,255,255,.18);text-align:center;padding:10px;line-height:1}
-.pv .tag{position:absolute;left:8px;top:8px;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14)}
+.pv .tag{position:absolute;left:8px;top:8px;font-size:11px;font-weight:800;padding:3px 8px;border-radius:2px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14)}
 .pv .tag.live{background:rgba(67,211,154,.2);border-color:rgba(67,211,154,.6);color:#bff5de}
 .pv .busy{position:absolute;inset:0;background:rgba(0,0,0,.7);display:grid;place-items:center;font-weight:700;font-size:13px}
 .pv .busy i{display:block;width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--red2);animation:sp 0.8s linear infinite;margin:0 auto 8px}
 @keyframes sp{to{transform:rotate(360deg)}}
 .pv .drop{position:absolute;inset:0;display:none;place-items:center;background:rgba(226,35,42,.35);font-weight:800}
 .slot.drag .drop{display:grid}
+.acts:has(+.acts2){padding-bottom:6px}.acts2{padding-top:0!important;margin-top:0!important;gap:6px}.acts2 .btn{flex:1;justify-content:center}.btn.ghost{background:transparent;border-color:var(--line);color:var(--mut)}.btn.ghost:hover{color:var(--ink);border-color:var(--line2)}.btn.ghost svg{width:14px;height:14px}
 .k-planets .pv{background:repeating-conic-gradient(#171a23 0 25%,#10121a 0 50%) 0 0/18px 18px}.k-planets .pv img{object-fit:contain!important;padding:8px}
 .meta{padding:12px 12px 6px}
 .meta b{display:block;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meta small{color:var(--dim);font-size:12px}
 .acts{display:flex;gap:6px;padding:6px 12px 12px;margin-top:auto}
 .acts .btn{flex:1}.acts .btn.danger{flex:0 0 40px;padding:0}
-.empty{padding:40px;text-align:center;color:var(--mut);border:1px dashed var(--line2);border-radius:16px}
+.empty{padding:40px;text-align:center;color:var(--mut);border:1px dashed var(--line2);border-radius:2px}
 /* videos */
 .vgrid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
 @media(max-width:1000px){.vgrid{grid-template-columns:minmax(0,1fr)}}
-.tlist{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:10px;position:sticky;top:80px;max-height:calc(100vh - 100px);display:flex;flex-direction:column}
+.tlist{background:var(--s1);border:1px solid var(--line);border-radius:2px;padding:10px;position:sticky;top:80px;max-height:calc(100vh - 100px);display:flex;flex-direction:column}
 .tlist .in{flex:none}.tlist .rows{overflow:auto;margin-top:8px}
-.tlist button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:10px;text-align:left}
+.tlist button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:2px;text-align:left}
 .tlist button:hover{background:rgba(255,255,255,.04)}
 .tlist button.on{background:rgba(255,255,255,.09)}
 .tlist button span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-.tlist button em{font-style:normal;font-size:12px;font-weight:800;min-width:22px;height:22px;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--mut)}
+.tlist button em{font-style:normal;font-size:12px;font-weight:800;min-width:22px;height:22px;border-radius:2px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--mut)}
 .tlist button em.has{background:var(--red);color:#fff}
 .dot{width:8px;height:8px;border-radius:50%;flex:none}
-.panel{background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:22px}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:2px;padding:22px}
 .add{display:grid;grid-template-columns:minmax(0,1fr) 170px minmax(0,.7fr) auto;gap:10px;align-items:start}
 @media(max-width:760px){.add{grid-template-columns:minmax(0,1fr)}}
 .hint{font-size:13px;color:var(--dim);margin-top:8px}
 .vitem{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
-.vitem .th{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000;border:0;padding:0}
+.vitem .th{position:relative;aspect-ratio:16/9;border-radius:2px;overflow:hidden;background:#000;border:0;padding:0}
 .vitem .th img{width:100%;height:100%;object-fit:cover}
 .vitem .th svg{position:absolute;left:50%;top:50%;width:36px;height:36px;margin:-18px;color:#fff;filter:drop-shadow(0 2px 8px #000)}
 .vitem .f{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px}
 .vitem .ord{display:flex;gap:4px}
 .vitem .ord .btn{width:36px;padding:0}
 @media(max-width:760px){.vitem{grid-template-columns:110px minmax(0,1fr)}.vitem .ord{grid-column:1/-1}.vitem .f{grid-template-columns:minmax(0,1fr)}}
-.builtin{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.03);border:1px dashed var(--line2);font-size:14px;color:var(--mut);margin-top:14px}
+.builtin{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:2px;background:rgba(255,255,255,.03);border:1px dashed var(--line2);font-size:14px;color:var(--mut);margin-top:14px}
 .setup ol{padding-left:20px;margin:10px 0 0}.setup li{margin:0 0 12px}
 .check{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
 .check i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:12px;flex:none}
 .check i.y{background:var(--ok);color:#03150d}.check i.n{background:var(--red);color:#fff}
-code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;font-size:13px}
+code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:2px;font-size:13px}
 .vmodal{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.85);display:grid;place-items:center;padding:16px}
-.vmodal .box{width:min(960px,100%);border-radius:16px;overflow:hidden;background:#000}
+.vmodal .box{width:min(960px,100%);border-radius:2px;overflow:hidden;background:#000}
 .vmodal .fr{position:relative;aspect-ratio:16/9}.vmodal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .vmodal .bar{display:flex;justify-content:flex-end;padding:10px;background:var(--s1)}
 @media(max-width:560px){.top{gap:8px;padding:0 12px}.brand b{font-size:18px;white-space:nowrap}.badge span{display:none}.badge{padding:0 10px}}
 .brandgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
 @media(max-width:1000px){.brandgrid{grid-template-columns:minmax(0,1fr)}}
-.mock{border-radius:14px;overflow:hidden;border:1px solid var(--line2);background:#07080c}
+.mock{border-radius:2px;overflow:hidden;border:1px solid var(--line2);background:#07080c}
 .mock .mbar{display:flex;align-items:center;gap:14px;height:64px;padding:0 18px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--line)}
 .mock .mbar img{height:36px;max-width:200px;object-fit:contain}
-.mock .mbar .ghost{display:flex;gap:8px;margin-left:auto}.mock .mbar .ghost i{width:64px;height:28px;border-radius:999px;background:rgba(255,255,255,.06)}
+.mock .mbar .ghost{display:flex;gap:8px;margin-left:auto}.mock .mbar .ghost i{width:64px;height:28px;border-radius:2px;background:rgba(255,255,255,.06)}
 .mock.light{background:#f5f2ed}.mock.light .mbar{border-color:rgba(0,0,0,.08)}
 .tabs{display:flex;gap:6px;padding:10px 10px 0;background:#1d212c}
-.tabs .tb{display:flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:10px 10px 0 0;font-size:13px;font-weight:600;color:#d6d3cf;max-width:220px}
+.tabs .tb{display:flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:2px;font-size:13px;font-weight:600;color:#d6d3cf;max-width:220px}
 .tabs .tb.on{background:#0f1118;color:#fff}.tabs .tb img,.tabs .tb svg{width:16px;height:16px;flex:none;object-fit:contain}
 .favs{display:flex;gap:18px;align-items:flex-end;padding:18px;flex-wrap:wrap}
 .favs div{text-align:center;font-size:12px;color:var(--dim)}
-.favs img,.favs svg{display:block;margin:0 auto 6px;object-fit:contain;border-radius:6px}
+.favs img,.favs svg{display:block;margin:0 auto 6px;object-fit:contain;border-radius:2px}
 .brandacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.drop{border:1.5px dashed var(--line2);border-radius:14px;padding:16px;margin-top:14px;text-align:center;color:var(--mut);font-size:14px;transition:border-color .2s,background .2s}
+.drop{border:1.5px dashed var(--line2);border-radius:2px;padding:16px;margin-top:14px;text-align:center;color:var(--mut);font-size:14px;transition:border-color .2s,background .2s}
 .drop.drag{border-color:var(--red2);background:rgba(226,35,42,.08)}
-.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140px);background:var(--ink);color:#0b0b0f;font-weight:700;padding:12px 20px;border-radius:999px;z-index:130;transition:transform .35s var(--ease);max-width:calc(100vw - 32px);text-align:center}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140px);background:var(--ink);color:#0b0b0f;font-weight:700;padding:12px 20px;border-radius:2px;z-index:130;transition:transform .35s var(--ease);max-width:calc(100vw - 32px);text-align:center}
 .toast.on{transform:translate(-50%,0)}.toast.bad{background:#ff6a6e;color:#fff}
 
 /* Buttons and CTAs: square corners, max 2px */
-.btn,.btn.sm,.seg,.seg button,.side button,.tlist button,.tabs .tb,.in,.vitem .th,.builtin .th,.dd-b,.dd.pill .dd-b,.dd-o,.dd-s,:focus-visible{border-radius:2px!important}
+.btn,.btn.sm,.seg,.seg button,.side button,.tlist button,.tabs .tb,.in,.vitem .th,.builtin .th,.dd-b,.dd.pill .dd-b,.dd-o,.dd-s,:focus-visible{border-radius:2px}
 </style>
 </head>
 <body>
 <div class="gate" id="gate">
  <form id="gf" autocomplete="on">
-  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></a>
+  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="2" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></a>
   <h1>Admin sign in</h1>
   <p class="muted" style="margin:0 0 18px">Manage posters, character images, artwork and YouTube videos. Changes go live on the site as soon as they're saved.</p>
   <input type="text" name="username" value="admin" autocomplete="username" class="hide" aria-hidden="true">
@@ -158,7 +159,7 @@ code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;font-siz
 
 <div id="app" class="hide">
  <header class="top">
-  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></a>
+  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="2" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></a>
   <span class="tiny vs">Admin</span><span class="sp"></span>
   <span class="badge" id="st" role="status"><i></i><span>All changes live</span></span>
   <a class="btn sm vs" href="/" target="_blank" rel="noopener">View site</a>
@@ -186,8 +187,9 @@ const KINDS={posters:{label:"Posters",ar:"2/3",cw:"160px",max:1600,desc:"One pos
  characters:{label:"Characters",ar:"1/1",cw:"150px",max:1000,desc:"Portraits for the characters page, relationship web and cast lists. Square or 4:5 portrait.",slots:()=>Object.entries(CH).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>[k,v,""])},
  other:{label:"Other images",ar:"16/9",cw:"260px",max:2400,desc:"Backdrops and artwork used around the site.",slots:()=>OTHER},
  planets:{label:"Planets",ar:"1/1",cw:"170px",max:1024,desc:"Planet art for the universe map and its side panel. Use a 1:1 PNG with a transparent background — the planet fills the frame edge to edge, nothing around it.",slots:()=>PLANETS}};
+const FINDQ={posters:(n,k)=>`${n} official poster`,characters:(n,k)=>`${n.split(" / ")[0]} MCU`};
 const VT=[["trailer","Official trailer"],["teaser","Teaser"],["bts","Behind the scenes"],["clip","Clip"]];
-const ICO={globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="7"/><ellipse cx="12" cy="12" rx="11" ry="3.5" transform="rotate(-20 12 12)"/></svg>',star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 14.6 8.6 20.7 9.3 16.2 13.4 17.4 19.5 12 16.5 6.6 19.5 7.8 13.4 3.3 9.3 9.4 8.6z"/></svg>',img:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>',play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>',gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4m0 0-5 5m5-5 5 5M4 20h16"/></svg>',playf:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.55)"/><path d="M10 8v8l6-4z"/></svg>'};
+const ICO={find:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',paste:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="12" height="17" rx="1"/><path d="M9 4h6v3H9z"/></svg>',globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="7"/><ellipse cx="12" cy="12" rx="11" ry="3.5" transform="rotate(-20 12 12)"/></svg>',star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 14.6 8.6 20.7 9.3 16.2 13.4 17.4 19.5 12 16.5 6.6 19.5 7.8 13.4 3.3 9.3 9.4 8.6z"/></svg>',img:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>',play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>',gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4m0 0-5 5m5-5 5 5M4 20h16"/></svg>',playf:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.55)"/><path d="M10 8v8l6-4z"/></svg>'};
 let KEY="",C={posters:{},characters:{},other:{},planets:{},brand:{},videos:{},updated:""},STATUS={},view="posters",filt={q:"",show:"all"},VSEL=ORDER.find(t=>t.id==="doom")?.id||ORDER[0].id;
 let tT;const toast=(m,bad)=>{const e=$("#toast");e.textContent=m;e.classList.toggle("bad",!!bad);e.classList.add("on");clearTimeout(tT);tT=setTimeout(()=>e.classList.remove("on"),2600)};
 const hdr=()=>({"x-admin-key":KEY});
@@ -219,7 +221,8 @@ function slotHTML(kind,[key,name,sub]){const custom=C[kind][key],u=current(kind,
  const ph=kind==="posters"&&t?`<div class="ph" style="color:${PC[t.ph]}55">${esc(t.t)}</div>`:`<div class="ph">${esc(name.split(/[ /:]+/).filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join("")||"·")}</div>`;
  return `<div class="slot" data-key="${esc(key)}"><div class="pv">${u?`<img src="${esc(u)}" alt="" loading="lazy">`:ph}${custom?'<span class="tag live">Uploaded</span>':u?'<span class="tag">From images.js</span>':""}<div class="drop">Drop to upload</div></div>
  <div class="meta"><b title="${esc(name)}">${esc(name)}</b><small>${esc(sub||key)}</small></div>
- <div class="acts"><label class="btn sm">${ICO.up}${u?"Replace":"Upload"}<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" class="hide" data-up="${esc(key)}"></label>${custom?`<button class="btn sm danger" data-rm="${esc(key)}" aria-label="Remove image for ${esc(name)}" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>`:""}</div></div>`}
+ <div class="acts"><label class="btn sm">${ICO.up}${u?"Replace":"Upload"}<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" class="hide" data-up="${esc(key)}"></label>${custom?`<button class="btn sm danger" data-rm="${esc(key)}" aria-label="Remove image for ${esc(name)}" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>`:""}</div>
+ <div class="acts acts2">${FINDQ[kind]?`<a class="btn sm ghost" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(FINDQ[kind](name,key))}" target="_blank" rel="noopener noreferrer" title="Search the web for an image of ${esc(name)}">${ICO.find}Find</a>`:""}<button class="btn sm ghost" data-paste="${esc(key)}" title="Paste a copied image or image address">${ICO.paste}Paste</button></div></div>`}
 function vImages(kind){const K=KINDS[kind],all=K.slots(),q=filt.q.toLowerCase();
  const list=all.filter(([k,n,s])=>(!q||(n+" "+k+" "+(s||"")).toLowerCase().includes(q))&&(filt.show==="all"||(filt.show==="up"?C[kind][k]:!C[kind][k])));
  $("#main").innerHTML=`<div class="head"><div><h1>${K.label}</h1><p>${K.desc} Uploads are resized and compressed in your browser, then go live straight away.</p></div><div class="tiny">${Object.keys(C[kind]).length} of ${all.length} uploaded</div></div>
@@ -229,7 +232,21 @@ function vImages(kind){const K=KINDS[kind],all=K.slots(),q=filt.q.toLowerCase();
  $$("[data-s]").forEach(b=>b.onclick=()=>{filt.show=b.dataset.s;vImages(kind)});
  $$("[data-up]").forEach(inp=>inp.onchange=()=>{const f=inp.files[0];if(f)uploadTo(kind,inp.dataset.up,f);inp.value=""});
  $$("[data-rm]").forEach(b=>b.onclick=()=>removeImg(kind,b.dataset.rm));
+ $$("[data-paste]").forEach(b=>b.onclick=()=>pasteInto(kind,b.dataset.paste));
+ $$(".slot").forEach(sl=>{sl.onmouseenter=()=>HOV={kind,key:sl.dataset.key};sl.onfocusin=()=>HOV={kind,key:sl.dataset.key}});
  $$(".slot").forEach(sl=>{sl.ondragover=e=>{e.preventDefault();sl.classList.add("drag")};sl.ondragleave=()=>sl.classList.remove("drag");sl.ondrop=e=>{e.preventDefault();sl.classList.remove("drag");const f=[...e.dataTransfer.files].find(f=>f.type.startsWith("image/"));if(f)uploadTo(kind,sl.dataset.key,f);else toast("Drop an image file",true)}})}
+let HOV=null;
+async function fetchLink(url){const r=await fetch("/api/fetch?url="+encodeURIComponent(url),{headers:hdr(),cache:"no-store"});if(!r.ok){let j={};try{j=await r.json()}catch(e){}throw new Error(j.error||"Couldn't import that link.")}const b=await r.blob();return new File([b],"import",{type:b.type})}
+async function fromClipData(kind,key,items,text){const f=items.find(f=>f&&f.type&&f.type.startsWith("image/"));if(f)return uploadTo(kind,key,f);
+ const u=(text||"").trim();if(/^https:\/\/\S+$/i.test(u)){try{toast("Importing image…");await uploadTo(kind,key,await fetchLink(u))}catch(e){toast(e.message,true)}return}
+ if(/^http:\/\//i.test(u))return toast("Use an https image link.",true);
+ toast("Copy an image or its image address first, then paste.",true)}
+async function pasteInto(kind,key){if(!navigator.clipboard||!navigator.clipboard.read){toast("Hover the card and press "+(/Mac/.test(navigator.platform)?"⌘V":"Ctrl+V")+" to paste.",true);return}
+ try{const its=await navigator.clipboard.read(),files=[];let text="";
+  for(const it of its){const t=it.types.find(t=>t.startsWith("image/"));if(t){const b=await it.getType(t);files.push(new File([b],"paste",{type:t}))}else if(it.types.includes("text/plain"))text=await (await it.getType("text/plain")).text()}
+  await fromClipData(kind,key,files,text)}catch(e){toast("Allow clipboard access, or hover the card and press "+(/Mac/.test(navigator.platform)?"⌘V":"Ctrl+V")+".",true)}}
+document.addEventListener("paste",e=>{if(!HOV||!KINDS[view]||HOV.kind!==view||/INPUT|TEXTAREA/.test((e.target||{}).tagName||""))return;if(!$(`.slot[data-key="${CSS.escape(HOV.key)}"]:hover`)&&!$(`.slot[data-key="${CSS.escape(HOV.key)}"]:focus-within`))return;
+ e.preventDefault();fromClipData(HOV.kind,HOV.key,[...(e.clipboardData.files||[])],e.clipboardData.getData("text/plain"))});
 async function prep(file,max){if(file.type==="image/gif")return file;
  let bmp;try{bmp=await createImageBitmap(file)}catch(e){throw new Error("That file couldn't be read as an image.")}
  const s=Math.min(1,max/Math.max(bmp.width,bmp.height)),w=Math.round(bmp.width*s),h=Math.round(bmp.height*s);
@@ -256,7 +273,7 @@ function vVideos(){const q=filt.q.toLowerCase();const list=ORDER.filter(t=>!q||t
  <div class="panel"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline"><h2 style="font-size:34px;text-transform:uppercase">${esc(t.t)}</h2><span class="tiny">${t.d.slice(0,4)} · ${t.k==="film"?"Film":"Series"} · Phase ${t.ph||"—"}</span></div>
   <form class="add" id="addf" style="margin-top:18px"><div><input class="in" id="yu" placeholder="Paste a YouTube link or video ID" aria-label="YouTube link" autocomplete="off"><p class="hint" id="yh">youtube.com/watch?v=…, youtu.be/…, /shorts/… or an 11-character ID</p></div><div id="yt" class="full"></div><input class="in" id="yl" placeholder="Label (optional)" maxlength="80" aria-label="Label"><button class="btn red" style="height:44px" id="yadd">Add video</button></form>
   <div id="vl" style="margin-top:10px">${vs.length?vs.map((v,i)=>`<div class="vitem" data-i="${i}"><button class="th" data-pv="${v.yt}" aria-label="Preview"><img src="${thumb(v.yt)}" alt="" loading="lazy">${ICO.playf}</button><div class="f"><div id="vt${i}" class="full"></div><input class="in" data-lab="${i}" value="${esc(v.l)}" placeholder="Label (optional)" maxlength="80" aria-label="Label"><span class="tiny" style="grid-column:1/-1">youtu.be/${esc(v.yt)}${i===vs.findIndex(q=>q.t==="trailer")?" · <b style='color:var(--ok)'>Main trailer</b>":""}</span></div><div class="ord"><button class="btn sm" data-mv="-1" ${i?"":"disabled"} aria-label="Move up">↑</button><button class="btn sm" data-mv="1" ${i<vs.length-1?"":"disabled"} aria-label="Move down">↓</button><button class="btn sm danger" data-del aria-label="Remove video">✕</button></div></div>`).join(""):`<div class="empty" style="margin-top:8px">No videos added for this title yet.</div>`}</div>
-  ${YT[VSEL]&&!vs.some(v=>v.t==="trailer")?`<div class="builtin"><button class="th" data-pv="${YT[VSEL]}" style="width:96px;aspect-ratio:16/9;border:0;padding:0;border-radius:8px;overflow:hidden;position:relative;flex:none"><img src="${thumb(YT[VSEL])}" alt="" style="width:100%;height:100%;object-fit:cover"></button><span>Currently using the built-in official trailer. Add an <b>Official trailer</b> here to replace it.</span></div>`:""}
+  ${YT[VSEL]&&!vs.some(v=>v.t==="trailer")?`<div class="builtin"><button class="th" data-pv="${YT[VSEL]}" style="width:96px;aspect-ratio:16/9;border:0;padding:0;border-radius:2px;overflow:hidden;position:relative;flex:none"><img src="${thumb(YT[VSEL])}" alt="" style="width:100%;height:100%;object-fit:cover"></button><span>Currently using the built-in official trailer. Add an <b>Official trailer</b> here to replace it.</span></div>`:""}
  </div></div>`;
  const qi=$("#q");qi.oninput=()=>{filt.q=qi.value;const p=qi.selectionStart;vVideos();const n=$("#q");n.focus();n.setSelectionRange(p,p)};
  $$("[data-t]").forEach(b=>b.onclick=()=>{VSEL=b.dataset.t;vVideos();$("#main").scrollIntoView({block:"start"})});
@@ -273,8 +290,8 @@ function vVideos(){const q=filt.q.toLowerCase();const list=ORDER.filter(t=>!q||t
  $$("[data-pv]").forEach(b=>b.onclick=e=>{e.preventDefault();preview(b.dataset.pv)})}
 function preview(id){const d=document.createElement("div");d.className="vmodal";d.innerHTML=`<div class="box"><div class="fr"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="bar"><button class="btn sm">Close</button></div></div>`;document.body.append(d);const c=()=>{d.remove();removeEventListener("keydown",k)},k=e=>{if(e.key==="Escape")c()};addEventListener("keydown",k);d.onclick=e=>{if(e.target===d||e.target.closest(".bar button"))c()};$(".bar button",d).focus()}
 /* ---- branding ---- */
-const MARK='<svg viewBox="0 0 64 64"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d52"/><stop offset="1" stop-color="#b3141a"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#fg)"/><path d="M15 32h34" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".6"/><circle cx="18.4" cy="32" r="4.2" fill="#fff"/><circle cx="32" cy="32" r="6.8" fill="#fff"/><circle cx="45.6" cy="32" r="4.2" fill="#fff"/></svg>';
-const DEFLOGO=`<span class="brand" style="pointer-events:none"><svg viewBox="0 0 40 40" style="width:32px;height:32px"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></span>`;
+const MARK='<svg viewBox="0 0 64 64"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d52"/><stop offset="1" stop-color="#b3141a"/></linearGradient></defs><rect width="64" height="64" rx="2" fill="url(#fg)"/><path d="M15 32h34" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".6"/><circle cx="18.4" cy="32" r="4.2" fill="#fff"/><circle cx="32" cy="32" r="6.8" fill="#fff"/><circle cx="45.6" cy="32" r="4.2" fill="#fff"/></svg>';
+const DEFLOGO=`<span class="brand" style="pointer-events:none"><svg viewBox="0 0 40 40" style="width:32px;height:32px"><rect width="40" height="40" rx="2" fill="#e2232a"/><path d="M9.5 20h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/><circle cx="11.5" cy="20" r="2.6" fill="#fff"/><circle cx="20" cy="20" r="4.2" fill="#fff"/><circle cx="28.5" cy="20" r="2.6" fill="#fff"/></svg><b>The <span>Timeline</span></b></span>`;
 function applyAdminBrand(){const a=$(".top .brand");if(!a.dataset.def)a.dataset.def=a.innerHTML;a.innerHTML=C.brand.logo?`<img src="${esc(C.brand.logo)}" alt="The Timeline" style="height:32px;max-width:180px;object-fit:contain">`:a.dataset.def;
  const f=C.brand.favicon||"favicon.svg";$$('link[rel="icon"]').forEach(l=>l.setAttribute("href",f))}
 function vBrand(){const lg=C.brand.logo,fv=C.brand.favicon,fimg=(sz)=>fv?`<img src="${esc(fv)}" alt="" style="width:${sz}px;height:${sz}px">`:MARK.replace("<svg",`<svg style="width:${sz}px;height:${sz}px"`);
