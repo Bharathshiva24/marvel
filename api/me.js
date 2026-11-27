@@ -7,7 +7,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { put, list, del } from "@vercel/blob";
 import { storageReady } from "./_lib.js";
 
-const CLIENT_ID = () => process.env.GOOGLE_CLIENT_ID || "";
+const CLIENT_ID = () => process.env.GOOGLE_CLIENT_ID || "705291261663-sgek75g1dquuhd7gknivd1i1ol7q955j.apps.googleusercontent.com";
 const SECRET = () => process.env.SESSION_SECRET || process.env.BLOB_READ_WRITE_TOKEN || "";
 const COOKIE = "tl_s";
 const MAX_AGE = 60 * 60 * 24 * 60; // 60 days
