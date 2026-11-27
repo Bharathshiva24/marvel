@@ -29,7 +29,8 @@ export const keyFromUrl = (v) => (isOurUrl(v) ? decodeURIComponent(v.slice(publi
 // Cloudflare's short error code (e.g. InvalidAccessKeyId, SignatureDoesNotMatch, NoSuchBucket). Never secret.
 async function why(r) {
   const t = await r.text().catch(() => "");
-  return `R2 ${r.status}${(t.match(/<Code>([^<]{1,60})<\/Code>/) || [])[1] ? " " + t.match(/<Code>([^<]{1,60})<\/Code>/)[1] : ""}`;
+  const pick = (tag) => (t.match(new RegExp(`<${tag}>([^<]{1,160})</${tag}>`)) || [])[1] || "";
+  return [`R2 ${r.status}`, pick("Code"), pick("Message")].filter(Boolean).join(" ");
 }
 
 export async function r2Put(key, body, contentType, cacheControl = "public, max-age=31536000, immutable") {
