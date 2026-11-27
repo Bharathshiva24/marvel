@@ -174,7 +174,7 @@ other:{
   "hero":"", // Home hero backdrop behind Avengers: Doomsday — 16:9, 2400×1350
   "saga_infinity":"", // Infinity Saga panel background — 16:9, 1600×900
   "saga_multiverse":"", // Multiverse Saga panel background — 16:9, 1600×900
-  "universe_map":"", // Universe map background — 1000×620 (or 16:10)
+  "universe_map":"", // Universe map background (full screen) — 16:9, 2560×1440
   "upcoming_secret_wars":"", // Avengers: Secret Wars card art — 16:9, 1600×900
   "upcoming_daredevil_s3":"", // Daredevil: Born Again S3 card art — 16:9, 1600×900
   "event_e1":"", // Narration backdrop: Project Rebirth — 16:9, 1920×1080
@@ -189,12 +189,12 @@ other:{
   "event_e10":"", // Narration backdrop: The Multiverse is born — 16:9, 1920×1080
   "event_e11":"", // Narration backdrop: Cracks between worlds — 16:9, 1920×1080
   "event_e12":"", // Narration backdrop: Doom arrives — 16:9, 1920×1080
-  "stone_space":"", // Space Stone icon — 1:1, 256×256 PNG
-  "stone_mind":"", // Mind Stone icon — 1:1, 256×256 PNG
-  "stone_reality":"", // Reality Stone icon — 1:1, 256×256 PNG
-  "stone_power":"", // Power Stone icon — 1:1, 256×256 PNG
-  "stone_time":"", // Time Stone icon — 1:1, 256×256 PNG
-  "stone_soul":"", // Soul Stone icon — 1:1, 256×256 PNG
+  "stone_space":"", // Space Stone icon — 1:1, 512×512 transparent PNG
+  "stone_mind":"", // Mind Stone icon — 1:1, 512×512 transparent PNG
+  "stone_reality":"", // Reality Stone icon — 1:1, 512×512 transparent PNG
+  "stone_power":"", // Power Stone icon — 1:1, 512×512 transparent PNG
+  "stone_time":"", // Time Stone icon — 1:1, 512×512 transparent PNG
+  "stone_soul":"", // Soul Stone icon — 1:1, 512×512 transparent PNG
 },
 /* ---------- 4. PLANETS (universe map) ---------- */
 planets:{
