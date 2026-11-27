@@ -309,6 +309,30 @@ h3{font-size:24px}
 .reel button::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:var(--c);opacity:.7}
 .reel button.on::after{width:14px;height:14px;margin:-7px;opacity:1;box-shadow:0 0 14px var(--c)}
 /* ===== characters ===== */
+/*chars*/
+.cfil{display:grid;grid-template-columns:minmax(220px,1.4fr) repeat(3,minmax(170px,1fr));gap:10px;margin-bottom:20px}
+@media(max-width:900px){.cfil{grid-template-columns:1fr 1fr}.cfil .in{grid-column:1/-1}}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:14px}
+.ccard{display:flex;flex-direction:column;text-align:left;padding:0;border:1px solid var(--line);background:var(--s1);color:var(--ink);cursor:pointer;overflow:hidden;transition:border-color .2s,transform .25s var(--ease),background .2s}
+.ccard:hover{border-color:var(--line2);background:var(--s2);transform:translateY(-3px)}
+.ccard:focus-visible{outline:2px solid var(--red2);outline-offset:2px}
+.cimg{position:relative;aspect-ratio:4/5;background:radial-gradient(120% 90% at 30% 20%,color-mix(in srgb,var(--c) 55%,#000),#0b0c12 75%);display:grid;place-items:center;overflow:hidden}
+.cimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;transition:transform .5s var(--ease)}
+.ccard:hover .cimg img{transform:scale(1.04)}
+.cimg .ini{font:900 56px var(--fd);color:rgba(255,255,255,.85);letter-spacing:1px}
+.cimg::after{content:"";position:absolute;inset:auto 0 0;height:40%;z-index:1;background:linear-gradient(0deg,rgba(7,8,12,.85),transparent)}
+.cimg .cn{position:absolute;z-index:2;right:8px;top:8px;min-width:26px;height:26px;padding:0 7px;display:grid;place-items:center;background:rgba(7,8,12,.75);border:1px solid var(--line2);border-radius:2px;font:800 13px var(--fb)}
+.cmeta{display:grid;gap:3px;padding:12px 14px 14px}
+.cmeta b{font:800 17px/1.15 var(--fb)}.cmeta small{color:var(--mut);font-size:13px}.cmeta em{font-style:normal;color:var(--ink);opacity:.8;font-size:13px}.cmeta .tiny{margin-top:4px}
+.cmodal{position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px;animation:in .25s}
+.cbox{width:min(1320px,100%);max-height:calc(100svh - 40px);overflow:auto;background:var(--bg);border:1px solid var(--line2);border-radius:2px;padding:20px;box-shadow:0 40px 120px rgba(0,0,0,.6);animation:cup .35s var(--ease)}
+@keyframes cup{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.chd{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:-20px;z-index:3;background:var(--bg);padding:4px 0}
+.chd #csel{width:min(360px,100%)}
+.cbody #cinfo{max-height:calc(100svh - 140px);overflow:auto}
+html.noscroll{overflow:hidden}
+@media(max-width:760px){.cmodal{padding:0}.cbox{max-height:100svh;height:100svh;padding:14px}.cbody #cinfo{max-height:none}}
+@media (prefers-reduced-motion:reduce){.ccard,.cimg img{transition:none}.cbox{animation:none}}
 .cgraph{position:relative;min-height:500px;border-radius:2px;background:radial-gradient(circle at 50% 50%,rgba(226,35,42,.12),transparent 60%),var(--s1);border:1px solid var(--line);overflow:hidden}
 .cgraph svg{position:absolute;inset:0;width:100%;height:100%}
 .cgraph text{font:600 13px var(--fb);fill:var(--ink)}
@@ -507,7 +531,7 @@ function shell(){document.documentElement.lang=S.lang;
  $("#spoil").setAttribute("aria-pressed",S.sp);$("#spl").textContent=S.sp?t("spoil_on"):t("spoil_off");$("#spoil").setAttribute("aria-label",S.sp?t("spoil_on"):t("spoil_off"));
  const f={hi:"Noto+Sans+Devanagari:wght@400;600;700;800",ja:"Noto+Sans+JP:wght@400;600;700;800"}[S.lang];$("#xfont").href=f?`https://fonts.googleapis.com/css2?family=${f}&display=swap`:"data:text/css,"}
 function markNav(){$$(".nav a").forEach(a=>a.classList.toggle("on",a.dataset.v===cur));const a=$(`#nav2 a[data-v="${cur}"]`);a&&a.scrollIntoView({block:"nearest",inline:"center"})}
-function setLang(v){S.lang=v;save();loadTX();shell();const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters")PEND=CG.id;stopVO();$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true);translateAll()}
+function setLang(v){S.lang=v;save();loadTX();shell();const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters"&&CG.open)PEND=CG.id;stopVO();$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true);translateAll()}
 $("#spoil").onclick=()=>{S.sp=!S.sp;save();shell();toast(S.sp?t("t_sp_on"):t("t_sp_off"));refresh()};
 const spoilBlock=html=>S.sp?`<div class="spoil">${html}</div>`:`<div class="spoil lock" tabindex="0" role="button" data-rv data-hint="${esc(t("hidden"))}"><div>${html}</div></div>`;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-rv]");if(b){b.classList.remove("lock");b.removeAttribute("data-rv");b.removeAttribute("role")}});
@@ -516,10 +540,11 @@ document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.tar
 const R={timeline:vTimeline,watch:vWatch,videos:vVideos,characters:vChars,universe:vUniverse,sagas:vSagas,credits:vCredits,upcoming:vUpcoming,mylist:vList};
 let cur="",PEND=null;
 function setHH(){const h=$(".top");h&&document.documentElement.style.setProperty("--hh",h.offsetHeight+"px")}addEventListener("resize",setHH);
-function route(){setHH();const h=location.hash.slice(1);const v=R[h]?h:"timeline";stopVO();clearInterval(cdT);cur=v;markNav();$("#main").innerHTML="";R[v]()}
+function syncHash(p){const h="#"+p;if(location.hash!==h)history.replaceState(null,"",h)}
+function route(){setHH();if($("#cmodal")){CG.ro&&CG.ro.disconnect();$("#cmodal").remove();document.documentElement.classList.remove("noscroll")}CG.open=false;const h=location.hash.slice(1),[h0,ha]=h.split("/");const v=R[h0]?h0:"timeline";if(ha)PEND=decodeURIComponent(ha);stopVO();clearInterval(cdT);cur=v;markNav();$("#main").innerHTML="";R[v]()}
 window.addEventListener("hashchange",()=>{route();scrollTo({top:0})});
 function go(v,arg){PEND=arg;if(location.hash==="#"+v)route();else location.hash=v}
-function refresh(){const y=scrollY;if(cur==="timeline"&&$("#tr")){drawTL();heroText();}else{if(cur==="watch")PEND=WG.id;if(cur==="characters")PEND=CG.id;const keepVO=cur==="videos";$("#main").innerHTML="";R[cur](keepVO);}scrollTo(0,y);if(DR.id)openT(DR.id,true)}
+function refresh(){const y=scrollY;if(cur==="timeline"&&$("#tr")){drawTL();heroText();}else{if(cur==="watch")PEND=WG.id;if(cur==="characters"&&CG.open)PEND=CG.id;const keepVO=cur==="videos";$("#main").innerHTML="";R[cur](keepVO);}scrollTo(0,y);if(DR.id)openT(DR.id,true)}
 /* ================= search palette ================= */
 const ACT={};T.forEach(x=>x.cast.forEach(c=>{const[a]=c.split("|");(ACT[a]=ACT[a]||new Set()).add(x.id)}));
 const SX={rs:[],qi:0};
@@ -686,7 +711,7 @@ function guideFor(id){if(G[id]){const g=G[id];return{e:g.e.map((r,i)=>[r[0],GR(i
  x.cn.forEach(c=>(BY[c]?.cn||[]).forEach(cc=>{if(!seen.has(cc)&&BY[cc]){seen.add(cc);r.push([cc,first(L(BY[cc],"why"))])}}));
  const o=T.filter(y=>!seen.has(y.id)&&y.dt<x.dt&&y.chars.filter(c=>x.chars.includes(c)).length>=2).slice(0,4).map(y=>[y.id,y.chars.filter(c=>x.chars.includes(c)).slice(0,3).map(c=>CH[c].split(" / ").pop()).join(", ")]);
  return{e,r,o,auto:true}}
-function vWatch(){if(PEND&&BY[PEND])WG.id=PEND;PEND=null;
+function vWatch(){if(PEND&&BY[PEND])WG.id=PEND;PEND=null;syncHash("watch/"+WG.id);
  const tg=REL_ORDER.filter(y=>y.k==="film"||G[y.id]).reverse(),x=BY[WG.id],g=guideFor(WG.id);
  const all=[...g.e.map(r=>[...r,"e"]),...g.r.map(r=>[...r,"r"]),...(WG.opt?g.o.map(r=>[...r,"o"]):[])];
  const seq=all.slice().sort((a,b)=>WG.ord==="release"?BY[a[0]].dt-BY[b[0]].dt:BY[a[0]].ci-BY[b[0]].ci);
@@ -696,7 +721,7 @@ function vWatch(){if(PEND&&BY[PEND])WG.id=PEND;PEND=null;
  <div class="head"><div><h1>${t("w_title")}</h1><p class="lede">${t("w_lede")}</p></div></div>
  <div class="targets" role="group">${tg.map(y=>`<button data-tg="${y.id}" aria-pressed="${y.id===WG.id}" aria-label="${esc(y.t)}">${poster(y,false)}<small>${y.up?t("coming_y",{y:y.dt.getFullYear()}):y.dt.getFullYear()}</small></button>`).join("")}</div>
  <div class="tlc" style="margin-top:8px"><div id="wsel" style="flex:1 1 260px;max-width:420px"></div>
- <div class="seg"><button id="oR" aria-pressed="${WG.ord==="release"}">${t("release_order")}</button><button id="oC" aria-pressed="${WG.ord==="chrono"}">${t("story_order")}</button></div><button class="chip" id="wopt" aria-pressed="${WG.opt}">${t("include_opt")}</button></div>
+ <div class="seg"><button id="oR" aria-pressed="${WG.ord==="release"}">${t("release_order")}</button><button id="oC" aria-pressed="${WG.ord==="chrono"}">${t("story_order")}</button></div></div>
  <div class="grid2" style="margin-top:10px"><div class="panel" style="display:grid;grid-template-columns:130px minmax(0,1fr);gap:22px;align-items:center"><button class="bare" data-open="${x.id}" style="font-size:20px">${poster(x)}</button><div><div class="tiny">${x.up?t("coming_d",{d:fmt(x)}):t("released_d",{d:fmt(x)})}</div><h2 style="text-transform:uppercase;font-weight:900;margin:6px 0 8px">${esc(x.t)}</h2><p class="small muted" style="margin:0">${esc(L(x,"log"))}</p>${g.auto?`<p class="hint">${t("auto_note")}</p>`:""}</div></div>
  <div class="panel"><h3>${t("your_prep")}</h3><div class="stats" style="margin:16px 0"><span><b>${seq.length}</b>${t("titles")}</span><span><b>${tot.toFixed(0)} h</b>${t("total")}</span><span><b>${left.toFixed(0)} h</b>${t("left")}</span><span><b>${done}/${seq.length}</b>${t("watched_l")}</span></div><div class="meter"><i style="width:${seq.length?done/seq.length*100:100}%"></i></div><div class="chips" style="margin-top:16px"><button class="btn" id="wadd">${ICON.plus}${t("add_all")}</button></div></div></div>
  <div class="tiers" style="margin-top:20px">${tier(g.e,"e","#e2232a")}${tier(g.r,"r","#3e86f2")}${tier(g.o,"o","#6b7080")}</div>
@@ -704,7 +729,7 @@ function vWatch(){if(PEND&&BY[PEND])WG.id=PEND;PEND=null;
  ${seq.length?`<ol class="seq">${seq.map(([id,why,k])=>{const y=BY[id];return`<li class="${isW(id)?"done":""}"><div><button class="bare" data-open="${id}" style="font-weight:800;font-size:17px">${esc(y.t)}</button><span class="tag ${k}">${t({e:"essential",r:"recommended",o:"optional"}[k])}</span><div class="tiny">${fmt(y)} · ${lenL(y)} · ${esc(why)}</div></div><button class="tick-b" data-w="${id}" aria-pressed="${isW(id)}" aria-label="${esc(t("mark_watched"))}: ${esc(y.t)}">✓</button></li>`}).join("")}<li class="end" style="border:0"><div><b style="color:var(--red2);font-size:17px">${esc(x.t)}</b><div class="tiny">${x.up?t("arrives",{d:fmt(x)}):t("ready")}</div></div><span></span></li></ol>`:`<p class="muted">${t("no_prereq")}</p>`}</div>
  </div></section>`;
  $$("[data-tg]").forEach(b=>b.onclick=()=>{WG.id=b.dataset.tg;reWatch()});dd("wsel",REL_ORDER.map(y=>[y.id,y.t,`<i class="dd-dot" style="background:${PC[y.ph]}"></i>`,String(y.dt.getFullYear())]),WG.id,v=>{WG.id=v;reWatch()},{label:t("nav_watch"),search:true,minWidth:320});
- $("#oR").onclick=()=>{WG.ord="release";reWatch()};$("#oC").onclick=()=>{WG.ord="chrono";reWatch()};$("#wopt").onclick=()=>{WG.opt=!WG.opt;reWatch()};
+ $("#oR").onclick=()=>{WG.ord="release";reWatch()};$("#oC").onclick=()=>{WG.ord="chrono";reWatch()};
  $("#wadd").onclick=()=>{let n=0;seq.forEach(([id])=>{if(!isW(id)&&!inL(id)){S.l.push(id);n++}});save();toast(n?t("added_n",{n}):t("already"))};
  requestAnimationFrame(()=>{const b=$(`[data-tg="${WG.id}"]`);if(b){const c=$(".targets");c.scrollLeft=b.offsetLeft-c.clientWidth/2+56}});
 }
@@ -791,18 +816,46 @@ function jump(c,s){const was=VO.on;stopVO();VO.c=c;VO.s=s;syncVO();if(was)playVO
 const CG={id:"tony"};
 function appear(id){return REL_ORDER.filter(x=>x.chars.includes(id))}
 const RC={love:"#ff5d8f",family:"#f2b84b",ally:"#4fa3ff",rival:"#e2232a",mentor:"#43d39a"};
-function vChars(){if(PEND&&CH[PEND])CG.id=PEND;PEND=null;
- const top=Object.keys(CH).map(k=>[k,appear(k).length]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]).slice(0,16),mx=top[0][1];
+const CF={q:"",ph:"",fr:"",sort:"most"};
+function vChars(){const pend=PEND&&CH[PEND]?PEND:null;PEND=null;
  const pc={};T.forEach(x=>{const c=[...new Set(x.chars)];for(let i=0;i<c.length;i++)for(let j=i+1;j<c.length;j++){const k=[c[i],c[j]].sort().join("|");pc[k]=(pc[k]||0)+1}});
  $("#main").innerHTML=`<section class="sec view"><div class="wrap">
- <div class="head"><div><h1>${t("c_title")}</h1><p class="lede">${t("c_lede")}</p></div><div id="csel" style="min-width:min(300px,100%)"></div></div>
- <div class="grid2"><div><div class="cgraph" id="cg"><svg id="cgs"></svg></div><div class="legend" style="margin-top:12px">${Object.entries(RC).map(([k,c])=>`<span><i style="width:18px;height:3px;border-radius:2px;background:${c}"></i>${t(k)}</span>`).join("")}</div></div><div class="panel" id="cinfo"></div></div>
- <div class="grid2" style="margin-top:20px"><div class="panel"><h3>${t("tracker")}</h3><p class="tiny" style="margin:6px 0 12px">${t("tracker_d")}</p><div class="bars" id="bars">${top.map(([k,n])=>`<button class="row" data-cs="${k}"><span>${esc(CH[k].split(" / ").pop())}</span><span><i style="width:${n/mx*100}%;${k===CG.id?"background:#fff":""}"></i></span><b>${n}</b></button>`).join("")}</div></div>
- <div class="panel"><h3>${t("together")}</h3><div class="bars" style="margin-top:12px">${Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,n])=>{const[a,b]=k.split("|");return`<button class="row" data-cs="${a}" style="grid-template-columns:minmax(0,1fr) 2.4em"><span>${esc(CH[a].split(" / ").pop())} + ${esc(CH[b].split(" / ").pop())}</span><b>${n}</b></button>`}).join("")}</div></div></div>
+ <div class="head"><div><h1>${t("c_title")}</h1><p class="lede">${t("c_lede2")}</p></div><div class="tiny" id="ccount"></div></div>
+ <div class="cfil"><input class="in" id="cq" type="search" placeholder="${esc(t("c_search"))}" value="${esc(CF.q)}" aria-label="${esc(t("c_search"))}"><div id="cph"></div><div id="cfr"></div><div id="csort"></div></div>
+ <div class="cgrid" id="cgrid"></div>
+ <div class="panel" style="margin-top:28px"><h3>${t("together")}</h3><div class="bars" style="margin-top:12px">${Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,n])=>{const[a,b]=k.split("|");return`<button class="row" data-cs="${a}" style="grid-template-columns:minmax(0,1fr) 2.4em"><span>${esc(CH[a].split(" / ").pop())} + ${esc(CH[b].split(" / ").pop())}</span><b>${n}</b></button>`}).join("")}</div></div>
  </div></section>`;
- dd("csel",Object.entries(CH).filter(([k])=>appear(k).length||REL.some(r=>r[0]===k||r[1]===k)).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>[k,v,"",String(appear(k).length)]),CG.id,selC,{label:t("r_char"),search:true,minWidth:320});$$("[data-cs]").forEach(b=>b.onclick=()=>selC(b.dataset.cs));
- const ro=new ResizeObserver(()=>drawG());ro.observe($("#cg"));drawInfo()}
-function selC(id){CG.id=id;$("#csel").set(id);drawG();drawInfo();$$("#bars [data-cs]").forEach(b=>b.querySelector("i").style.background=b.dataset.cs===id?"#fff":"")}
+ const phDot=c=>`<span class="dd-dot" style="background:${c}"></span>`;
+ dd("cph",[["",t("all_phases"),phDot("linear-gradient(135deg,"+PC.slice(1).join(",")+")")],...[1,2,3,4,5,6].map(p=>[String(p),t("phase",{n:p}),phDot(PC[p])])],CF.ph,()=>{CF.ph=$("#cph").value;drawCG()},{label:t("phase",{n:""}).trim()});
+ dd("cfr",[["",t("all_fr")],...Object.entries(FR).map(([k,v])=>[k,v])],CF.fr,()=>{CF.fr=$("#cfr").value;drawCG()},{label:"Franchise",search:true});
+ dd("csort",[["most",t("sort_most")],["az",t("sort_az")],["new",t("sort_new")]],CF.sort,()=>{CF.sort=$("#csort").value;drawCG()},{label:"Sort"});
+ const q=$("#cq");q.oninput=()=>{CF.q=q.value;drawCG()};
+ $$("[data-cs]").forEach(b=>b.onclick=()=>openC(b.dataset.cs));
+ drawCG();if(pend)openC(pend,true)}
+function actorsOf(id){return[...new Set(appear(id).map(x=>(x.cast.find(c=>c.endsWith("|"+id))||"").split("|")[0]).filter(Boolean))]}
+function drawCG(){const g=$("#cgrid");if(!g)return;const q=CF.q.trim().toLowerCase();
+ let ids=Object.keys(CH).filter(k=>appear(k).length||REL.some(r=>r[0]===k||r[1]===k));
+ ids=ids.filter(k=>{const ap=appear(k);if(CF.ph&&!ap.some(x=>x.ph===+CF.ph))return false;if(CF.fr&&!ap.some(x=>x.fr.includes(CF.fr)))return false;
+  if(q&&!(CH[k]+" "+actorsOf(k).join(" ")).toLowerCase().includes(q))return false;return true});
+ const last=k=>{const a=appear(k);return a.length?a[a.length-1].dt:0};
+ ids.sort(CF.sort==="az"?(a,b)=>CH[a].split(" / ").pop().localeCompare(CH[b].split(" / ").pop()):CF.sort==="new"?(a,b)=>last(b)-last(a):(a,b)=>appear(b).length-appear(a).length||CH[a].localeCompare(CH[b]));
+ $("#ccount").textContent=t("n_chars",{n:ids.length});
+ g.innerHTML=ids.length?ids.map(k=>{const p=CH[k].split(" / "),hero=p.length>1?p[1]:p[0],real=p.length>1?p[0]:"",u=IU("characters",k),h=hash(k),c=PC[1+h%6],ac=actorsOf(k),n=appear(k).length,r=rels(k).length;
+  const ini=hero.split(/\s+/).filter(w=>/^[A-Z0-9]/.test(w)).slice(0,2).map(w=>w[0]).join("")||hero[0];
+  return`<button class="ccard" data-c="${k}" aria-label="${esc(CH[k])}"><div class="cimg" style="--c:${c}">${u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}<span class="ini">${esc(ini)}</span><span class="cn">${n}</span></div><div class="cmeta"><b>${esc(hero)}</b>${real?`<small>${esc(real)}</small>`:""}${ac.length?`<em>${esc(ac[0])}${ac.length>1?" +"+(ac.length-1):""}</em>`:""}<span class="tiny">${t("appearances",{n})}${r?" · "+t("conns",{n:r}):""}</span></div></button>`}).join(""):`<div class="empty" style="grid-column:1/-1">${t("c_none")}</div>`;
+ $$("[data-c]",g).forEach(b=>b.onclick=()=>openC(b.dataset.c))}
+function openC(id,instant){if(!CH[id])return;CG.id=id;CG.open=true;syncHash("characters/"+id);let m=$("#cmodal");
+ if(!m){m=document.createElement("div");m.id="cmodal";m.className="cmodal";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");
+  m.innerHTML=`<div class="cbox"><div class="chd"><div id="csel"></div><button class="ib" id="cx" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="grid2 cbody"><div><div class="cgraph" id="cg"><svg id="cgs"></svg></div><div class="legend" style="margin-top:12px">${Object.entries(RC).map(([k,c])=>`<span><i style="width:18px;height:3px;border-radius:2px;background:${c}"></i>${t(k)}</span>`).join("")}</div></div><div class="panel" id="cinfo"></div></div></div>`;
+  document.body.append(m);document.documentElement.classList.add("noscroll");
+  m.onclick=e=>{if(e.target===m)closeC()};$("#cx").onclick=closeC;
+  dd("csel",Object.entries(CH).filter(([k])=>appear(k).length||REL.some(r=>r[0]===k||r[1]===k)).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>[k,v,"",String(appear(k).length)]),id,selC,{label:t("r_char"),search:true,minWidth:320});
+  CG.ro=new ResizeObserver(()=>drawG());CG.ro.observe($("#cg"));if(instant)m.style.animation="none";setTimeout(()=>$("#cx")&&$("#cx").focus({preventScroll:true}),30)}
+ selC(id)}
+function closeC(){CG.open=false;if(cur==="characters")syncHash("characters");const m=$("#cmodal");if(!m)return;CG.ro&&CG.ro.disconnect();m.remove();document.documentElement.classList.remove("noscroll");const b=$(`[data-c="${CG.id}"]`);b&&b.focus({preventScroll:true})}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#cmodal")&&!DR.id&&!$("#sx.open")&&!$('[aria-expanded="true"]'))closeC()});
+function selC(id){CG.id=id;if(CG.open)syncHash("characters/"+id);const cs=$("#csel");if(cs&&cs.set)cs.set(id);if(!$("#cinfo"))return;drawG();drawInfo();$("#cinfo").scrollTop=0}
 function rels(id){return REL.filter(r=>r[0]===id||r[1]===id).map(r=>({o:r[0]===id?r[1]:r[0],k:r[2],l:r[3]}))}
 function drawG(){const s=$("#cgs");if(!s)return;const W=s.clientWidth,H=s.clientHeight,cx=W/2,cy=H/2,rs=rels(CG.id),n=rs.length,R=Math.min(W,H)/2-(W<520?60:78);
  const nm=id=>{const p=CH[id].split(" / ");return p.length>1?p[1]:p[0]};
@@ -942,7 +995,7 @@ function applyBrand(b){b=b||{};const ok=u=>typeof u==="string"&&/^https:\/\//.te
 async function loadRemote(){if(!EMBED)return;try{const r=await fetch("/api/content",{cache:"no-store"});if(!r.ok)return;const j=await r.json(),c=j&&j.content;if(!c||!c.updated||c.updated===CUPD)return;CUPD=c.updated;applyBrand(c.brand);
  ["posters","characters","other","planets"].forEach(k=>{IMG[k]=Object.assign({},IMG0[k]);const src=c[k]||{};for(const key in src)if(typeof src[key]==="string"&&/^https:\/\//.test(src[key]))IMG[k][key]=src[key]});
  VID={};const v=c.videos||{};for(const id in v)if(BY[id]&&Array.isArray(v[id]))VID[id]=v[id].filter(q=>q&&/^[\w-]{11}$/.test(q.yt)).map(q=>({t:VTL[q.t]?q.t:"clip",yt:q.yt,l:String(q.l||"").slice(0,80)}));
- if(VO.on||$(".vmodal")||$("#sx.open"))return;const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters")PEND=CG.id;$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true)}catch(e){}}
+ if(VO.on||$(".vmodal")||$("#sx.open"))return;const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters"&&CG.open)PEND=CG.id;$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true)}catch(e){}}
 /* ================= boot ================= */
 loadTX();shell();route();loadRemote();setInterval(loadRemote,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRemote()});
 if(window.claude&&typeof claude.use==="function"){
