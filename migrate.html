@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Move images to R2 · The Timeline</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;background:#0b0b0f;color:#eee;margin:0;padding:24px;display:flex;justify-content:center}
+main{max-width:520px;width:100%}h1{font-size:22px;margin:0 0 6px}p{color:#aaa;margin:0 0 18px}
+label{display:block;font-size:14px;color:#bbb;margin:14px 0 6px}
+input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #333;background:#16161c;color:#fff;font-size:16px}
+button{margin-top:18px;width:100%;padding:14px;border:0;border-radius:10px;background:#e3262f;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+button:disabled{opacity:.6}#out{margin-top:20px;white-space:pre-wrap;background:#16161c;border-radius:10px;padding:14px;display:none}
+.ok{color:#5ee08a}.bad{color:#ff6b6b}small{color:#888}
+</style></head><body><main>
+<h1>Move images from Vercel Blob to R2</h1>
+<p>Copies every image you uploaded before into the new storage. You can press the button again any time — anything already copied is skipped.</p>
+<label for="pw">Admin password</label><input id="pw" type="password" autocomplete="current-password">
+<label for="from">Content file link <small>(leave empty — only needed if it asks)</small></label><input id="from" type="url" placeholder="https://….public.blob.vercel-storage.com/content/content-….json">
+<button id="go">Copy my images</button>
+<div id="out"></div>
+<script>
+const $=s=>document.querySelector(s),out=$("#out");
+$("#go").onclick=async()=>{const b=$("#go");b.disabled=true;b.textContent="Copying… (can take a few minutes)";out.style.display="block";out.className="";out.textContent="Working…";
+ try{const r=await fetch("/api/migrate",{method:"POST",headers:{"content-type":"application/json","x-admin-key":$("#pw").value},body:JSON.stringify({from:$("#from").value})});
+  let j={};try{j=await r.json()}catch(e){}
+  if(!r.ok){out.className="bad";out.textContent=j.error||("Failed ("+r.status+")")}
+  else{out.className=j.failed.length?"":"ok";out.textContent=`Found ${j.found} images to copy.\nCopied: ${j.copied}${j.left?`\nStill to do: ${j.left} — press the button again.`:""}${j.lists?`\nWatchlists copied: ${j.lists}`:""}${j.failed.length?`\n\nCouldn't copy ${j.failed.length}:\n`+j.failed.join("\n"):""}${!j.left&&!j.failed.length?"\n\nAll done — open the site to check.":""}`}
+ }catch(e){out.className="bad";out.textContent="Network error: "+e.message}
+ b.disabled=false;b.textContent="Copy my images"};
+</script></main></body></html>

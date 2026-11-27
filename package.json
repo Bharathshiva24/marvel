@@ -4,10 +4,8 @@
   "type": "module",
   "description": "The Timeline — interactive MCU guide with an admin panel for images and videos",
   "dependencies": {
+    "@vercel/blob": "^1.1.1",
     "aws4fetch": "^1.0.20"
-  },
-  "devDependencies": {
-    "@vercel/blob": "^1.1.1"
   },
   "engines": { "node": ">=20" }
 }
