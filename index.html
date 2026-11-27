@@ -43,11 +43,17 @@ button{cursor:pointer}
 .ib svg{width:17px;height:17px;flex:none}
 .ib kbd{font:600 11px var(--fb);color:var(--dim);border:1px solid var(--line2);border-radius:5px;padding:1px 5px}
 .ib[aria-pressed=true]{background:var(--red);border-color:var(--red)}
-.lang{appearance:none;-webkit-appearance:none;height:40px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.03) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa0ad' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z'/%3E%3C/svg%3E") 12px 50%/16px no-repeat;padding:0 14px 0 36px;font:600 14px var(--fb);color:var(--ink)}
+.xlang{appearance:none;-webkit-appearance:none;height:40px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.03) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa0ad' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z'/%3E%3C/svg%3E") 12px 50%/16px no-repeat;padding:0 14px 0 36px;font:600 14px var(--fb);color:var(--ink)}
 .lang option{background:#151821}
 .nav2{display:none}
 @media(max-width:1440px){.bar>.nav{display:none}.bar{justify-content:space-between}.nav2{display:flex;padding:0 max(3vw,12px) 10px;justify-content:flex-start}}
-@media(max-width:560px){.ib .lbl,.ib kbd{display:none}.brand b{font-size:22px}.bar{gap:10px}.lang{width:44px;padding:0;color:transparent;background-position:center}.lang option{color:#fff}}
+@media(max-width:560px){.ib .lbl,.ib kbd{display:none}.brand b{font-size:22px}.bar{gap:10px}#lang .dd-v,#lang .dd-c{display:none}#lang .dd-b{width:40px;padding:0;justify-content:center}}
+.vmodal{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);display:grid;place-items:center;padding:16px;animation:in .25s}
+.vmodal .vbox{width:min(1100px,100%);border-radius:18px;overflow:hidden;background:#000;border:1px solid var(--line2);box-shadow:0 40px 120px rgba(0,0,0,.8)}
+.vmodal .vfr{position:relative;aspect-ratio:16/9}.vmodal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vmodal .vbar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--s1)}
+.vmodal .vbar b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vmodal .vbar a,.vmodal .vbar button{flex:none}
 .trbar{display:flex;align-items:center;gap:12px;padding:8px max(3vw,16px);font-size:14px;background:linear-gradient(90deg,rgba(226,35,42,.16),rgba(226,35,42,.04));border-top:1px solid var(--line)}
 .trbar .pg{flex:0 1 160px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}.trbar .pg i{display:block;height:100%;background:var(--red2);transition:width .4s}
 .trbar button{border:0;background:none;color:var(--red2);font-weight:700;padding:6px}
@@ -330,7 +336,7 @@ footer p{max-width:100ch;margin:6px 0}
   <nav class="nav" id="nav" aria-label="Sections"></nav>
   <div class="tools">
    <button class="ib" id="sbtn" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="lbl" data-t="search_btn"></span><kbd>⌘K</kbd></button>
-   <select class="lang" id="lang" aria-label="Language"></select>
+   <div class="pill" id="lang"></div>
    <button class="ib" id="spoil" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="lbl" id="spl"></span></button>
   </div>
  </div>
@@ -346,6 +352,7 @@ footer p{max-width:100ch;margin:6px 0}
 <script src="data.js"></script>
 <script src="images.js"></script>
 <script src="i18n.js"></script>
+<script src="ui.js"></script>
 <script>
 {
 /* ================= core ================= */
@@ -402,16 +409,18 @@ function poster(x,lbl=true){const u=IU("posters",x.id);
  return `<div class="poster${u?" img":""}" style="--pc:${PC[x.ph]}">${art(x)}${imgTag(u)}${lbl?`<span class="pk">${x.up?t("coming_y",{y:x.dt.getFullYear()}):phL(x)}</span>`:""}<span class="pt" style="--s:${ptS(x.t)}">${esc(x.t)}</span><span class="pc">${esc(x.dir)} · ${x.dt.getFullYear()}</span>${isW(x.id)?'<span class="wk" aria-label="'+esc(t("watched"))+'">✓</span>':""}</div>`}
 function av(id,cls=""){const u=IU("characters",id),n=CH[id]||id,h=hash(id),c=PC[1+h%6];const ini=n.split(" / ").pop().split(/\s+/).filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join("")||n[0];
  return `<span class="av ${cls}" style="background:linear-gradient(135deg,${c},#14161d)">${u?imgTag(u):esc(ini)}</span>`}
+/* custom dropdown helper */
+const dd=(id,items,value,onChange,o={})=>UIDD.mount(id,Object.assign({items,value,onChange,placeholder:t("search_btn")},o));
 /* ================= shell: nav, language, spoilers ================= */
 const VIEWS=["timeline","watch","videos","characters","universe","sagas","credits","upcoming","mylist"];
 function shell(){document.documentElement.lang=S.lang;
  const links=VIEWS.map(v=>`<a href="#${v}" data-v="${v}">${esc(t("nav_"+v))}</a>`).join("");$("#nav").innerHTML=links;$("#nav2").innerHTML=links;markNav();
  $$("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));
- $("#lang").innerHTML=LANGS.map(([c,n])=>`<option value="${c}" ${c===S.lang?"selected":""}>${n}</option>`).join("");
+ const EN={en:"English",hi:"Hindi",es:"Spanish",fr:"French",ja:"Japanese"};UIDD.mount("lang",{items:LANGS.map(([c,n])=>[c,n,"",c===S.lang?"":EN[c]]),value:S.lang,label:t("language"),icon:'<svg class="dd-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>',alignRight:true,onChange:setLang});
  $("#spoil").setAttribute("aria-pressed",S.sp);$("#spl").textContent=S.sp?t("spoil_on"):t("spoil_off");$("#spoil").setAttribute("aria-label",S.sp?t("spoil_on"):t("spoil_off"));
  const f={hi:"Noto+Sans+Devanagari:wght@400;600;700;800",ja:"Noto+Sans+JP:wght@400;600;700;800"}[S.lang];$("#xfont").href=f?`https://fonts.googleapis.com/css2?family=${f}&display=swap`:"data:text/css,"}
 function markNav(){$$(".nav a").forEach(a=>a.classList.toggle("on",a.dataset.v===cur));const a=$(`#nav2 a[data-v="${cur}"]`);a&&a.scrollIntoView({block:"nearest",inline:"center"})}
-$("#lang").onchange=e=>{S.lang=e.target.value;save();loadTX();shell();const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters")PEND=CG.id;stopVO();$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true);translateAll()};
+function setLang(v){S.lang=v;save();loadTX();shell();const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters")PEND=CG.id;stopVO();$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true);translateAll()}
 $("#spoil").onclick=()=>{S.sp=!S.sp;save();shell();toast(S.sp?t("t_sp_on"):t("t_sp_off"));refresh()};
 const spoilBlock=html=>S.sp?`<div class="spoil">${html}</div>`:`<div class="spoil lock" tabindex="0" role="button" data-rv data-l="${esc(t("hidden"))}"><div>${html}</div></div>`;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-rv]");if(b){b.classList.remove("lock");b.removeAttribute("data-rv");b.removeAttribute("role")}});
@@ -443,14 +452,27 @@ $("#sbtn").onclick=openPal;
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openPal()}else if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();openPal()}});
 /* ================= detail drawer ================= */
 const DR={id:null};
-function trailer(x){const id=YT[x.id];return id?{u:"https://www.youtube.com/watch?v="+id,l:t("official_trailer"),off:1}:{u:"https://www.youtube.com/results?search_query="+encodeURIComponent((x.k==="film"?"Marvel Studios' ":"")+x.t+" official trailer"),l:t("find_trailer"),off:0}}
-function vids(x){const q=s=>"https://www.youtube.com/results?search_query="+encodeURIComponent((x.k==="film"?"Marvel Studios' ":"")+x.t+" "+s);return[trailer(x),{u:q("official teaser"),l:t("teaser")},{u:q("featurette behind the scenes"),l:t("bts")},{u:q("official clip"),l:t("clips")}]}
+const EMBED=/^https?:$/.test(location.protocol)&&!/claude|anthropic/.test(location.hostname);
+let VID={};
+const YTW=id=>"https://www.youtube.com/watch?v="+id;
+const pa=(yt,x,l)=>yt&&EMBED?` data-play="${yt}" data-pid="${x.id}" data-pl="${esc(l)}"`:"";
+function trailer(x){const tv=(VID[x.id]||[]).find(v=>v.t==="trailer"),id=tv?tv.yt:YT[x.id],l=tv&&tv.l?tv.l:t("official_trailer");
+ return id?{u:YTW(id),l,off:1,yt:id,a:pa(id,x,l)}:{u:"https://www.youtube.com/results?search_query="+encodeURIComponent((x.k==="film"?"Marvel Studios' ":"")+x.t+" official trailer"),l:t("find_trailer"),off:0,a:""}}
+const VTL={trailer:"official_trailer",teaser:"teaser",bts:"bts",clip:"clips"};
+function vids(x){const q=s=>"https://www.youtube.com/results?search_query="+encodeURIComponent((x.k==="film"?"Marvel Studios' ":"")+x.t+" "+s);const tr=trailer(x),out=[tr],have=new Set(["trailer"]);
+ (VID[x.id]||[]).forEach(v=>{if(v.yt===tr.yt)return;const l=v.l||t(VTL[v.t]);have.add(v.t);out.push({u:YTW(v.yt),l,yt:v.yt,a:pa(v.yt,x,l)})});
+ [["teaser","official teaser"],["bts","featurette behind the scenes"],["clip","official clip"]].forEach(([k,qq])=>{if(!have.has(k))out.push({u:q(qq),l:t(VTL[k]),a:""})});return out}
+function openPlayer(yt,pid,label){const x=BY[pid];const d=document.createElement("div");d.className="vmodal";d.setAttribute("role","dialog");d.setAttribute("aria-label",(x?x.t+" — ":"")+label);
+ d.innerHTML=`<div class="vbox"><div class="vfr"><iframe src="https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&rel=0&modestbranding=1&playsinline=1" title="${esc(label)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="vbar"><b>${x?esc(x.t)+" · ":""}${esc(label)}</b><a class="btn" href="${YTW(yt)}" target="_blank" rel="noopener">${ICON.yt}${esc(t("open_yt"))}</a><button class="x" style="position:static" aria-label="${esc(t("close"))}">${ICON.x}</button></div></div>`;
+ document.body.append(d);stopVO();const close=()=>{d.remove();document.removeEventListener("keydown",k,true)};const k=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};
+ document.addEventListener("keydown",k,true);d.onclick=e=>{if(e.target===d||e.target.closest(".x"))close()};$(".x",d).focus()}
+document.addEventListener("click",e=>{const a=e.target.closest("[data-play]");if(!a||e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();e.stopPropagation();openPlayer(a.dataset.play,a.dataset.pid,a.dataset.pl)},true);
 function openT(id,quiet){const x=BY[id];if(!x)return;DR.id=id;const d=$("#drawer");
  const back=x.cn.map(c=>BY[c]).filter(Boolean),fwd=(FWD[id]||[]).map(c=>BY[c]);
  const link=y=>`<button class="chip" data-open="${y.id}"><span class="dot" style="background:${PC[y.ph]}"></span>${esc(y.t)}</button>`;
  const tr=trailer(x),pc=L(x,"pc")||[],sp=L(x,"sp");
  d.innerHTML=`<div class="dhero"><div class="bg">${IU("posters",x.id)?imgTag(IU("posters",x.id)):art(x)}</div><button class="x" data-close aria-label="${esc(t("close"))}">${ICON.x}</button>${poster(x)}<div><div class="tiny">${sagaL(x)} · ${phL(x)}</div><h2>${esc(x.t)}</h2><div class="meta"><span>${x.up?t("releases",{d:fmt(x)}):fmt(x)}</span><span>${kindL(x)}</span><span>${lenL(x)}</span><span>${esc(t("set_in",{e:L(x,"era")}))}</span><span>${t("story_no",{n:x.rank+1})}</span></div></div></div>
- <div class="dsec"><div class="actions"><a class="btn red" href="${tr.u}" target="_blank" rel="noopener">${ICON.yt}${esc(tr.l)}</a><button class="btn" aria-pressed="${isW(id)}" data-w="${id}">${isW(id)?ICON.check+t("watched"):t("mark_watched")}</button><button class="btn" aria-pressed="${inL(id)}" data-l="${id}">${inL(id)?ICON.check+t("on_list"):ICON.plus+t("add_list")}</button></div>
+ <div class="dsec"><div class="actions"><a class="btn red" href="${tr.u}"${tr.a} target="_blank" rel="noopener">${ICON.yt}${esc(tr.l)}</a><button class="btn" aria-pressed="${isW(id)}" data-w="${id}">${isW(id)?ICON.check+t("watched"):t("mark_watched")}</button><button class="btn" aria-pressed="${inL(id)}" data-l="${id}">${inL(id)?ICON.check+t("on_list"):ICON.plus+t("add_list")}</button></div>
  <div class="chips" style="margin-top:6px"><button class="chip" data-guide="${id}">${t("watch_before")}</button><button class="chip" data-vo="${id}">${t("narrate")}</button><button class="chip" data-ontl="${id}">${t("show_tl")}</button></div>
  <h3>${t("story")}</h3><p>${esc(L(x,"log"))}</p>${sp?spoilBlock(`<b>${t("full_story")}:</b> ${esc(sp)}`):""}
  <h3>${t("why")}</h3><p>${esc(L(x,"why"))}</p>
@@ -459,7 +481,7 @@ function openT(id,quiet){const x=BY[id];if(!x)return;DR.id=id;const d=$("#drawer
  ${back.length?`<h3>${t("builds_on")}</h3><div class="chips">${back.map(link).join("")}</div>`:""}
  ${fwd.length?`<h3>${t("leads_into")}</h3><div class="chips">${fwd.map(link).join("")}</div>`:""}
  <h3>${t("post_credits")}</h3>${pc.length?spoilBlock(`<ol style="margin:0;padding-left:18px">${pc.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>`):`<p class="muted">${x.up?t("not_released"):t("none_listed")}</p>`}
- <h3>${t("nav_videos")}</h3><div class="chips">${vids(x).map(v=>`<a class="chip" href="${v.u}" target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="16" height="16"')} ${esc(v.l)}</a>`).join("")}</div><p class="hint">${t("yt_note")}</p></div>`;
+ <h3>${t("nav_videos")}</h3><div class="chips">${vids(x).map(v=>`<a class="chip" href="${v.u}"${v.a} target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="16" height="16"')} ${esc(v.l)}</a>`).join("")}</div><p class="hint">${t("yt_note")}</p></div>`;
  d.classList.add("on");$("#scrim").classList.add("on");if(!quiet){d.scrollTop=0;setTimeout(()=>$(".x",d).focus(),60)}}
 function closeT(){DR.id=null;$("#drawer").classList.remove("on");$("#scrim").classList.remove("on")}
 $("#scrim").onclick=closeT;
@@ -482,28 +504,31 @@ function heroText(){const x=nextUp();const el=$("#hero");if(!el)return;
  $("#hb1").lastChild.textContent=t("hero_guide");$("#hb2").lastChild.textContent=t("hero_trailer");$("#hb3").textContent=t("hero_details")}
 function vTimeline(){
  const x=nextUp(),yrs=[...new Set(T.map(y=>y.dt.getFullYear()))].sort(),hu=IU("other","hero");
- $("#main").innerHTML=`<div class="view"><section class="hero" id="hero">${hu?imgTag(hu,"bgimg"):""}<div class="bg">${art(x)}</div><div class="wrap"><div><span class="kick"><i></i><span id="hk"></span></span><h1>${esc(x.t)}</h1><div class="date" id="hd"></div><div class="cd" data-cd="${x.d}"></div><div class="chips" style="gap:10px"><button class="btn red" id="hb1" data-guide="${x.id}">${ICON.check}<span></span></button><a class="btn" id="hb2" href="${trailer(x).u}" target="_blank" rel="noopener">${ICON.yt}<span></span></a><button class="btn ghost" id="hb3" data-open="${x.id}"></button></div><p class="log" id="hl"></p></div><div class="art">${poster(x)}</div></div></section>
+ $("#main").innerHTML=`<div class="view"><section class="hero" id="hero">${hu?imgTag(hu,"bgimg"):""}<div class="bg">${art(x)}</div><div class="wrap"><div><span class="kick"><i></i><span id="hk"></span></span><h1>${esc(x.t)}</h1><div class="date" id="hd"></div><div class="cd" data-cd="${x.d}"></div><div class="chips" style="gap:10px"><button class="btn red" id="hb1" data-guide="${x.id}">${ICON.check}<span></span></button><a class="btn" id="hb2" href="${trailer(x).u}"${trailer(x).a} target="_blank" rel="noopener">${ICON.yt}<span></span></a><button class="btn ghost" id="hb3" data-open="${x.id}"></button></div><p class="log" id="hl"></p></div><div class="art">${poster(x)}</div></div></section>
  <section class="sec"><div class="wrap">
  <div class="head"><div><h2>${t("tl_title")}</h2><p class="lede">${esc(t("tl_lede",{f:T.filter(y=>y.k==="film").length,s:T.filter(y=>y.k!=="film").length}))}</p></div><div class="legend">${[1,2,3,4,5,6].map(p=>`<span><i style="width:10px;height:10px;border-radius:50%;background:${PC[p]}"></i>${t("phase",{n:p})}</span>`).join("")}</div></div>
  <div class="tlc"><div class="seg" role="group"><button id="mR" aria-pressed="${S.mode==="release"}">${t("release_order")}</button><button id="mC" aria-pressed="${S.mode==="chrono"}">${t("story_order")}</button></div>
  <div class="zoom"><button id="zo" aria-label="${esc(t("zoom_out"))}">−</button><input id="zr" type="range" min="0" max="100" aria-label="${esc(t("zoom"))}"><button id="zi" aria-label="${esc(t("zoom_in"))}">+</button></div><div class="chips" id="jumps"></div></div>
  <details class="fbox" id="fbox"><summary class="btn">${t("filters")}</summary><div class="filters">
   <div class="chips" id="fph">${[1,2,3,4,5,6].map(p=>`<button class="chip" data-ph="${p}" aria-pressed="${F.ph.has(p)}"><span class="dot" style="background:${PC[p]}"></span>P${p}</button>`).join("")}</div>
-  <select class="in" id="fk" aria-label="${esc(t("filters"))}"><option value="all">${t("films_series")}</option><option value="film">${t("films_only")}</option><option value="series">${t("series_only")}</option></select>
-  <select class="in" id="ffr" aria-label="Franchise"><option value="">${t("all_fr")}</option>${Object.entries(FR).map(([k,v])=>`<option value="${k}">${esc(v)}</option>`).join("")}</select>
-  <select class="in" id="fch" aria-label="${esc(t("r_char"))}"><option value="">${t("any_char")}</option>${Object.entries(CH).filter(([k])=>appear(k).length>1).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${k}">${esc(v)}</option>`).join("")}</select>
-  <div style="display:flex;gap:8px"><select class="in" id="fy0" aria-label="From" style="flex:1">${yrs.map(y=>`<option>${y}</option>`).join("")}</select><select class="in" id="fy1" aria-label="To" style="flex:1">${yrs.map(y=>`<option>${y}</option>`).join("")}</select></div>
-  <select class="in" id="fw" aria-label="${esc(t("watched"))}"><option value="all">${t("w_all")}</option><option value="un">${t("w_un")}</option><option value="wd">${t("w_yes")}</option></select>
+  <div class="full" id="fk"></div><div class="full" id="ffr"></div><div class="full" id="fch"></div>
+  <div style="display:flex;gap:8px"><div class="full" id="fy0"></div><div class="full" id="fy1"></div></div>
+  <div class="full" id="fw"></div>
  </div></details>
  <div class="strip"><div class="scroller" id="sc" tabindex="0" aria-label="${esc(t("tl_title"))}"><div class="track" id="tr"></div></div></div><div class="mini" id="mini" aria-hidden="true"></div>
  <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="tiny" id="tlcount"></span><span class="hint" style="margin:0">${t("tl_hint")}</span></div>
  </div></section></div>`;
  heroText();startCD();
  if(innerWidth>760)$("#fbox").open=true;
- $("#fk").value=F.k;$("#ffr").value=F.fr;$("#fch").value=F.ch;$("#fy0").value=F.y0;$("#fy1").value=F.y1;$("#fw").value=F.w;
+ const fset=()=>{F.k=$("#fk").value;F.fr=$("#ffr").value;F.ch=$("#fch").value;F.y0=+$("#fy0").value;F.y1=+$("#fy1").value;F.w=$("#fw").value;drawTL()};
+ dd("fk",[["all",t("films_series")],["film",t("films_only")],["series",t("series_only")]],F.k,fset,{label:t("filters")});
+ dd("ffr",[["",t("all_fr")],...Object.entries(FR).map(([k,v])=>[k,v])],F.fr,fset,{label:"Franchise",search:true});
+ dd("fch",[["",t("any_char")],...Object.entries(CH).filter(([k])=>appear(k).length>1).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>[k,v,"",String(appear(k).length)])],F.ch,fset,{label:t("r_char"),search:true,minWidth:300});
+ dd("fy0",yrs.map(y=>[y,String(y)]),F.y0,fset,{label:"From",minWidth:120});dd("fy1",yrs.map(y=>[y,String(y)]),F.y1,fset,{label:"To",minWidth:120});
+ dd("fw",[["all",t("w_all")],["un",t("w_un")],["wd",t("w_yes")]],F.w,fset,{label:t("watched")});
  $("#mR").onclick=()=>setMode("release");$("#mC").onclick=()=>setMode("chrono");
  $$("#fph .chip").forEach(b=>b.onclick=()=>{const p=+b.dataset.ph;F.ph.has(p)?F.ph.delete(p):F.ph.add(p);b.setAttribute("aria-pressed",F.ph.has(p));drawTL()});
- ["fk","ffr","fch","fy0","fy1","fw"].forEach(i=>$("#"+i).onchange=()=>{F.k=$("#fk").value;F.fr=$("#ffr").value;F.ch=$("#fch").value;F.y0=+$("#fy0").value;F.y1=+$("#fy1").value;F.w=$("#fw").value;drawTL()});
+ 
  const sc=$("#sc");
  $("#zi").onclick=()=>zoomBy(1.45);$("#zo").onclick=()=>zoomBy(1/1.45);
  $("#zr").oninput=e=>{const[a,b]=ZR();setZoom(a*Math.pow(b/a,e.target.value/100))};
@@ -528,8 +553,8 @@ function vTimeline(){
  if(!S.z)S.z=defZ();
  drawTL();
  const target=PEND;PEND=null;
- if(target&&BY[target]){F.ph.clear();F.k="all";F.fr="";F.w="all";F.y0=2008;F.y1=2027;if(F.ch&&!BY[target].chars.includes(F.ch))F.ch="";$$("#fph .chip").forEach(b=>b.setAttribute("aria-pressed","false"));$("#fk").value="all";$("#ffr").value="";$("#fch").value=F.ch;$("#fy0").value=2008;$("#fy1").value=2027;$("#fw").value="all";drawTL();focusIt(target)}
- else if(F.ch){$("#fch").value=F.ch;drawTL();requestAnimationFrame(()=>$(".strip").scrollIntoView({behavior:"smooth",block:"center"}))}
+ if(target&&BY[target]){F.ph.clear();F.k="all";F.fr="";F.w="all";F.y0=2008;F.y1=2027;if(F.ch&&!BY[target].chars.includes(F.ch))F.ch="";$$("#fph .chip").forEach(b=>b.setAttribute("aria-pressed","false"));$("#fk").set("all");$("#ffr").set("");$("#fch").set(F.ch);$("#fy0").set(2008);$("#fy1").set(2027);$("#fw").set("all");drawTL();focusIt(target)}
+ else if(F.ch){$("#fch").set(F.ch);drawTL();requestAnimationFrame(()=>$(".strip").scrollIntoView({behavior:"smooth",block:"center"}))}
 }
 function focusIt(id){if(S.mode==="release"&&S.z<400)setZoom(400);if(S.mode==="chrono"&&S.z<120)setZoom(120);requestAnimationFrame(()=>{const sc=$("#sc"),el=$(`.it[data-id="${id}"]`);if(!el)return;$(".strip").scrollIntoView({block:"center"});sc.scrollLeft=el.offsetLeft-sc.clientWidth/2+70;sc.scrollTop=Math.max(0,el.offsetTop-90);el.focus({preventScroll:true});el.animate([{transform:"scale(1)"},{transform:"scale(1.12)"},{transform:"scale(1)"}],{duration:700,iterations:2})})}
 const ZR=()=>S.mode==="release"?[36,1500]:[12,260];
@@ -579,7 +604,7 @@ function vWatch(){if(PEND&&BY[PEND])WG.id=PEND;PEND=null;
  $("#main").innerHTML=`<section class="sec view"><div class="wrap">
  <div class="head"><div><h1>${t("w_title")}</h1><p class="lede">${t("w_lede")}</p></div></div>
  <div class="targets" role="group">${tg.map(y=>`<button data-tg="${y.id}" aria-pressed="${y.id===WG.id}" aria-label="${esc(y.t)}">${poster(y,false)}<small>${y.up?t("coming_y",{y:y.dt.getFullYear()}):y.dt.getFullYear()}</small></button>`).join("")}</div>
- <div class="tlc" style="margin-top:8px"><select class="in" id="wsel" style="flex:1 1 260px;max-width:420px">${REL_ORDER.map(y=>`<option value="${y.id}" ${y.id===WG.id?"selected":""}>${esc(y.t)} (${y.dt.getFullYear()})</option>`).join("")}</select>
+ <div class="tlc" style="margin-top:8px"><div id="wsel" style="flex:1 1 260px;max-width:420px"></div>
  <div class="seg"><button id="oR" aria-pressed="${WG.ord==="release"}">${t("release_order")}</button><button id="oC" aria-pressed="${WG.ord==="chrono"}">${t("story_order")}</button></div><button class="chip" id="wopt" aria-pressed="${WG.opt}">${t("include_opt")}</button></div>
  <div class="grid2" style="margin-top:10px"><div class="panel" style="display:grid;grid-template-columns:130px minmax(0,1fr);gap:22px;align-items:center"><button class="bare" data-open="${x.id}" style="font-size:20px">${poster(x)}</button><div><div class="tiny">${x.up?t("coming_d",{d:fmt(x)}):t("released_d",{d:fmt(x)})}</div><h2 style="text-transform:uppercase;font-weight:900;margin:6px 0 8px">${esc(x.t)}</h2><p class="small muted" style="margin:0">${esc(L(x,"log"))}</p>${g.auto?`<p class="hint">${t("auto_note")}</p>`:""}</div></div>
  <div class="panel"><h3>${t("your_prep")}</h3><div class="stats" style="margin:16px 0"><span><b>${seq.length}</b>${t("titles")}</span><span><b>${tot.toFixed(0)} h</b>${t("total")}</span><span><b>${left.toFixed(0)} h</b>${t("left")}</span><span><b>${done}/${seq.length}</b>${t("watched_l")}</span></div><div class="meter"><i style="width:${seq.length?done/seq.length*100:100}%"></i></div><div class="chips" style="margin-top:16px"><button class="btn" id="wadd">${ICON.plus}${t("add_all")}</button></div></div></div>
@@ -587,7 +612,7 @@ function vWatch(){if(PEND&&BY[PEND])WG.id=PEND;PEND=null;
  <div class="panel" style="margin-top:20px"><h3>${t("sequence")}</h3><p class="tiny" style="margin:6px 0 6px">${WG.ord==="release"?t("seq_rel"):t("seq_story")}</p>
  ${seq.length?`<ol class="seq">${seq.map(([id,why,k])=>{const y=BY[id];return`<li class="${isW(id)?"done":""}"><div><button class="bare" data-open="${id}" style="font-weight:800;font-size:17px">${esc(y.t)}</button><span class="tag ${k}">${t({e:"essential",r:"recommended",o:"optional"}[k])}</span><div class="tiny">${fmt(y)} · ${lenL(y)} · ${esc(why)}</div></div><button class="tick-b" data-w="${id}" aria-pressed="${isW(id)}" aria-label="${esc(t("mark_watched"))}: ${esc(y.t)}">✓</button></li>`}).join("")}<li class="end" style="border:0"><div><b style="color:var(--red2);font-size:17px">${esc(x.t)}</b><div class="tiny">${x.up?t("arrives",{d:fmt(x)}):t("ready")}</div></div><span></span></li></ol>`:`<p class="muted">${t("no_prereq")}</p>`}</div>
  </div></section>`;
- $$("[data-tg]").forEach(b=>b.onclick=()=>{WG.id=b.dataset.tg;reWatch()});$("#wsel").onchange=e=>{WG.id=e.target.value;reWatch()};
+ $$("[data-tg]").forEach(b=>b.onclick=()=>{WG.id=b.dataset.tg;reWatch()});dd("wsel",REL_ORDER.map(y=>[y.id,y.t,`<i class="dd-dot" style="background:${PC[y.ph]}"></i>`,String(y.dt.getFullYear())]),WG.id,v=>{WG.id=v;reWatch()},{label:t("nav_watch"),search:true,minWidth:320});
  $("#oR").onclick=()=>{WG.ord="release";reWatch()};$("#oC").onclick=()=>{WG.ord="chrono";reWatch()};$("#wopt").onclick=()=>{WG.opt=!WG.opt;reWatch()};
  $("#wadd").onclick=()=>{let n=0;seq.forEach(([id])=>{if(!isW(id)&&!inL(id)){S.l.push(id);n++}});save();toast(n?t("added_n",{n}):t("already"))};
  requestAnimationFrame(()=>{const b=$(`[data-tg="${WG.id}"]`);if(b){const c=$(".targets");c.scrollLeft=b.offsetLeft-c.clientWidth/2+56}});
@@ -613,7 +638,7 @@ function vVideos(keep){if(PEND&&BY[PEND]){VO.src="t";VO.id=PEND}PEND=null;stopVO
  $("#main").innerHTML=`<section class="sec view"><div class="wrap">
  <div class="head"><div><h1>${t("v_title")}</h1><p class="lede">${t("v_lede")}</p></div></div>
  <div class="grid2"><div>
-  <div class="tlc"><div class="seg"><button id="sT" aria-pressed="${VO.src==="t"}">${t("src_titles")}</button><button id="sE" aria-pressed="${VO.src==="e"}">${t("src_events")}</button></div><select class="in" id="vsel" style="flex:1 1 240px"></select></div>
+  <div class="tlc"><div class="seg"><button id="sT" aria-pressed="${VO.src==="t"}">${t("src_titles")}</button><button id="sE" aria-pressed="${VO.src==="e"}">${t("src_events")}</button></div><div id="vsel" style="flex:1 1 260px"></div></div>
   <div class="screen" id="scr"><div class="bg" id="sbg"></div><div class="pp" id="spp"></div><div class="ttl"><h3 id="sh"></h3><p id="sm"></p></div><div class="wave"><i></i><i></i><i></i><i></i></div><div class="sub" id="ssub"></div></div>
   <div class="ctl"><button class="ib" id="pv" aria-label="${esc(t("prev"))}">${ICON.prev}</button><button class="big" id="pl" aria-label="${esc(t("play"))}">${ICON.play}</button><button class="ib" id="nx" aria-label="${esc(t("next"))}">${ICON.next}</button><div class="prog" id="pg" role="slider" tabindex="0" aria-label="${esc(t("chapters"))}"><i id="pgi"></i></div><button class="chip" id="subt" aria-pressed="${VO.sub}">${t("subtitles")}</button></div>
   <p class="hint" id="vnote"></p>
@@ -621,11 +646,11 @@ function vVideos(keep){if(PEND&&BY[PEND]){VO.src="t";VO.id=PEND}PEND=null;stopVO
  </div>
  <div class="panel"><h3>${t("chapters")}</h3><ul class="chaps" id="chaps"></ul><h3 style="margin-top:22px">${t("transcript")}</h3><div class="trans" id="trans"></div></div></div>
  <div class="panel" style="margin-top:22px"><div class="head" style="margin:0 0 6px"><div><h2>${t("video_tl")}</h2><p class="tiny" style="margin:8px 0 0">${t("video_tl_d")}</p></div><input class="in" id="vq" type="search" placeholder="${esc(t("filter_videos"))}" aria-label="${esc(t("filter_videos"))}"></div>
- <div class="vlist" id="vl">${Object.entries(groups).map(([y,ts])=>`<div class="vyear">${y}</div>`+ts.map(x=>{const tr=trailer(x);return`<div class="vrow" data-name="${esc(x.t.toLowerCase())}"><button class="bare" data-open="${x.id}" aria-label="${esc(x.t)}">${poster(x,false)}</button><div><b>${esc(x.t)}</b> <span class="tiny">${fmt(x)} · ${phL(x)}</span><div class="chips"><a class="chip ${tr.off?"yt":""}" href="${tr.u}" target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="15" height="15"')} ${esc(tr.l)}</a><button class="chip" data-nar="${x.id}">${ICON.mic.replace("<svg",'<svg width="15" height="15"')} ${t("narrate")}</button></div></div></div>`}).join("")).join("")}</div></div>
+ <div class="vlist" id="vl">${Object.entries(groups).map(([y,ts])=>`<div class="vyear">${y}</div>`+ts.map(x=>{const tr=trailer(x);return`<div class="vrow" data-name="${esc(x.t.toLowerCase())}"><button class="bare" data-open="${x.id}" aria-label="${esc(x.t)}">${poster(x,false)}</button><div><b>${esc(x.t)}</b> <span class="tiny">${fmt(x)} · ${phL(x)}</span><div class="chips"><a class="chip ${tr.off?"yt":""}" href="${tr.u}"${tr.a} target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="15" height="15"')} ${esc(tr.l)}</a><button class="chip" data-nar="${x.id}">${ICON.mic.replace("<svg",'<svg width="15" height="15"')} ${t("narrate")}</button></div></div></div>`}).join("")).join("")}</div></div>
  </div></section>`;
  fillSel();
  $("#sT").onclick=()=>{VO.src="t";stopVO();buildChapters();fillSel();syncVO(true)};$("#sE").onclick=()=>{VO.src="e";stopVO();buildChapters();fillSel();syncVO(true)};
- $("#vsel").onchange=e=>{if(VO.src==="t")VO.id=e.target.value;else VO.ev=e.target.value;stopVO();buildChapters();syncVO(true)};
+ 
  $("#pl").onclick=()=>VO.on?stopVO():playVO();
  $("#pv").onclick=()=>jump(VO.s>0?VO.c:Math.max(0,VO.c-1),0);$("#nx").onclick=()=>{if(VO.c<VO.chs.length-1)jump(VO.c+1,0)};
  $("#subt").onclick=e=>{VO.sub=!VO.sub;e.currentTarget.setAttribute("aria-pressed",VO.sub);syncVO()};
@@ -634,9 +659,9 @@ function vVideos(keep){if(PEND&&BY[PEND]){VO.src="t";VO.id=PEND}PEND=null;stopVO
  $("#vq").oninput=e=>{const q=e.target.value.toLowerCase();$$(".vrow").forEach(r=>r.classList.toggle("hide",!r.dataset.name.includes(q)));$$(".vyear").forEach(y=>{let n=y.nextElementSibling,any=false;while(n&&n.classList.contains("vrow")){if(!n.classList.contains("hide"))any=true;n=n.nextElementSibling}y.classList.toggle("hide",!any)})};
  $("#vl").addEventListener("click",e=>{const b=e.target.closest("[data-nar]");if(!b)return;VO.src="t";VO.id=b.dataset.nar;stopVO();buildChapters();fillSel();syncVO(true);$("#scr").scrollIntoView({behavior:"smooth",block:"center"})});
  syncVO(true)}
-function fillSel(){const s=$("#vsel");if(!s)return;$("#sT").setAttribute("aria-pressed",VO.src==="t");$("#sE").setAttribute("aria-pressed",VO.src==="e");
- s.setAttribute("aria-label",VO.src==="t"?t("src_titles"):t("src_events"));
- s.innerHTML=VO.src==="t"?REL_ORDER.map(x=>`<option value="${x.id}" ${x.id===VO.id?"selected":""}>${esc(x.t)} (${x.dt.getFullYear()})</option>`).join(""):`<option value="all">${esc(t("story_so_far",{n:EVENTS.length}))}</option>`+EVENTS.map(e=>`<option value="${e.id}" ${e.id===VO.ev?"selected":""}>${esc(e.y)} · ${esc(EV(e,"t"))}</option>`).join("")}
+function fillSel(){if(!$("#vsel"))return;$("#sT").setAttribute("aria-pressed",VO.src==="t");$("#sE").setAttribute("aria-pressed",VO.src==="e");
+ const items=VO.src==="t"?REL_ORDER.map(x=>[x.id,x.t,`<i class="dd-dot" style="background:${PC[x.ph]}"></i>`,String(x.dt.getFullYear())]):[["all",t("story_so_far",{n:EVENTS.length})],...EVENTS.map(e=>[e.id,EV(e,"t"),"",e.y])];
+ dd("vsel",items,VO.src==="t"?VO.id:VO.ev,v=>{if(VO.src==="t")VO.id=v;else VO.ev=v;stopVO();buildChapters();syncVO(true)},{label:VO.src==="t"?t("src_titles"):t("src_events"),search:VO.src==="t",minWidth:320})}
 function curT(){if(VO.src==="t")return BY[VO.id];const c=VO.chs[VO.c];return BY[c?.ids?.[0]]||BY.eg}
 function syncVO(full){const x=curT(),ch=VO.chs[VO.c];if(!ch||!$("#scr"))return;
  const key=VO.src+x.id+(ch.ev||"");
@@ -679,14 +704,14 @@ function vChars(){if(PEND&&CH[PEND])CG.id=PEND;PEND=null;
  const top=Object.keys(CH).map(k=>[k,appear(k).length]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]).slice(0,16),mx=top[0][1];
  const pc={};T.forEach(x=>{const c=[...new Set(x.chars)];for(let i=0;i<c.length;i++)for(let j=i+1;j<c.length;j++){const k=[c[i],c[j]].sort().join("|");pc[k]=(pc[k]||0)+1}});
  $("#main").innerHTML=`<section class="sec view"><div class="wrap">
- <div class="head"><div><h1>${t("c_title")}</h1><p class="lede">${t("c_lede")}</p></div><select class="in" id="csel" aria-label="${esc(t("r_char"))}" style="min-width:260px">${Object.entries(CH).filter(([k])=>appear(k).length||REL.some(r=>r[0]===k||r[1]===k)).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${k}" ${k===CG.id?"selected":""}>${esc(v)}</option>`).join("")}</select></div>
+ <div class="head"><div><h1>${t("c_title")}</h1><p class="lede">${t("c_lede")}</p></div><div id="csel" style="min-width:min(300px,100%)"></div></div>
  <div class="grid2"><div><div class="cgraph" id="cg"><svg id="cgs"></svg></div><div class="legend" style="margin-top:12px">${Object.entries(RC).map(([k,c])=>`<span><i style="width:18px;height:3px;border-radius:2px;background:${c}"></i>${t(k)}</span>`).join("")}</div></div><div class="panel" id="cinfo"></div></div>
  <div class="grid2" style="margin-top:20px"><div class="panel"><h3>${t("tracker")}</h3><p class="tiny" style="margin:6px 0 12px">${t("tracker_d")}</p><div class="bars" id="bars">${top.map(([k,n])=>`<button class="row" data-cs="${k}"><span>${esc(CH[k].split(" / ").pop())}</span><span><i style="width:${n/mx*100}%;${k===CG.id?"background:#fff":""}"></i></span><b>${n}</b></button>`).join("")}</div></div>
  <div class="panel"><h3>${t("together")}</h3><div class="bars" style="margin-top:12px">${Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,n])=>{const[a,b]=k.split("|");return`<button class="row" data-cs="${a}" style="grid-template-columns:minmax(0,1fr) 2.4em"><span>${esc(CH[a].split(" / ").pop())} + ${esc(CH[b].split(" / ").pop())}</span><b>${n}</b></button>`}).join("")}</div></div></div>
  </div></section>`;
- $("#csel").onchange=e=>selC(e.target.value);$$("[data-cs]").forEach(b=>b.onclick=()=>selC(b.dataset.cs));
+ dd("csel",Object.entries(CH).filter(([k])=>appear(k).length||REL.some(r=>r[0]===k||r[1]===k)).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>[k,v,"",String(appear(k).length)]),CG.id,selC,{label:t("r_char"),search:true,minWidth:320});$$("[data-cs]").forEach(b=>b.onclick=()=>selC(b.dataset.cs));
  const ro=new ResizeObserver(()=>drawG());ro.observe($("#cg"));drawInfo()}
-function selC(id){CG.id=id;$("#csel").value=id;drawG();drawInfo();$$("#bars [data-cs]").forEach(b=>b.querySelector("i").style.background=b.dataset.cs===id?"#fff":"")}
+function selC(id){CG.id=id;$("#csel").set(id);drawG();drawInfo();$$("#bars [data-cs]").forEach(b=>b.querySelector("i").style.background=b.dataset.cs===id?"#fff":"")}
 function rels(id){return REL.filter(r=>r[0]===id||r[1]===id).map(r=>({o:r[0]===id?r[1]:r[0],k:r[2],l:r[3]}))}
 function drawG(){const s=$("#cgs");if(!s)return;const W=s.clientWidth,H=s.clientHeight,cx=W/2,cy=H/2,rs=rels(CG.id),n=rs.length,R=Math.min(W,H)/2-(W<520?60:78);
  const nm=id=>{const p=CH[id].split(" / ");return p.length>1?p[1]:p[0]};
@@ -755,7 +780,7 @@ function vUpcoming(){const rec=REL_ORDER.filter(x=>released(x)&&x.dt.getFullYear
   return`<div class="up">${bu?imgTag(bu,"bgimg"):""}<div class="tiny">${t(w)}</div><h2 style="margin:8px 0 6px;font-size:30px">${esc(n||t("untitled"))}</h2><div class="small">${dd.toLocaleDateString(LC(),tba?{month:"long",year:"numeric"}:{year:"numeric",month:"long",day:"numeric"})}</div>${tba?`<p class="tiny">${t("cd_tba")}</p>`:`<div class="cd" data-cd="${d}"></div>`}${x?`<div class="chips"><button class="btn red" data-guide="${id}">${t("hero_guide")}</button><button class="btn" data-open="${id}">${t("hero_details")}</button></div>`:""}</div>`}).join("")}</div>
  <div class="panel" style="margin-top:20px"><h3>${t("rel_2026")}</h3><div class="app" style="margin-top:14px">${rec.map(x=>`<button data-open="${x.id}" aria-label="${esc(x.t)}" style="width:96px">${poster(x,false)}<div class="tiny" style="margin-top:6px">${fmt(x)}</div></button>`).join("")}</div></div>
  </div></section>`;
- const x=nextUp();$(".ups").insertAdjacentHTML("beforebegin",`<div class="panel" style="display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:26px;align-items:center;margin-bottom:16px;background:radial-gradient(600px 300px at 0 0,rgba(226,35,42,.3),transparent),var(--s1)"><button class="bare" data-open="${x.id}" style="font-size:26px">${poster(x)}</button><div><div class="tiny">${t("theaters")}</div><h2 style="font-size:clamp(36px,5vw,64px);text-transform:uppercase;font-weight:900;margin:6px 0">${esc(x.t)}</h2><div class="small">${fmtL(x.dt)}</div><div class="cd" data-cd="${x.d}"></div><p class="small muted" style="margin:0 0 16px;max-width:60ch">${esc(L(x,"log"))}</p><div class="chips"><button class="btn red" data-guide="${x.id}">${t("hero_guide")}</button><a class="btn" href="${trailer(x).u}" target="_blank" rel="noopener">${ICON.yt}${t("hero_trailer")}</a><button class="btn" data-l="${x.id}" aria-pressed="${inL(x.id)}">${inL(x.id)?t("on_list"):t("add_list")}</button></div></div></div>`);
+ const x=nextUp();$(".ups").insertAdjacentHTML("beforebegin",`<div class="panel" style="display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:26px;align-items:center;margin-bottom:16px;background:radial-gradient(600px 300px at 0 0,rgba(226,35,42,.3),transparent),var(--s1)"><button class="bare" data-open="${x.id}" style="font-size:26px">${poster(x)}</button><div><div class="tiny">${t("theaters")}</div><h2 style="font-size:clamp(36px,5vw,64px);text-transform:uppercase;font-weight:900;margin:6px 0">${esc(x.t)}</h2><div class="small">${fmtL(x.dt)}</div><div class="cd" data-cd="${x.d}"></div><p class="small muted" style="margin:0 0 16px;max-width:60ch">${esc(L(x,"log"))}</p><div class="chips"><button class="btn red" data-guide="${x.id}">${t("hero_guide")}</button><a class="btn" href="${trailer(x).u}"${trailer(x).a} target="_blank" rel="noopener">${ICON.yt}${t("hero_trailer")}</a><button class="btn" data-l="${x.id}" aria-pressed="${inL(x.id)}">${inL(x.id)?t("on_list"):t("add_list")}</button></div></div></div>`);
  if(innerWidth<600)$(".panel").style.gridTemplateColumns="minmax(0,1fr)";
  startCD()}
 /* ================= MY LIST ================= */
@@ -803,8 +828,14 @@ async function translateAll(){const lang=S.lang,run=++trRun;if(lang==="en"){trBa
   else{TX.m={stones:Array.isArray(out.stones)?out.stones:[],threads:Array.isArray(out.threads)?out.threads:[],rel:out.rel&&typeof out.rel==="object"?out.rel:{}}}
   saveTX();k++;if(cur!=="videos"||!VO.on)refresh()}
  trBar(`<span>${esc(t("tr_done",{l:name}))}</span>`);setTimeout(()=>{if(run===trRun)trBar("")},3000)}
+/* ================= live content from the admin panel ================= */
+const IMG0=JSON.parse(JSON.stringify(window.IMG||{posters:{},characters:{},other:{}}));let CUPD="";
+async function loadRemote(){if(!EMBED)return;try{const r=await fetch("/api/content",{cache:"no-store"});if(!r.ok)return;const j=await r.json(),c=j&&j.content;if(!c||!c.updated||c.updated===CUPD)return;CUPD=c.updated;
+ ["posters","characters","other"].forEach(k=>{IMG[k]=Object.assign({},IMG0[k]);const src=c[k]||{};for(const key in src)if(typeof src[key]==="string"&&/^https:\/\//.test(src[key]))IMG[k][key]=src[key]});
+ VID={};const v=c.videos||{};for(const id in v)if(BY[id]&&Array.isArray(v[id]))VID[id]=v[id].filter(q=>q&&/^[\w-]{11}$/.test(q.yt)).map(q=>({t:VTL[q.t]?q.t:"clip",yt:q.yt,l:String(q.l||"").slice(0,80)}));
+ if(VO.on||$(".vmodal")||$(".pal"))return;const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters")PEND=CG.id;$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true)}catch(e){}}
 /* ================= boot ================= */
-loadTX();shell();route();
+loadTX();shell();route();loadRemote();setInterval(loadRemote,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRemote()});
 if(window.claude&&typeof claude.use==="function"){
  claude.use("tts").then(x=>{TTS=x||null;if(cur==="videos"&&$("#vnote"))$("#vnote").textContent=TTS?"":t("vo_note");if(TTS&&TTS.onLine)TTS.onLine(({id})=>{if(!VO.on||!id)return;const[c,s]=String(id).split("-").map(Number);if(isNaN(c))return;VO.c=c;VO.s=s;syncVO(VO.chs[c]&&s===0)})}).catch(()=>{});
  claude.use("sample").then(x=>{SAMPLE=x||null;if(S.lang!=="en")translateAll()}).catch(()=>{if(S.lang!=="en")translateAll()});
