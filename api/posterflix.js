@@ -1,14 +1,22 @@
 // GET /api/posterflix → { url, items:[{ id, title, img, full, href, by, medium }] }
-// Reads Posterflix's own catalog (the POSTERS list in /app/catalog.<hash>.js) and returns only the posters
-// tagged "Marvel" (no DC). The page shuffles them on every load.
+// Reads Posterflix's own catalog (the POSTERS list in /app/catalog.<hash>.js) and returns its Superheroes
+// category, which is what posterflix.in/search?q=marvel shows, minus DC-inspired pieces. Shuffled on each load.
 // Cached at Vercel's edge for an hour. If Posterflix can't be read, the last known Marvel posters are used.
 const ORIGIN = "https://posterflix.in";
 const PAGE = ORIGIN + "/search?q=marvel";
 const UA = { "user-agent": "Mozilla/5.0 (compatible; TheTimelineBot/1.0; +https://marvel-timeline.vercel.app)" };
 const FALLBACK = [
-  { id: "hulk", title: "Hulk", year: "Marvel", medium: "Hyperreal minimal render" },
-  { id: "captain", title: "Captain America", year: "Marvel", medium: "Arctic photo-realism" },
+  { id: "handprint", title: "The Handprint", medium: "Distressed photo-realism" },
+  { id: "endlessdoors", title: "Every Door, Another World", medium: "Surreal painted corridor" },
+  { id: "manywebs", title: "Many Worlds, One Web", medium: "Shattered-glass photo collage" },
+  { id: "redstarshadow", title: "The Red Star", medium: "Gritty industrial poster" },
+  { id: "foldingcity", title: "The Folding City", medium: "Mystical illustration" },
+  { id: "pantherfalls", title: "Panther Falls", medium: "Cinematic landscape painting" },
+  { id: "rainbowroad", title: "Rainbow Road to the Arena", medium: "Synthwave sci-fi art" },
+  { id: "hulk", title: "The Gentle Giant", medium: "Hyperreal minimal render" },
 ];
+// Posterflix's "marvel" search shows its Superheroes category. These DC-inspired pieces are left out.
+const SKIP = new Set(["flash", "superman", "batman"]);
 const ID = /^[a-z0-9-]{1,60}$/;
 
 function shape(p) {
@@ -18,7 +26,7 @@ function shape(p) {
     img: `${ORIGIN}/img/${p.id}-s.webp${v}`, full: `${ORIGIN}/img/${p.id}.webp${v}`,
     href: `${ORIGIN}/poster/${p.id}`,
     by: String(p.by || "").slice(0, 80), medium: String(p.medium || "").slice(0, 80),
-    brand: String(p.year || "").slice(0, 20), marvel: String(p.year).toLowerCase() === "marvel",
+    marvel: true,
   };
 }
 
@@ -38,7 +46,7 @@ async function fromCatalog() {
   if (!path) return [];
   const js = await (await fetch(ORIGIN + path, { headers: UA, signal: AbortSignal.timeout(8000) })).text();
   const all = parsePosters(js).filter((p) => p && ID.test(p.id));
-  return all.filter((p) => String(p.year).toLowerCase() === "marvel");
+  return all.filter((p) => p.region === "Superheroes" && !SKIP.has(p.id) && String(p.year).toLowerCase() !== "dc");
 }
 
 export async function GET() {
