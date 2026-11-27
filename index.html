@@ -157,6 +157,7 @@ h3{font-size:24px}
 .zoom button:hover{background:rgba(255,255,255,.08)}
 .zoom input{width:120px;accent-color:var(--red)}
 .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px}
+@media(min-width:900px){.filters .yrs{grid-column:span 2}}
 .fbox summary{display:none}
 @media(max-width:760px){.fbox summary{display:inline-flex;margin-bottom:12px;list-style:none}.fbox summary::-webkit-details-marker{display:none}}
 .strip{position:relative;border-radius:var(--r);background:#05060a;border:1px solid var(--line);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
@@ -429,7 +430,7 @@ footer p{max-width:100ch;margin:6px 0}
 /* ================= core ================= */
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const PC=["#9a9aa6","#e0353d","#ec7a2c","#d8b03c","#1fb8aa","#8d6ff4","#3e86f2"];
+const PC=["#9a9aa6","#ff1f4b","#ff7a00","#ffc400","#00d9a6","#a64dff","#1f7aff"];
 const BY={};T.forEach(t=>{t.dt=new Date(t.d+"T12:00:00");t.yr=t.dt.getFullYear()+(t.dt-new Date(t.dt.getFullYear(),0,1))/31557600000;BY[t.id]=t;t.chars=t.cast.map(c=>c.split("|")[1]).filter(Boolean)});
 const REL_ORDER=[...T].sort((a,b)=>a.dt-b.dt),CHR_ORDER=[...T].sort((a,b)=>a.ci-b.ci);CHR_ORDER.forEach((t,i)=>t.rank=i);
 const NOW=new Date(),released=t=>t.dt<=NOW;
@@ -586,9 +587,9 @@ function vTimeline(){
  <div class="tlc"><div class="seg" role="group"><button id="mR" aria-pressed="${S.mode==="release"}">${t("release_order")}</button><button id="mC" aria-pressed="${S.mode==="chrono"}">${t("story_order")}</button></div>
  <div class="zoom"><button id="zo" aria-label="${esc(t("zoom_out"))}">−</button><input id="zr" type="range" min="0" max="100" aria-label="${esc(t("zoom"))}"><button id="zi" aria-label="${esc(t("zoom_in"))}">+</button></div><div class="chips" id="jumps"></div></div>
  <details class="fbox" id="fbox"><summary class="btn">${t("filters")}</summary><div class="filters">
-  <div class="chips" id="fph">${[1,2,3,4,5,6].map(p=>`<button class="chip" data-ph="${p}" aria-pressed="${F.ph.has(p)}"><span class="dot" style="background:${PC[p]}"></span>P${p}</button>`).join("")}</div>
+  <div class="full" id="fph"></div>
   <div class="full" id="fk"></div><div class="full" id="ffr"></div><div class="full" id="fch"></div>
-  <div style="display:flex;gap:8px"><div class="full" id="fy0"></div><div class="full" id="fy1"></div></div>
+  <div class="yrs" style="display:flex;gap:8px"><div class="full" id="fy0"></div><div class="full" id="fy1"></div></div>
   <div class="full" id="fw"></div>
  </div></details>
  <div class="strip"><div class="scroller" id="sc" tabindex="0" aria-label="${esc(t("tl_title"))}"><div class="track" id="tr"></div></div></div><div class="mini" id="mini" aria-hidden="true"></div>
@@ -603,7 +604,7 @@ function vTimeline(){
  dd("fy0",yrs.map(y=>[y,String(y)]),F.y0,fset,{label:"From",minWidth:120});dd("fy1",yrs.map(y=>[y,String(y)]),F.y1,fset,{label:"To",minWidth:120});
  dd("fw",[["all",t("w_all")],["un",t("w_un")],["wd",t("w_yes")]],F.w,fset,{label:t("watched")});
  $("#mR").onclick=()=>setMode("release");$("#mC").onclick=()=>setMode("chrono");
- $$("#fph .chip").forEach(b=>b.onclick=()=>{const p=+b.dataset.ph;F.ph.has(p)?F.ph.delete(p):F.ph.add(p);b.setAttribute("aria-pressed",F.ph.has(p));drawTL()});
+ const phDot=c=>`<span class="dd-dot" style="background:${c};box-shadow:0 0 0 3px ${c}33"></span>`;dd("fph",[["",t("all_phases"),phDot("linear-gradient(135deg,"+PC.slice(1).join(",")+")")],...[1,2,3,4,5,6].map(p=>[String(p),t("phase",{n:p}),phDot(PC[p])])],F.ph.size?String([...F.ph][0]):"",()=>{const v=$("#fph").value;F.ph=v?new Set([+v]):new Set();drawTL();if(v){const f=REL_ORDER.find(x=>x.ph===+v&&pass(x));f&&focusIt(f.id)}},{label:t("phase",{n:""}).trim()});
  
  const sc=$("#sc");
  $("#zi").onclick=()=>zoomBy(1.45);$("#zo").onclick=()=>zoomBy(1/1.45);
@@ -629,7 +630,7 @@ function vTimeline(){
  if(!S.z)S.z=defZ();
  drawTL();
  const target=PEND;PEND=null;
- if(target&&BY[target]){F.ph.clear();F.k="all";F.fr="";F.w="all";F.y0=2008;F.y1=2027;if(F.ch&&!BY[target].chars.includes(F.ch))F.ch="";$$("#fph .chip").forEach(b=>b.setAttribute("aria-pressed","false"));$("#fk").set("all");$("#ffr").set("");$("#fch").set(F.ch);$("#fy0").set(2008);$("#fy1").set(2027);$("#fw").set("all");drawTL();focusIt(target)}
+ if(target&&BY[target]){F.ph.clear();F.k="all";F.fr="";F.w="all";F.y0=2008;F.y1=2027;if(F.ch&&!BY[target].chars.includes(F.ch))F.ch="";$("#fph").set("");$("#fk").set("all");$("#ffr").set("");$("#fch").set(F.ch);$("#fy0").set(2008);$("#fy1").set(2027);$("#fw").set("all");drawTL();focusIt(target)}
  else if(F.ch){$("#fch").set(F.ch);drawTL();requestAnimationFrame(()=>$(".strip").scrollIntoView({behavior:"smooth",block:"center"}))}
 }
 function focusIt(id){if(S.mode==="release"&&S.z<400)setZoom(400);if(S.mode==="chrono"&&S.z<120)setZoom(120);requestAnimationFrame(()=>{const sc=$("#sc"),el=$(`.it[data-id="${id}"]`);if(!el)return;$(".strip").scrollIntoView({block:"center"});sc.scrollLeft=el.offsetLeft-sc.clientWidth/2+70;sc.scrollTop=Math.max(0,el.offsetTop-90);el.focus({preventScroll:true});el.animate([{transform:"scale(1)"},{transform:"scale(1.12)"},{transform:"scale(1)"}],{duration:700,iterations:2})})}

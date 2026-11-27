@@ -28,7 +28,7 @@ const css=`
 .dd-o.hi{background:rgba(255,255,255,.08)}
 .dd-o.sel{color:#fff}
 .dd-e{padding:14px;color:var(--mut,#9aa0ad);font-size:14px}
-.dd-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.dd-dot,.dd-o>.dd-dot,.dd-v>.dd-dot{width:10px;height:10px;border-radius:50%;flex:none;min-width:0}
 @media (prefers-reduced-motion:reduce){.dd-p{animation:none}}`;
 const st=document.createElement("style");st.textContent=css;document.head.append(st);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
