@@ -483,6 +483,12 @@ html.noscroll{overflow:hidden}
 .dlg .panel{max-width:400px}
 footer{border-top:1px solid var(--line);padding:36px 0 56px;color:var(--dim);font-size:13px}
 footer p{max-width:100ch;margin:6px 0}
+footer .mk{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 22px}footer .mk .byme{margin:0}
+footer .bmc{display:inline-flex;align-items:center;gap:12px;padding:12px 20px 12px 14px;border-radius:4px;background:#ffdd00;color:#111;text-decoration:none;font-family:var(--fb);box-shadow:0 8px 24px rgba(255,221,0,.15);transition:transform .2s,box-shadow .2s}
+footer .bmc:hover,footer .bmc:focus-visible{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,221,0,.3)}
+footer .bmc>span:first-child{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#fff;font-size:22px}
+footer .bmc small{display:block;font-size:12px;color:#5a4a00}footer .bmc b{display:block;font:800 16px var(--fb)}
+@media(max-width:480px){footer .mk>a{flex:1 1 100%}}
 footer .byme{display:inline-flex;align-items:center;gap:14px;margin:0 0 22px;padding:12px 18px 12px 12px;border:1px solid var(--line2);border-radius:4px;background:rgba(255,255,255,.03);color:var(--ink);text-decoration:none;transition:border-color .2s,background .2s,transform .2s}
 footer .byme:hover,footer .byme:focus-visible{border-color:var(--red);background:rgba(226,35,42,.08);transform:translateY(-2px)}
 footer .byme .av{display:block;width:42px;height:42px;border-radius:50%;object-fit:cover;background:#222;box-shadow:0 0 0 2px var(--red),0 0 0 4px rgba(226,35,42,.2)}
@@ -513,7 +519,7 @@ footer .byme em{font-style:normal;font:600 14px var(--fb);color:var(--red2);marg
  <div class="trbar hide" id="trbar" role="status"></div>
 </header>
 <main id="main"></main>
-<footer><div class="wrap"><a class="byme" href="https://bharath-ayyappan.vercel.app/?utm_source=marvel-timeline&amp;utm_medium=referral&amp;utm_campaign=footer" target="_blank" rel="noopener"><img class="av" src="/images/other/bharath.webp" alt="" width="42" height="42" loading="lazy"><span><small>Designed &amp; built by</small><b>Bharath Ayyappan</b></span><em>View portfolio →</em></a><p data-t="f1"></p><p data-t="f2"></p><p><a href="/privacy" style="color:var(--mut)">Privacy</a></p></div></footer>
+<footer><div class="wrap"><div class="mk"><a class="byme" href="https://bharath-ayyappan.vercel.app/?utm_source=marvel-timeline&amp;utm_medium=referral&amp;utm_campaign=footer" target="_blank" rel="noopener"><img class="av" src="/images/other/bharath.webp" alt="" width="42" height="42" loading="lazy"><span><small>Designed &amp; built by</small><b>Bharath Ayyappan</b></span><em>View portfolio →</em></a><a class="bmc" href="https://buymeacoffee.com/bharathshiva" target="_blank" rel="noopener"><span aria-hidden="true">☕</span><span><small>Enjoying the timeline?</small><b>Buy me a coffee</b></span></a></div><p data-t="f1"></p><p data-t="f2"></p><p><a href="/privacy" style="color:var(--mut)">Privacy</a></p></div></footer>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Details"></aside>
 <div class="tip hide" id="tip"></div>
