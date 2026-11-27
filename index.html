@@ -550,7 +550,7 @@ function openT(id,quiet){const x=BY[id];if(!x)return;DR.id=id;const d=$("#drawer
  <h3>${t("cast")}</h3><table class="cast"><tbody>${x.cast.map(c=>{const[a,ch]=c.split("|");return`<tr><td>${ch&&CH[ch]?av(ch):'<span class="av" style="background:#262a35">·</span>'}${esc(a)}</td><td>${ch&&CH[ch]?`<button data-char="${ch}">${esc(CH[ch])}</button>`:'<span class="muted">—</span>'}</td></tr>`}).join("")}</tbody></table>
  ${back.length?`<h3>${t("builds_on")}</h3><div class="chips">${back.map(link).join("")}</div>`:""}
  ${fwd.length?`<h3>${t("leads_into")}</h3><div class="chips">${fwd.map(link).join("")}</div>`:""}
- <h3>${t("post_credits")}</h3>${pc.length?spoilBlock(`<ol style="margin:0;padding-left:18px">${pc.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>`):`<p class="muted">${x.up?t("not_released"):t("none_listed")}</p>`}
+ <h3>${t("post_credits")}</h3>${pc.length?spoilBlock(pc.length===1?`<p style="margin:0">${esc(pc[0])}</p>`:`<ol style="margin:0;padding-left:18px">${pc.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>`):`<p class="muted">${x.up?t("not_released"):t("none_listed")}</p>`}
  <h3>${t("nav_videos")}</h3><div class="chips">${vids(x).map(v=>`<a class="chip" href="${v.u}"${v.a} target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="16" height="16"')} ${esc(v.l)}</a>`).join("")}</div><p class="hint">${t("yt_note")}</p></div>`;
  d.classList.add("on");$("#scrim").classList.add("on");if(!quiet){d.scrollTop=0;setTimeout(()=>$(".x",d).focus(),60)}}
 function closeT(){DR.id=null;$("#drawer").classList.remove("on");$("#scrim").classList.remove("on")}
@@ -849,7 +849,7 @@ let PCF={k:"film"};
 function vCredits(){const ts=REL_ORDER.filter(x=>x.pc.length&&(PCF.k==="all"||x.k==="film")),n=ts.reduce((a,x)=>a+x.pc.length,0);
  $("#main").innerHTML=`<section class="sec view"><div class="wrap">
  <div class="head"><div><h1>${t("pc_title")}</h1><p class="lede">${t("pc_lede",{n,t:ts.length})}</p></div><div class="tlc" style="margin:0"><div class="seg"><button id="pf" aria-pressed="${PCF.k==="film"}">${t("films_l")}</button><button id="pa" aria-pressed="${PCF.k==="all"}">${t("films_series_l")}</button></div>${S.sp?"":`<button class="btn" id="rall">${t("reveal_all")}</button>`}</div></div>
- <div class="pcl">${ts.map(x=>`<div class="panel pcc"><button class="bare" data-open="${x.id}" aria-label="${esc(x.t)}">${poster(x,false)}</button><div><b style="font-size:17px">${esc(x.t)}</b><div class="tiny" style="margin:2px 0 10px">${x.dt.getFullYear()} · ${x.id==="eg"?t("eg_note"):t("scenes",{n:x.pc.length})}</div>${spoilBlock(`<ol>${(L(x,"pc")||x.pc).map(p=>`<li class="small">${esc(p)}</li>`).join("")}</ol>`)}</div></div>`).join("")}</div>
+ <div class="pcl">${ts.map(x=>`<div class="panel pcc"><button class="bare" data-open="${x.id}" aria-label="${esc(x.t)}">${poster(x,false)}</button><div><b style="font-size:17px">${esc(x.t)}</b><div class="tiny" style="margin:2px 0 10px">${x.dt.getFullYear()} · ${x.id==="eg"?t("eg_note"):t(x.pc.length===1?"scene1":"scenes",{n:x.pc.length})}</div>${(ps=>spoilBlock(ps.length===1?`<p class="small" style="margin:0">${esc(ps[0])}</p>`:`<ol>${ps.map(p=>`<li class="small">${esc(p)}</li>`).join("")}</ol>`))(L(x,"pc")||x.pc)}</div></div>`).join("")}</div>
  </div></section>`;
  $("#pf").onclick=()=>{PCF.k="film";$("#main").innerHTML="";vCredits()};$("#pa").onclick=()=>{PCF.k="all";$("#main").innerHTML="";vCredits()};
  const ra=$("#rall");if(ra)ra.onclick=()=>$$("[data-rv]").forEach(b=>b.click())}
