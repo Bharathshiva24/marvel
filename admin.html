@@ -202,7 +202,7 @@ function setStatus(kind,text){const b=$("#st");b.className="badge "+kind;b.lastC
 function save(){pending++;setStatus("saving","Saving…");saveChain=saveChain.then(async()=>{try{const j=await api("/api/content",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(C)});C.updated=j.content.updated;pending--;if(!pending)setStatus("","All changes live")}catch(e){pending--;setStatus("err","Not saved");toast(e.message,true);throw e}});return saveChain}
 /* ---- sign in ---- */
 function setupHTML(s){const row=(ok,t)=>`<div class="check"><i class="${ok?"y":"n"}">${ok?"✓":"!"}</i><span>${t}</span></div>`;
- return `${row(s.configured,"Blob storage connected"+(s.configured?"":" — in Vercel: <b>Storage → Create → Blob</b>, connect it to this project, then redeploy."))}${row(s.password,"Admin password set"+(s.password?"":" — in Vercel: <b>Settings → Environment Variables</b>, add <code>ADMIN_PASSWORD</code>, then redeploy."))}`}
+ return `${row(s.configured,"R2 storage connected"+(s.configured?"":" — in Vercel: <b>Settings → Environment Variables</b>, add the five <code>R2_…</code> values from the README, then redeploy."))}${row(s.password,"Admin password set"+(s.password?"":" — in Vercel: <b>Settings → Environment Variables</b>, add <code>ADMIN_PASSWORD</code>, then redeploy."))}`}
 async function probe(k){const r=await fetch("/api/content",{headers:k?{"x-admin-key":k}:{},cache:"no-store"});if(!r.ok&&r.status!==500)throw new Error("The admin API isn't reachable ("+r.status+"). Make sure this site is deployed on Vercel.");return r.json()}
 $("#gf").onsubmit=async e=>{e.preventDefault();const k=$("#pw").value;$("#gerr").textContent="";$("#gbtn").disabled=true;$("#gbtn").textContent="Checking…";
  try{const s=await probe(k);STATUS=s;if(!s.configured||!s.password){$("#gsetup").innerHTML=`<b>Finish setup in Vercel</b>${setupHTML(s)}`;$("#gsetup").classList.remove("hide");$("#gerr").textContent="The admin panel needs two settings before you can sign in."}
@@ -341,7 +341,7 @@ async function vSetup(){let s=STATUS;try{s=await probe(KEY)}catch(e){}
  <div class="panel setup"><h3 style="font-size:24px">Status</h3>${setupHTML(s)}<div class="check"><i class="y">✓</i><span>Last published: <b>${C.updated?new Date(C.updated).toLocaleString():"nothing yet"}</b></span></div>
  <div class="check"><i class="y">✓</i><span>${n("posters")} posters · ${n("characters")} character images · ${n("other")} other images · ${n("planets")} planets · ${vn} videos</span></div></div>
  <div class="panel setup" style="margin-top:18px"><h3 style="font-size:24px">How it works</h3><ol>
- <li>Uploads and video links are saved to this project's <b>Vercel Blob</b> store. Each save publishes a new version and keeps the last 10 as a backup.</li>
+ <li>Uploads and video links are saved to this project's <b>Cloudflare R2</b> bucket. Each save also keeps a dated backup copy.</li>
  <li>The public site checks for new content when a page opens, every minute while it's open, and whenever the tab comes back into view. Visitors see changes within a minute, without a redeploy.</li>
  <li>Anything you haven't uploaded falls back to <code>images.js</code> in the GitHub repo, then to the built-in artwork.</li>
  <li>To change the password, update <code>ADMIN_PASSWORD</code> in Vercel and redeploy.</li></ol></div>`}

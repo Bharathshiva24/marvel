@@ -1,6 +1,6 @@
 // POST   /api/upload?kind=posters&key=im&ext=webp   (raw image body) → { url }   admin only
-// DELETE /api/upload?url=<blob url>                                   → { ok }    admin only
-import { put, del } from "@vercel/blob";
+// DELETE /api/upload?url=<image url>                                   → { ok }    admin only
+import { r2Put, r2Del, keyFromUrl } from "./_r2.js";
 import { json, storageReady, isAdmin, KINDS, BRAND_KEYS, isOurBlob } from "./_lib.js";
 
 const MAX = 4_400_000; // Vercel Functions accept request bodies up to ~4.5 MB
@@ -8,7 +8,7 @@ const EXT = { "image/webp": "webp", "image/jpeg": "jpg", "image/png": "png", "im
 
 export async function POST(request) {
   if (!isAdmin(request)) return json({ error: "Wrong admin password." }, 401);
-  if (!storageReady()) return json({ error: "Blob storage isn't connected to this project." }, 503);
+  if (!storageReady()) return json({ error: "R2 storage isn't connected to this project." }, 503);
   const q = new URL(request.url).searchParams;
   const kind = q.get("kind"), key = q.get("key") || "";
   const type = (request.headers.get("content-type") || "").split(";")[0].trim();
@@ -20,17 +20,15 @@ export async function POST(request) {
   const buf = Buffer.from(await request.arrayBuffer());
   if (!buf.length) return json({ error: "The file is empty." }, 400);
   if (buf.length > MAX) return json({ error: "The image is larger than 4.4 MB after compression." }, 413);
-  const blob = await put(`images/${kind}/${key}-${Date.now()}.${ext}`, buf, {
-    access: "public", contentType: type, addRandomSuffix: false, cacheControlMaxAge: 31536000,
-  });
-  return json({ url: blob.url });
+  const url = await r2Put(`images/${kind}/${key}-${Date.now()}.${ext}`, buf, type);
+  return json({ url });
 }
 
 export async function DELETE(request) {
   if (!isAdmin(request)) return json({ error: "Wrong admin password." }, 401);
-  if (!storageReady()) return json({ error: "Blob storage isn't connected to this project." }, 503);
+  if (!storageReady()) return json({ error: "R2 storage isn't connected to this project." }, 503);
   const url = new URL(request.url).searchParams.get("url") || "";
   if (!isOurBlob(url) || !/\/images\//.test(url)) return json({ error: "Not an uploaded image." }, 400);
-  await del(url);
+  await r2Del(keyFromUrl(url));
   return json({ ok: true });
 }

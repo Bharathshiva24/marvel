@@ -4,11 +4,11 @@
 // PUT    /api/me   { l:[], w:[] }  → saves the signed-in user's lists
 // DELETE /api/me   → signs out
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { put, list, del } from "@vercel/blob";
+import { r2Put, r2GetJSON } from "./_r2.js";
 import { storageReady } from "./_lib.js";
 
 const CLIENT_ID = () => process.env.GOOGLE_CLIENT_ID || "705291261663-sgek75g1dquuhd7gknivd1i1ol7q955j.apps.googleusercontent.com";
-const SECRET = () => process.env.SESSION_SECRET || process.env.BLOB_READ_WRITE_TOKEN || "";
+const SECRET = () => process.env.SESSION_SECRET || process.env.BLOB_READ_WRITE_TOKEN || process.env.R2_SECRET_ACCESS_KEY || "";
 const COOKIE = "tl_s";
 const MAX_AGE = 60 * 60 * 24 * 60; // 60 days
 const ID_RE = /^[\w-]{1,40}$/;
@@ -36,12 +36,11 @@ function session(request) {
   } catch { return null; }
 }
 
+// Each user's lists live in one file, users/<hash>.json, overwritten on every save.
+const userFile = (u) => `users/${userKey(u.sub)}.json`;
 async function load(u) {
-  const { blobs } = await list({ prefix: `users/${userKey(u.sub)}/`, limit: 100 });
-  blobs.sort((a, b) => (a.pathname < b.pathname ? 1 : -1));
-  if (!blobs[0]) return { data: { l: [], w: [] }, blobs };
-  const r = await fetch(blobs[0].url, { cache: "no-store" });
-  return { data: r.ok ? await r.json() : { l: [], w: [] }, blobs };
+  const data = await r2GetJSON(userFile(u));
+  return { data: data || { l: [], w: [] } };
 }
 const clean = (a) => [...new Set((Array.isArray(a) ? a : []).filter((x) => typeof x === "string" && ID_RE.test(x)))].slice(0, 500);
 const pub = (u) => ({ name: u.name, email: u.email, picture: u.picture });
@@ -78,10 +77,7 @@ export async function PUT(request) {
   let body = {};
   try { body = await request.json(); } catch {}
   const data = { l: clean(body.l), w: clean(body.w), updated: new Date().toISOString() };
-  const { blobs } = await load(u);
-  await put(`users/${userKey(u.sub)}/${Date.now()}.json`, JSON.stringify(data), { access: "public", contentType: "application/json", addRandomSuffix: true, cacheControlMaxAge: 60 });
-  const old = blobs.slice(2).map((b) => b.url); // keep a couple of recent versions
-  if (old.length) await del(old).catch(() => {});
+  await r2Put(userFile(u), JSON.stringify(data), "application/json", "no-store");
   return reply({ ok: true, data });
 }
 

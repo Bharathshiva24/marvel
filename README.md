@@ -6,22 +6,25 @@ An interactive guide to the Marvel Cinematic Universe: a zoomable timeline, "wha
 
 ## One-time setup on Vercel
 
-The admin panel stores everything in **Vercel Blob**. In your Vercel project:
+The admin panel stores everything in a **Cloudflare R2** bucket.
 
-1. **Storage → Create Database → Blob** → create a store and **connect it to this project** (this adds `BLOB_READ_WRITE_TOKEN` automatically).
-2. **Settings → Environment Variables** → add `ADMIN_PASSWORD` with a long, unique password (Production, Preview and Development).
-3. **Deployments → ⋯ → Redeploy** so the new settings take effect.
-4. Open `https://<your-site>/admin` and sign in.
+1. **Cloudflare → R2** → create a bucket, then in its **Settings** turn on **Public Development URL** (or connect a custom domain). Copy that address.
+2. **R2 → Manage API tokens → Create API token** with *Object Read & Write* on that bucket. Copy the Access Key ID and Secret Access Key.
+3. In Vercel, **Settings → Environment Variables** (Production, Preview and Development), add:
+   `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL`, and `ADMIN_PASSWORD`.
+4. **Deployments → ⋯ → Redeploy**, then open `https://<your-site>/admin` and sign in.
+
+Moving from Vercel Blob: run `scripts/migrate-blob-to-r2.mjs` once (instructions at the top of the file). Keep `BLOB_READ_WRITE_TOKEN` set (or copy its value into `SESSION_SECRET`) so signed-in visitors keep their watchlists.
 
 ## How content flows
 
 | Source | Used for | Priority |
 | --- | --- | --- |
-| Admin panel (Vercel Blob) | Images and YouTube videos added at `/admin` | Highest |
+| Admin panel (Cloudflare R2) | Images and YouTube videos added at `/admin` | Highest |
 | `images.js` in this repo | Image paths you add by hand | Used when the admin panel has none |
 | Built-in artwork / trailer IDs in `data.js` | Everything else | Fallback |
 
-The public site checks for new admin content when a page opens, every minute while it's open, and when the tab comes back into view. Each save is published as a new version; the last 10 are kept.
+The public site checks for new admin content when a page opens, every minute while it's open, and when the tab comes back into view. Each save also keeps a dated backup copy in the bucket.
 
 ## Files
 

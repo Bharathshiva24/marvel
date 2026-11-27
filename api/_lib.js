@@ -1,4 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
+import { r2Ready, isOurUrl } from "./_r2.js";
 
 export const KINDS = ["posters", "characters", "other", "planets", "brand"];
 export const BRAND_KEYS = ["logo", "favicon", "social"];
@@ -10,7 +11,7 @@ export const json = (data, status = 200) =>
     headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
   });
 
-export const storageReady = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+export const storageReady = r2Ready;
 export const passwordSet = () => Boolean(process.env.ADMIN_PASSWORD);
 
 export function isAdmin(request) {
@@ -22,14 +23,13 @@ export function isAdmin(request) {
 }
 
 const KEY_RE = /^[\w-]{1,60}$/;
-const isBlobUrl = (v) => typeof v === "string" && v.length < 600 && /^https:\/\/[\w.-]+\.public\.blob\.vercel-storage\.com\//.test(v);
 
 /** Keep only well-formed fields so nothing unexpected is ever served to visitors. */
 export function cleanContent(body) {
   const out = { posters: {}, characters: {}, other: {}, planets: {}, brand: {}, videos: {} };
   for (const kind of KINDS) {
     const src = body && typeof body[kind] === "object" ? body[kind] : {};
-    for (const [k, v] of Object.entries(src).slice(0, 600)) if (KEY_RE.test(k) && isBlobUrl(v) && (kind !== "brand" || BRAND_KEYS.includes(k))) out[kind][k] = v;
+    for (const [k, v] of Object.entries(src).slice(0, 600)) if (KEY_RE.test(k) && isOurUrl(v) && (kind !== "brand" || BRAND_KEYS.includes(k))) out[kind][k] = v;
   }
   const vids = body && typeof body.videos === "object" ? body.videos : {};
   for (const [id, list] of Object.entries(vids).slice(0, 200)) {
@@ -43,4 +43,4 @@ export function cleanContent(body) {
   return out;
 }
 
-export const isOurBlob = isBlobUrl;
+export const isOurBlob = isOurUrl;
