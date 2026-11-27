@@ -5,7 +5,7 @@
 const css=`
 .dd{position:relative;display:inline-flex;min-width:0}
 .dd.full{display:flex;width:100%}
-.dd-b{display:flex;align-items:center;gap:10px;width:100%;height:46px;padding:0 14px;border-radius:12px;border:1px solid var(--line2,rgba(255,255,255,.14));background:var(--s1,#0f1118);color:var(--ink,#f5f2ed);font:600 15px var(--fb,system-ui);text-align:left;cursor:pointer;transition:border-color .2s,background .2s,box-shadow .2s}
+.dd-b{display:flex;align-items:center;gap:10px;width:100%;height:46px;padding:0 14px;border-radius:2px;border:1px solid var(--line2,rgba(255,255,255,.14));background:var(--s1,#0f1118);color:var(--ink,#f5f2ed);font:600 15px var(--fb,system-ui);text-align:left;cursor:pointer;transition:border-color .2s,background .2s,box-shadow .2s}
 .dd-b:hover{background:var(--s2,#151821)}
 .dd-b[aria-expanded=true]{border-color:rgba(255,77,82,.7);box-shadow:0 0 0 4px rgba(226,35,42,.16)}
 .dd-v{flex:1;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -13,14 +13,14 @@ const css=`
 .dd-c{width:16px;height:16px;flex:none;opacity:.6;transition:transform .25s}
 .dd-b[aria-expanded=true] .dd-c{transform:rotate(180deg)}
 .dd-ic{width:17px;height:17px;flex:none;opacity:.85}
-.dd.pill .dd-b{height:40px;border-radius:999px;padding:0 14px;background:rgba(255,255,255,.03);font-size:14px}
+.dd.pill .dd-b{height:40px;border-radius:2px;padding:0 14px;background:rgba(255,255,255,.03);font-size:14px}
 .dd-p{position:fixed;z-index:120;min-width:220px;max-width:min(420px,calc(100vw - 16px));background:rgba(21,24,33,.98);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.14);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4);padding:6px;display:flex;flex-direction:column;animation:ddIn .18s cubic-bezier(.2,.8,.2,1);outline:0;color:var(--ink,#f5f2ed);font-family:var(--fb,system-ui)}
 @keyframes ddIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
 .dd-p.up{animation-name:ddUp}@keyframes ddUp{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
-.dd-s{height:42px;margin:2px 2px 6px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);color:inherit;padding:0 12px;font:500 15px var(--fb,system-ui);outline:0}
+.dd-s{height:42px;margin:2px 2px 6px;border-radius:2px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);color:inherit;padding:0 12px;font:500 15px var(--fb,system-ui);outline:0}
 .dd-s:focus{border-color:rgba(255,77,82,.6)}
 .dd-l{overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#2a2e3a transparent}
-.dd-o{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:15px;font-weight:600;min-height:42px}
+.dd-o{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:2px;cursor:pointer;font-size:15px;font-weight:600;min-height:42px}
 .dd-o>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dd-o small{color:var(--mut,#9aa0ad);font-weight:500;font-size:12px;white-space:nowrap}
 .dd-o .ck{width:16px;height:16px;flex:none;opacity:0;color:#ff4d52}
