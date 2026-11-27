@@ -1,6 +1,6 @@
 // GET /api/posterflix → { url, items:[{ id, title, img, full, href, by, medium }] }
-// Reads Posterflix's own catalog (the POSTERS list in /app/catalog.<hash>.js) and returns its superhero
-// posters (Marvel first, then DC). The page shuffles them on every load.
+// Reads Posterflix's own catalog (the POSTERS list in /app/catalog.<hash>.js) and returns only the posters
+// tagged "Marvel" (no DC). The page shuffles them on every load.
 // Cached at Vercel's edge for an hour. If Posterflix can't be read, the last known Marvel posters are used.
 const ORIGIN = "https://posterflix.in";
 const PAGE = ORIGIN + "/search?q=marvel";
@@ -8,9 +8,6 @@ const UA = { "user-agent": "Mozilla/5.0 (compatible; TheTimelineBot/1.0; +https:
 const FALLBACK = [
   { id: "hulk", title: "Hulk", year: "Marvel", medium: "Hyperreal minimal render" },
   { id: "captain", title: "Captain America", year: "Marvel", medium: "Arctic photo-realism" },
-  { id: "batman", title: "Batman", year: "DC" },
-  { id: "superman", title: "Superman", year: "DC" },
-  { id: "flash", title: "The Flash", year: "DC" },
 ];
 const ID = /^[a-z0-9-]{1,60}$/;
 
@@ -41,9 +38,7 @@ async function fromCatalog() {
   if (!path) return [];
   const js = await (await fetch(ORIGIN + path, { headers: UA, signal: AbortSignal.timeout(8000) })).text();
   const all = parsePosters(js).filter((p) => p && ID.test(p.id));
-  const hero = (p) => p.region === "Superheroes" || ["marvel", "dc"].includes(String(p.year).toLowerCase());
-  const mv = (p) => String(p.year).toLowerCase() === "marvel";
-  return all.filter(hero).sort((a, b) => mv(b) - mv(a));
+  return all.filter((p) => String(p.year).toLowerCase() === "marvel");
 }
 
 export async function GET() {
