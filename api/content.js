@@ -13,10 +13,8 @@ export async function GET(request) {
   if (!storageReady()) return json({ configured: false, password: passwordSet(), authed, content: null });
   try {
     const saved = await r2GetJSON(LATEST);
-    const res = json({ configured: true, password: passwordSet(), authed, content: { ...EMPTY, ...(saved || {}) } });
-    // Visitors poll this every minute; let Vercel's edge serve a copy for 30 s so R2 isn't hit on every view.
-    if (!request.headers.get("x-admin-key")) res.headers.set("cache-control", "public, max-age=0, s-maxage=30, stale-while-revalidate=60");
-    return res;
+    // Not cached: the answer differs for the admin (authed) and visitors. One R2 read per call is well inside the free tier.
+    return json({ configured: true, password: passwordSet(), authed, content: { ...EMPTY, ...(saved || {}) } });
   } catch (e) {
     return json({ configured: true, password: passwordSet(), authed, content: null, error: "Couldn't read saved content.", detail: String(e && e.message || e).slice(0, 240) }, 500);
   }
