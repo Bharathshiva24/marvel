@@ -195,5 +195,27 @@ other:{
   "stone_power":"", // Power Stone icon — 1:1, 256×256 PNG
   "stone_time":"", // Time Stone icon — 1:1, 256×256 PNG
   "stone_soul":"", // Soul Stone icon — 1:1, 256×256 PNG
-}
+},
+/* ---------- 4. PLANETS (universe map) ---------- */
+planets:{
+  "earth":"", // Earth — 1:1, 1024×1024 transparent PNG
+  "asgard":"", // Asgard — 1:1, 1024×1024 transparent PNG
+  "jotunheim":"", // Jotunheim — 1:1, 1024×1024 transparent PNG
+  "svartalfheim":"", // Svartalfheim — 1:1, 1024×1024 transparent PNG
+  "sakaar":"", // Sakaar — 1:1, 1024×1024 transparent PNG
+  "xandar":"", // Xandar — 1:1, 1024×1024 transparent PNG
+  "knowhere":"", // Knowhere — 1:1, 1024×1024 transparent PNG
+  "titan":"", // Titan — 1:1, 1024×1024 transparent PNG
+  "vormir":"", // Vormir — 1:1, 1024×1024 transparent PNG
+  "hala":"", // Hala — 1:1, 1024×1024 transparent PNG
+  "ego":"", // Ego — 1:1, 1024×1024 transparent PNG
+  "counterearth":"", // Counter-Earth — 1:1, 1024×1024 transparent PNG
+  "quantum":"", // Quantum Realm — 1:1, 1024×1024 transparent PNG
+  "dark":"", // Dark Dimension — 1:1, 1024×1024 transparent PNG
+  "tva":"", // TVA — 1:1, 1024×1024 transparent PNG
+  "void":"", // The Void — 1:1, 1024×1024 transparent PNG
+  "multi":"", // The Multiverse — 1:1, 1024×1024 transparent PNG
+  "earth828":"", // Earth-828 — 1:1, 1024×1024 transparent PNG
+  "earth10005":"", // Earth-10005 — 1:1, 1024×1024 transparent PNG
+},
 };
