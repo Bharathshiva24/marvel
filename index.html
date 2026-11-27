@@ -310,6 +310,16 @@ h3{font-size:24px}
 .reel button.on::after{width:14px;height:14px;margin:-7px;opacity:1;box-shadow:0 0 14px var(--c)}
 /* ===== characters ===== */
 /*chars*/
+.acw{position:relative}
+.acb{padding:0;width:40px;overflow:hidden}.acb img{width:100%;height:100%;object-fit:cover}.acb.in{border-color:var(--line2)}
+.aci{display:grid;place-items:center;width:100%;height:100%;background:var(--red);color:#fff;font:800 16px var(--fb)}
+.acpop{position:absolute;right:0;top:calc(100% + 8px);width:300px;z-index:60;background:var(--s1);border:1px solid var(--line2);border-radius:2px;padding:18px;box-shadow:0 24px 60px rgba(0,0,0,.55);display:grid;gap:10px;animation:in .2s}
+.acpop[hidden]{display:none}.acpop h4{margin:0;font:800 18px var(--fb)}.acpop p{margin:0}
+.gbtn{min-height:44px;display:flex;align-items:center}
+.acu{display:flex;gap:12px;align-items:center}.acu img,.acu .aci{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none}.acu b{display:block;font-size:15px}.acu small{color:var(--mut);font-size:13px;word-break:break-all}
+.acpop .btn{justify-self:start}
+.lhint{margin:10px 0 0}.linkb{background:none;border:0;padding:0;color:var(--red2);font:600 14px var(--fb);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:700px){.acpop{position:fixed;left:12px;right:12px;top:70px;width:auto}}
 .cfil{display:grid;grid-template-columns:minmax(220px,1.4fr) repeat(3,minmax(170px,1fr));gap:10px;margin-bottom:20px}
 @media(max-width:900px){.cfil{grid-template-columns:1fr 1fr}.cfil .in{grid-column:1/-1}}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:14px}
@@ -447,6 +457,7 @@ footer p{max-width:100ch;margin:6px 0}
   <div class="tools">
    <div class="sx" id="sx" role="search"><button class="sxb" id="sbtn" aria-label="Search" aria-expanded="false" aria-controls="pres" title="Search (⌘K)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button><input id="pq" type="search" autocomplete="off" tabindex="-1" aria-label="Search"><kbd class="sxk">Esc</kbd><div class="sres hide" id="pres" role="listbox"></div></div>
    <div class="pill" id="lang"></div>
+   <div class="acw" id="acw"><button class="ib acb" id="acct" aria-haspopup="dialog" aria-expanded="false" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.4-3.6 4.3-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></button><div class="acpop" id="acpop" role="dialog" aria-label="Account" hidden></div></div>
    <button class="ib" id="spoil" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="lbl" id="spl"></span></button>
   </div>
  </div>
@@ -473,10 +484,10 @@ const BY={};T.forEach(t=>{t.dt=new Date(t.d+"T12:00:00");t.yr=t.dt.getFullYear()
 const REL_ORDER=[...T].sort((a,b)=>a.dt-b.dt),CHR_ORDER=[...T].sort((a,b)=>a.ci-b.ci);CHR_ORDER.forEach((t,i)=>t.rank=i);
 const NOW=new Date(),released=t=>t.dt<=NOW;
 const FWD={};T.forEach(t=>t.cn.forEach(c=>(FWD[c]=FWD[c]||[]).push(t.id)));
-const KEY="mcu-codex-v2";let S={w:[],l:[],sp:false,mode:"release",z:null,lang:"en"};
+const AU={user:null,clientId:"",last:"",tm:0,gis:null};const KEY="mcu-codex-v2";let S={w:[],l:[],sp:false,mode:"release",z:null,lang:"en"};
 try{const o=JSON.parse(localStorage.getItem("mcu-codex-v1")||"null");if(o){S.w=o.w||[];S.l=o.l||[];S.sp=!!o.sp}Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
 S.l=(S.l||[]).filter(id=>T.some(x=>x.id===id));S.w=(S.w||[]).filter(id=>T.some(x=>x.id===id));
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(AU.user)pushCloud()};
 const isW=id=>S.w.includes(id),inL=id=>S.l.includes(id);
 /* ---- i18n ---- */
 const t=(k,v)=>{let s=(I18N[S.lang]&&I18N[S.lang][k])??I18N.en[k]??k;if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s};
@@ -945,7 +956,7 @@ function vList(){const rel=T.filter(released),w=rel.filter(x=>isW(x.id)),pct=rel
  const next=CHR_ORDER.find(x=>released(x)&&!isW(x.id)),nextR=REL_ORDER.find(x=>released(x)&&!isW(x.id)),C=2*Math.PI*70;
  const lr=(x,sub,act)=>`<div class="lrow"><button class="bare" data-open="${x.id}" aria-label="${esc(x.t)}">${poster(x,false)}</button><div><b>${esc(x.t)}</b><div class="tiny">${sub}</div></div>${act}</div>`;
  $("#main").innerHTML=`<section class="sec view"><div class="wrap">
- <div class="head"><div><h1>${t("my_title")}</h1><p class="lede">${t("my_lede")}</p></div><div class="chips"><button class="btn" id="cp">${t("copy_list")}</button><button class="btn ghost" id="rs">${t("reset")}</button></div></div>
+ <div class="head"><div><h1>${t("my_title")}</h1><p class="lede">${t("my_lede")}</p><p class="tiny lhint" id="lhint" ${AU.user||!AU.clientId?"hidden":""}><button class="linkb" id="lsi">${t("si_hint")}</button></p></div><div class="chips"><button class="btn" id="cp">${t("copy_list")}</button><button class="btn ghost" id="rs">${t("reset")}</button></div></div>
  <div class="grid2"><div class="panel" style="display:flex;gap:26px;align-items:center;flex-wrap:wrap"><svg class="ring" viewBox="0 0 170 170" role="img" aria-label="${Math.round(pct*100)}%"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a52"/><stop offset="1" stop-color="#e2232a"/></linearGradient></defs><circle cx="85" cy="85" r="70" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="12"/><circle cx="85" cy="85" r="70" fill="none" stroke="url(#rg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C*pct} ${C}" transform="rotate(-90 85 85)"/><text x="85" y="94" text-anchor="middle" fill="#fff" style="font:900 46px var(--fd)">${Math.round(pct*100)}%</text><text x="85" y="116" text-anchor="middle" fill="#9aa0ad" style="font:600 12px var(--fb)">${esc(t("watched_l"))}</text></svg>
   <div style="flex:1;min-width:220px"><div class="stats"><span><b>${w.length}/${rel.length}</b>${t("released_titles")}</span><span><b>${hw.toFixed(0)} h</b>${t("h_watched")}</span><span><b>${hl.toFixed(0)} h</b>${t("h_togo")}</span></div>
   <div style="margin-top:16px">${[1,2,3,4,5,6].map(p=>{const ts=rel.filter(x=>x.ph===p),k=ts.filter(x=>isW(x.id)).length;return`<div style="display:grid;grid-template-columns:6.5em minmax(0,1fr) 3.5em;gap:10px;align-items:center;margin:6px 0" class="small"><span>${t("phase",{n:p})}</span><div class="meter"><i style="width:${ts.length?k/ts.length*100:0}%;background:${PC[p]}"></i></div><span style="text-align:right;font-variant-numeric:tabular-nums">${k}/${ts.length}</span></div>`}).join("")}</div></div></div>
@@ -997,7 +1008,33 @@ async function loadRemote(){if(!EMBED)return;try{const r=await fetch("/api/conte
  VID={};const v=c.videos||{};for(const id in v)if(BY[id]&&Array.isArray(v[id]))VID[id]=v[id].filter(q=>q&&/^[\w-]{11}$/.test(q.yt)).map(q=>({t:VTL[q.t]?q.t:"clip",yt:q.yt,l:String(q.l||"").slice(0,80)}));
  if(VO.on||$(".vmodal")||$("#sx.open"))return;const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters"&&CG.open)PEND=CG.id;$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true)}catch(e){}}
 /* ================= boot ================= */
-loadTX();shell();route();loadRemote();setInterval(loadRemote,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRemote()});
+
+/* ================= OPTIONAL GOOGLE SIGN-IN ================= */
+const listsKey=()=>JSON.stringify([[...S.l].sort(),[...S.w].sort()]);
+async function authInit(){if(!EMBED)return;try{const j=await (await fetch("/api/me",{cache:"no-store"})).json();AU.clientId=j.clientId||"";if(j.user){AU.user=j.user;applyCloud(j.data,S.acct===j.user.email)}}catch(e){}acctUI()}
+function applyCloud(d,trustCloud){if(!d)return;const ok=a=>(Array.isArray(a)?a:[]).filter(id=>BY[id]);const before=listsKey();
+ if(trustCloud){S.l=ok(d.l);S.w=ok(d.w)}else{S.l=[...new Set([...S.l,...ok(d.l)])];S.w=[...new Set([...S.w,...ok(d.w)])]}
+ S.acct=AU.user.email;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+ AU.last=JSON.stringify([ok(d.l).sort(),ok(d.w).sort()]);if(listsKey()!==AU.last)pushCloud();if(listsKey()!==before&&cur)refresh()}
+function pushCloud(){if(!AU.user||listsKey()===AU.last)return;clearTimeout(AU.tm);AU.tm=setTimeout(async()=>{const k=listsKey();try{const r=await fetch("/api/me",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify({l:S.l,w:S.w})});if(r.status===401){AU.user=null;acctUI();return}if(r.ok)AU.last=k}catch(e){}},700)}
+function acctUI(){const b=$("#acct");if(!b)return;const u=AU.user;b.classList.toggle("in",!!u);
+ b.innerHTML=u?(u.picture?`<img src="${esc(u.picture)}" alt="" referrerpolicy="no-referrer">`:`<span class="aci">${esc((u.name||u.email||"?")[0].toUpperCase())}</span>`):`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.4-3.6 4.3-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg>`;
+ b.setAttribute("aria-label",u?t("si_acct",{n:u.name||u.email}):t("si_btn"));b.title=b.getAttribute("aria-label");if(!$("#acpop").hidden)acctPop();const h=$("#lhint");if(h)h.hidden=!!u||!AU.clientId}
+function acctPop(){const p=$("#acpop"),u=AU.user;
+ p.innerHTML=u?`<div class="acu">${u.picture?`<img src="${esc(u.picture)}" alt="" referrerpolicy="no-referrer">`:`<span class="aci">${esc((u.name||u.email||"?")[0].toUpperCase())}</span>`}<div><b>${esc(u.name||"")}</b><small>${esc(u.email||"")}</small></div></div><p class="tiny">${t("si_synced")}</p><button class="btn" id="acout">${t("si_out")}</button>`
+  :`<h4>${t("si_title")}</h4><p class="tiny">${t("si_text")}</p>${AU.clientId?`<div id="gbtn" class="gbtn"><span class="tiny">…</span></div>`:`<p class="tiny" style="color:var(--warn,#f2b84b)">${t("si_na")}</p>`}`;
+ if(u)$("#acout").onclick=signOut;else if(AU.clientId)renderGoogle()}
+function loadGIS(){return AU.gis||(AU.gis=new Promise((ok,no)=>{const sc=document.createElement("script");sc.src="https://accounts.google.com/gsi/client";sc.async=true;sc.onload=()=>{google.accounts.id.initialize({client_id:AU.clientId,callback:onGoogle,ux_mode:"popup",itp_support:true});ok()};sc.onerror=()=>{AU.gis=null;no()};document.head.append(sc)}))}
+async function renderGoogle(){try{await loadGIS();const g=$("#gbtn");if(!g)return;g.innerHTML="";google.accounts.id.renderButton(g,{theme:"filled_black",size:"large",shape:"rectangular",text:"signin_with",logo_alignment:"left",width:256,locale:S.lang})}catch(e){const g=$("#gbtn");if(g)g.innerHTML=`<span class="tiny">${t("si_err")}</span>`}}
+async function onGoogle(r){try{const x=await fetch("/api/me",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({credential:r.credential})});const j=await x.json();if(!x.ok)throw new Error(j.error||"");
+ AU.user=j.user;applyCloud(j.data,S.acct===j.user.email);closeAcct();acctUI();toast(t("si_hi",{n:(j.user.name||j.user.email||"").split(" ")[0]}))}catch(e){toast(t("si_err"),true)}}
+async function signOut(){try{await fetch("/api/me",{method:"DELETE"})}catch(e){}try{google.accounts.id.disableAutoSelect()}catch(e){}AU.user=null;AU.last="";closeAcct();acctUI();toast(t("si_bye"))}
+function openAcct(){const p=$("#acpop");p.hidden=false;$("#acct").setAttribute("aria-expanded","true");acctPop()}
+function closeAcct(){const p=$("#acpop");if(!p||p.hidden)return;p.hidden=true;$("#acct").setAttribute("aria-expanded","false")}
+$("#acct").onclick=e=>{e.stopPropagation();$("#acpop").hidden?openAcct():closeAcct()};
+document.addEventListener("click",e=>{if(e.target.closest("#lsi")){e.stopPropagation();openAcct();scrollTo({top:0,behavior:"smooth"});return}if(!e.target.closest("#acw"))closeAcct()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#acpop").hidden){closeAcct();$("#acct").focus()}});
+loadTX();shell();route();loadRemote();authInit();setInterval(loadRemote,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRemote()});
 if(window.claude&&typeof claude.use==="function"){
  claude.use("tts").then(x=>{TTS=x||null;if(cur==="videos"&&$("#vnote"))$("#vnote").textContent=TTS?"":t("vo_note");if(TTS&&TTS.onLine)TTS.onLine(({id})=>{if(!VO.on||!id)return;const[c,s]=String(id).split("-").map(Number);if(isNaN(c))return;VO.c=c;VO.s=s;syncVO(VO.chs[c]&&s===0)})}).catch(()=>{});
  claude.use("sample").then(x=>{SAMPLE=x||null;if(S.lang!=="en")translateAll()}).catch(()=>{if(S.lang!=="en")translateAll()});
