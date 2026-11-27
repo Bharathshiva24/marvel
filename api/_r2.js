@@ -26,9 +26,15 @@ export function isOurUrl(v) {
 /** Bucket key for one of our public URLs, or "" if it isn't ours. */
 export const keyFromUrl = (v) => (isOurUrl(v) ? decodeURIComponent(v.slice(publicBase().length + 1).split(/[?#]/)[0]) : "");
 
+// Cloudflare's short error code (e.g. InvalidAccessKeyId, SignatureDoesNotMatch, NoSuchBucket). Never secret.
+async function why(r) {
+  const t = await r.text().catch(() => "");
+  return `R2 ${r.status}${(t.match(/<Code>([^<]{1,60})<\/Code>/) || [])[1] ? " " + t.match(/<Code>([^<]{1,60})<\/Code>/)[1] : ""}`;
+}
+
 export async function r2Put(key, body, contentType, cacheControl = "public, max-age=31536000, immutable") {
   const r = await aws().fetch(endpoint(key), { method: "PUT", body, headers: { "content-type": contentType, "cache-control": cacheControl } });
-  if (!r.ok) throw new Error(`R2 upload failed (${r.status})`);
+  if (!r.ok) throw new Error(await why(r));
   return publicUrl(key);
 }
 
@@ -36,11 +42,11 @@ export async function r2Put(key, body, contentType, cacheControl = "public, max-
 export async function r2GetJSON(key) {
   const r = await aws().fetch(endpoint(key), { method: "GET" });
   if (r.status === 404) return null;
-  if (!r.ok) throw new Error(`R2 read failed (${r.status})`);
+  if (!r.ok) throw new Error(await why(r));
   return r.json();
 }
 
 export async function r2Del(key) {
   const r = await aws().fetch(endpoint(key), { method: "DELETE" });
-  if (!r.ok && r.status !== 404) throw new Error(`R2 delete failed (${r.status})`);
+  if (!r.ok && r.status !== 404) throw new Error(await why(r));
 }

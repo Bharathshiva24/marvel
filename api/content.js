@@ -18,7 +18,7 @@ export async function GET(request) {
     if (!request.headers.get("x-admin-key")) res.headers.set("cache-control", "public, max-age=0, s-maxage=30, stale-while-revalidate=60");
     return res;
   } catch (e) {
-    return json({ configured: true, password: passwordSet(), authed, content: null, error: "Couldn't read saved content." }, 500);
+    return json({ configured: true, password: passwordSet(), authed, content: null, error: "Couldn't read saved content.", detail: String(e && e.message || e).slice(0, 120) }, 500);
   }
 }
 
