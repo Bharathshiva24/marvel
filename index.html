@@ -530,11 +530,12 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const PC=["#9a9aa6","#ff1f4b","#ff7a00","#ffc400","#00d9a6","#a64dff","#1f7aff"];
 const BY={};T.forEach(t=>{t.dt=new Date(t.d+"T12:00:00");t.yr=t.dt.getFullYear()+(t.dt-new Date(t.dt.getFullYear(),0,1))/31557600000;BY[t.id]=t;t.chars=t.cast.map(c=>c.split("|")[1]).filter(Boolean)});
 const REL_ORDER=[...T].sort((a,b)=>a.dt-b.dt),CHR_ORDER=[...T].sort((a,b)=>a.ci-b.ci);CHR_ORDER.forEach((t,i)=>t.rank=i);
+(window.EXT||[]).forEach(t=>{t.dt=new Date(t.d+"T12:00:00");t.yr=t.dt.getFullYear();t.rank=-1;t.chars=t.cast.map(c=>c.split("|")[1]).filter(Boolean);BY[t.id]=t;});
 const NOW=new Date(),released=t=>t.dt<=NOW;
-const FWD={};T.forEach(t=>t.cn.forEach(c=>(FWD[c]=FWD[c]||[]).push(t.id)));
+const FWD={};[...T,...(window.EXT||[])].forEach(t=>t.cn.forEach(c=>(FWD[c]=FWD[c]||[]).push(t.id)));
 const AU={user:null,clientId:"",last:"",tm:0,gis:null};const KEY="mcu-codex-v2";let S={w:[],l:[],sp:false,mode:"release",z:null,lang:"en"};
 try{const o=JSON.parse(localStorage.getItem("mcu-codex-v1")||"null");if(o){S.w=o.w||[];S.l=o.l||[];S.sp=!!o.sp}Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
-S.l=(S.l||[]).filter(id=>T.some(x=>x.id===id));S.w=(S.w||[]).filter(id=>T.some(x=>x.id===id));
+S.l=(S.l||[]).filter(id=>!!BY[id]);S.w=(S.w||[]).filter(id=>!!BY[id]);
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(AU.user)pushCloud()};
 const isW=id=>S.w.includes(id),inL=id=>S.l.includes(id);
 /* ---- i18n ---- */
@@ -545,8 +546,8 @@ const fmt=x=>x.dt.toLocaleDateString(LC(),{year:"numeric",month:"short",day:"num
 const fmtL=d=>d.toLocaleDateString(LC(),{year:"numeric",month:"long",day:"numeric"});
 const kindL=x=>t(x.k);
 const lenL=x=>x.rt?t("mins",{n:x.rt}):x.ep?t("eps",{n:x.ep}):t("rt_tba");
-const sagaL=x=>x.ph===0?t("mtv"):x.ph<=3?t("infinity_saga"):t("multiverse_saga");
-const phL=x=>x.ph?t("phase",{n:x.ph}):t("netflix");
+const sagaL=x=>x.ext?t("fox_films"):x.ph===0?t("mtv"):x.ph<=3?t("infinity_saga"):t("multiverse_saga");
+const phL=x=>x.ext?t("before_mcu"):x.ph?t("phase",{n:x.ph}):t("netflix");
 const hrs=x=>x.rt?x.rt/60:x.ep?x.ep*.75:2.2;
 /* ---- translated content ---- */
 let TX={t:{},e:{},g:{},m:{}};
@@ -609,7 +610,7 @@ const ACT={};T.forEach(x=>x.cast.forEach(c=>{const[a]=c.split("|");(ACT[a]=ACT[a
 const SX={rs:[],qi:0};
 function sxDraw(){const q=$("#pq"),res=$("#pres"),s=q.value.trim().toLowerCase();let rs=[],head="";
  if(!s){head=t("hero_kicker");rs=REL_ORDER.filter(x=>x.up||x.dt.getFullYear()>=2025).slice(-6).reverse().map(x=>({k:"t",id:x.id}))}
- else{T.forEach(x=>{if(x.t.toLowerCase().includes(s)||x.dir.toLowerCase().includes(s))rs.push({k:"t",id:x.id})});Object.entries(CH).forEach(([id,n])=>{if(n.toLowerCase().includes(s))rs.push({k:"c",id})});Object.keys(ACT).forEach(a=>{if(a.toLowerCase().includes(s))rs.push({k:"a",id:a})})}
+ else{[...T,...(window.EXT||[])].forEach(x=>{if(x.t.toLowerCase().includes(s)||x.dir.toLowerCase().includes(s))rs.push({k:"t",id:x.id})});Object.entries(CH).forEach(([id,n])=>{if(n.toLowerCase().includes(s))rs.push({k:"c",id})});Object.keys(ACT).forEach(a=>{if(a.toLowerCase().includes(s))rs.push({k:"a",id:a})})}
  SX.rs=rs.slice(0,16);SX.qi=0;
  res.innerHTML=(head&&SX.rs.length?`<h5>${esc(head)}</h5>`:"")+(SX.rs.length?SX.rs.map((r,i)=>{if(r.k==="t"){const x=BY[r.id];return`<button role="option" data-i="${i}">${poster(x,false)}<span><b>${esc(x.t)}</b><small>${t("r_title")} · ${kindL(x)} · ${x.dt.getFullYear()}</small></span></button>`}
   if(r.k==="c")return`<button role="option" data-i="${i}">${av(r.id)}<span><b>${esc(CH[r.id])}</b><small>${t("r_char")} · ${t("appearances",{n:appear(r.id).length})}</small></span></button>`;
@@ -646,9 +647,9 @@ function openT(id,quiet){const x=BY[id];if(!x)return;DR.id=id;const d=$("#drawer
  const back=x.cn.map(c=>BY[c]).filter(Boolean),fwd=(FWD[id]||[]).map(c=>BY[c]);
  const link=y=>`<button class="chip" data-open="${y.id}"><span class="dot" style="background:${PC[y.ph]}"></span>${esc(y.t)}</button>`;
  const tr=trailer(x),pc=L(x,"pc")||[],sp=L(x,"sp");
- d.innerHTML=`<div class="dhero"><div class="bg">${IU("posters",x.id)?imgTag(IU("posters",x.id)):art(x)}</div><button class="x" data-close aria-label="${esc(t("close"))}">${ICON.x}</button>${poster(x)}<div><div class="tiny">${sagaL(x)} · ${phL(x)}</div><h2>${esc(x.t)}</h2><div class="meta"><span>${x.up?t("releases",{d:fmt(x)}):fmt(x)}</span><span>${kindL(x)}</span><span>${lenL(x)}</span><span>${esc(t("set_in",{e:L(x,"era")}))}</span><span>${t("story_no",{n:x.rank+1})}</span></div></div></div>
+ d.innerHTML=`<div class="dhero"><div class="bg">${IU("posters",x.id)?imgTag(IU("posters",x.id)):art(x)}</div><button class="x" data-close aria-label="${esc(t("close"))}">${ICON.x}</button>${poster(x)}<div><div class="tiny">${sagaL(x)} · ${phL(x)}</div><h2>${esc(x.t)}</h2><div class="meta"><span>${x.up?t("releases",{d:fmt(x)}):fmt(x)}</span><span>${kindL(x)}</span><span>${lenL(x)}</span><span>${esc(t("set_in",{e:L(x,"era")}))}</span>${x.ext?"":`<span>${t("story_no",{n:x.rank+1})}</span>`}</div></div></div>
  <div class="dsec"><div class="actions"><a class="btn red" href="${tr.u}"${tr.a} target="_blank" rel="noopener">${ICON.yt}${esc(tr.l)}</a><button class="btn" aria-pressed="${isW(id)}" data-w="${id}">${isW(id)?ICON.check+t("watched"):t("mark_watched")}</button><button class="btn" aria-pressed="${inL(id)}" data-l="${id}">${inL(id)?ICON.check+t("on_list"):ICON.plus+t("add_list")}</button></div>
- <div class="chips" style="margin-top:6px"><button class="chip" data-guide="${id}">${t("watch_before")}</button><button class="chip" data-vo="${id}">${t("narrate")}</button><button class="chip" data-ontl="${id}">${t("show_tl")}</button></div>
+ <div class="chips" style="margin-top:6px"><button class="chip" data-guide="${id}">${t("watch_before")}</button>${x.ext?"":`<button class="chip" data-vo="${id}">${t("narrate")}</button><button class="chip" data-ontl="${id}">${t("show_tl")}</button>`}</div>
  <h3>${t("story")}</h3><p>${esc(L(x,"log"))}</p>${sp?spoilBlock(`<b>${t("full_story")}:</b> ${esc(sp)}`):""}
  <h3>${t("why")}</h3><p>${esc(L(x,"why"))}</p>
  <h3>${x.k==="film"?t("director"):t("director_sr")}</h3><p>${esc(x.dir)}</p>
