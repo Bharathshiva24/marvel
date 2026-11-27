@@ -319,6 +319,9 @@ h3{font-size:24px}
 .uv .pin{cursor:pointer;outline:none}
 .uv .pin .body{transform-box:fill-box;transform-origin:center;transition:transform .35s var(--ease),opacity .3s}
 .uv .pin .hit{fill:transparent}
+.uv .pin .br{transform-box:fill-box;transform-origin:center;animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@media (prefers-reduced-motion:reduce){.uv .pin .br{animation:none}}
 .uv .pin:hover .body{transform:scale(1.1)}
 .uv .pin.on .body{transform:scale(1.22)}
 .uv .pin:focus-visible text{fill:var(--red2)}
@@ -805,14 +808,14 @@ let UM={sel:null};
 function vUniverse(){const cnt=id=>T.filter(x=>x.loc.includes(id)).length,zc=["#e2232a","#e8b43a","#8d6ff4","#3e86f2"],mu=IU("other","universe_map"),eu=IU("planets","earth");
  let stars="",h=7;for(let i=0;i<260;i++){h=(h*9301+49297)%233280;const x=h/233280*1600;h=(h*9301+49297)%233280;const y=h/233280*900;stars+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(i%3)*.5+.4}" fill="#fff" opacity="${.12+(i%5)*.1}"/>`}
  const eN=LOC.filter(l=>l[2]===0).reduce((a,l)=>a+cnt(l[0]),0);
- const pins=LOC.filter(l=>l[2]>0).map(([id,n,z,x,y])=>{const k=cnt(id),r=8+Math.min(10,k*1.6),above=y>540,pu=IU("planets",id),R=pu?Math.round(r*1.9):r;
-  return`<g class="pin" tabindex="0" role="button" aria-label="${esc(n)}: ${esc(t("n_titles",{n:k}))}" data-loc="${id}"><g class="body">${pu?`<image href="${esc(pu)}" x="${x-R}" y="${y-R}" width="${R*2}" height="${R*2}" preserveAspectRatio="xMidYMid meet"/><circle class="hit" cx="${x}" cy="${y}" r="${R}"/>`:`<circle cx="${x}" cy="${y}" r="${r}" fill="${zc[z]}"/>`}</g><text x="${x}" y="${above?y-R-12:y+R+22}" text-anchor="middle">${esc(n)}</text></g>`}).join("");
+ const pins=LOC.filter(l=>l[2]>0).map(([id,n,z,x,y])=>{const k=cnt(id),r=8+Math.min(10,k*1.6),lb=id==="multi"?"a":"b",pu=IU("planets",id),R=pu?Math.round(r*1.9):r;
+  return`<g class="pin" tabindex="0" role="button" aria-label="${esc(n)}: ${esc(t("n_titles",{n:k}))}" data-loc="${id}"><g class="body"><g class="br" style="animation-delay:-${(x*7+y*3)%60/10}s;animation-duration:${5.5+(x+y)%30/10}s">${pu?`<image href="${esc(pu)}" x="${x-R}" y="${y-R}" width="${R*2}" height="${R*2}" preserveAspectRatio="xMidYMid meet"/><circle class="hit" cx="${x}" cy="${y}" r="${R}"/>`:`<circle cx="${x}" cy="${y}" r="${r}" fill="${zc[z]}"/>`}</g></g><text x="${x}" y="${lb==="b"?y+R+22:y-R-12}" text-anchor="middle">${esc(n)}</text></g>`}).join("");
  $("#main").innerHTML=`<section class="uv" id="uv">
  <svg class="ustars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${stars}</svg>${mu?imgTag(mu,"bgimg"):""}
  <div class="uhead"><div><h1>${t("u_title")}</h1><p>${t("u_lede")}</p></div><div class="legend">${[0,1,2,3].map(i=>`<span><i style="width:10px;height:10px;border-radius:50%;background:${zc[i]}"></i>${t("z"+i)}</span>`).join("")}</div></div>
  <div class="ustage" id="ustage"><svg viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(t("u_title"))}"><defs><radialGradient id="eg1" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#4a8be0"/><stop offset=".55" stop-color="#143e70"/><stop offset="1" stop-color="#050c18"/></radialGradient><radialGradient id="qr" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8d6ff4" stop-opacity=".35"/><stop offset="1" stop-color="#8d6ff4" stop-opacity="0"/></radialGradient></defs>
   <ellipse cx="500" cy="300" rx="400" ry="240" fill="none" stroke="#e8b43a" stroke-opacity=".14" stroke-dasharray="4 8"/><ellipse cx="500" cy="300" rx="300" ry="180" fill="none" stroke="#e8b43a" stroke-opacity=".09"/><ellipse cx="500" cy="585" rx="440" ry="64" fill="url(#qr)"/><path d="M0 540 Q500 500 1000 540" fill="none" stroke="#8d6ff4" stroke-opacity=".3" stroke-dasharray="2 6"/>
-  <g class="pin earth" tabindex="0" role="button" aria-label="${esc(t("z0"))}: ${eN}" data-loc="earth"><g class="body">${eu?`<image href="${esc(eu)}" x="410" y="210" width="180" height="180" preserveAspectRatio="xMidYMid meet"/><circle class="hit" cx="500" cy="300" r="88"/>`:`<circle cx="500" cy="300" r="80" fill="url(#eg1)"/><path d="M452 262c18-10 40-4 48 8s-8 24 6 34 30-2 34 16-20 30-40 26-20-20-36-22-30-14-26-30 2-24 14-32z" fill="#2f7a4a" opacity=".55"/>`}</g><text x="500" y="${eu?428:414}" text-anchor="middle" class="big">${esc(t("z0"))}</text></g>${pins}</svg></div>
+  <g class="pin earth" tabindex="0" role="button" aria-label="${esc(t("z0"))}: ${eN}" data-loc="earth"><g class="body"><g class="br" style="animation-duration:7s">${eu?`<image href="${esc(eu)}" x="410" y="210" width="180" height="180" preserveAspectRatio="xMidYMid meet"/><circle class="hit" cx="500" cy="300" r="88"/>`:`<circle cx="500" cy="300" r="80" fill="url(#eg1)"/><path d="M452 262c18-10 40-4 48 8s-8 24 6 34 30-2 34 16-20 30-40 26-20-20-36-22-30-14-26-30 2-24 14-32z" fill="#2f7a4a" opacity=".55"/>`}</g></g><text x="500" y="${eu?428:414}" text-anchor="middle" class="big">${esc(t("z0"))}</text></g>${pins}</svg></div>
  <aside class="upanel" id="locinfo" aria-live="polite"></aside></section>`;
  const uv=$("#uv");
  $$("#uv .pin").forEach(p=>{p.onclick=e=>{e.stopPropagation();selLoc(p.dataset.loc)};p.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selLoc(p.dataset.loc)}}});
