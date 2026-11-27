@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>MCU Codex · Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#07080c;--s1:#0f1118;--s2:#151821;--s3:#1d212c;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.14);--ink:#f5f2ed;--mut:#9aa0ad;--dim:#666b78;--red:#e2232a;--red2:#ff4d52;--ok:#43d39a;--warn:#f2b84b;--fd:"Big Shoulders Display",Impact,sans-serif;--fb:Manrope,system-ui,sans-serif;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--fb);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red2);outline-offset:2px;border-radius:6px}
+.hide{display:none!important}
+h1,h2,h3{font-family:var(--fd);font-weight:900;line-height:1;margin:0;letter-spacing:.3px}
+.muted{color:var(--mut)}.tiny{font-size:13px;color:var(--mut)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.04);font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:background .2s}
+.btn:hover{background:rgba(255,255,255,.09)}
+.btn.red{background:linear-gradient(180deg,#ef2b32,#c8161d);border-color:#ff474d}
+.btn.red:hover{background:linear-gradient(180deg,#ff3a40,#d81c23)}
+.btn.sm{height:34px;padding:0 10px;font-size:13px;border-radius:8px}
+.btn.ghost{border-color:transparent;background:none}
+.btn.danger{color:#ff9ea1}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn svg{width:16px;height:16px;flex:none}
+.in{height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--s1);padding:0 14px;font-size:15px;color:var(--ink);outline:0;width:100%}
+.in:focus{border-color:rgba(255,77,82,.6);box-shadow:0 0 0 4px rgba(226,35,42,.14)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:12px;padding:3px;background:var(--s1)}
+.seg button{border:0;background:none;border-radius:9px;padding:7px 12px;font-weight:700;font-size:13px;color:var(--mut)}
+.seg button[aria-pressed=true]{background:var(--ink);color:#0b0b0f}
+/* sign-in */
+.gate{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(800px 500px at 30% 0,rgba(226,35,42,.18),transparent 60%)}
+.gate form{width:min(420px,100%);background:var(--s1);border:1px solid var(--line2);border-radius:22px;padding:30px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.gate h1{font-size:40px;text-transform:uppercase;margin:18px 0 6px}
+.err{color:#ff9ea1;font-size:14px;margin:10px 0 0;min-height:20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:32px;height:32px}
+.brand b{font:900 22px/1 var(--fd);text-transform:uppercase;letter-spacing:.5px}.brand b span{color:var(--red)}
+/* app shell */
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;height:62px;padding:0 20px;background:rgba(7,8,12,.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.top .sp{flex:1}
+.badge{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:700;background:rgba(255,255,255,.05);border:1px solid var(--line2);white-space:nowrap}
+.badge i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.badge.saving i{background:var(--warn);animation:bl 1s infinite}.badge.err i{background:var(--red2)}
+@keyframes bl{50%{opacity:.3}}
+.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:calc(100vh - 62px)}
+.side{border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow:auto}
+.side button{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:12px;border:0;background:none;color:var(--mut);font-weight:700;text-align:left}
+.side button:hover{color:var(--ink);background:rgba(255,255,255,.04)}
+.side button.on{color:var(--ink);background:rgba(255,255,255,.08)}
+.side button svg{width:18px;height:18px;flex:none}
+.side button em{margin-left:auto;font-style:normal;font-size:12px;color:var(--dim);font-weight:700}
+.side .lab{font-size:12px;color:var(--dim);font-weight:700;padding:16px 12px 6px}
+main{padding:28px clamp(16px,3vw,40px) 80px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head h1{font-size:clamp(34px,4vw,52px);text-transform:uppercase}
+.head p{margin:8px 0 0;color:var(--mut);max-width:70ch}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.tools .in{max-width:340px}
+@media(max-width:860px){.shell{grid-template-columns:minmax(0,1fr)}.side{position:static;height:auto;display:flex;gap:4px;overflow-x:auto;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}.side button{width:auto;flex:none;padding:9px 12px}.side .lab,.side button em{display:none}.top .vs{display:none}}
+/* image grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cw,170px),1fr));gap:16px}
+.slot{position:relative;background:var(--s1);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.slot.drag{border-color:var(--red2);transform:scale(1.02);box-shadow:0 0 0 4px rgba(226,35,42,.2)}
+.pv{position:relative;aspect-ratio:var(--ar,2/3);background:linear-gradient(135deg,#1b1e28,#0c0d12);display:grid;place-items:center;overflow:hidden}
+.pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pv .ph{font:900 34px var(--fd);color:rgba(255,255,255,.18);text-align:center;padding:10px;line-height:1}
+.pv .tag{position:absolute;left:8px;top:8px;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14)}
+.pv .tag.live{background:rgba(67,211,154,.2);border-color:rgba(67,211,154,.6);color:#bff5de}
+.pv .busy{position:absolute;inset:0;background:rgba(0,0,0,.7);display:grid;place-items:center;font-weight:700;font-size:13px}
+.pv .busy i{display:block;width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--red2);animation:sp 0.8s linear infinite;margin:0 auto 8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.pv .drop{position:absolute;inset:0;display:none;place-items:center;background:rgba(226,35,42,.35);font-weight:800}
+.slot.drag .drop{display:grid}
+.meta{padding:12px 12px 6px}
+.meta b{display:block;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta small{color:var(--dim);font-size:12px}
+.acts{display:flex;gap:6px;padding:6px 12px 12px;margin-top:auto}
+.acts .btn{flex:1}.acts .btn.danger{flex:0 0 40px;padding:0}
+.empty{padding:40px;text-align:center;color:var(--mut);border:1px dashed var(--line2);border-radius:16px}
+/* videos */
+.vgrid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:1000px){.vgrid{grid-template-columns:minmax(0,1fr)}}
+.tlist{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:10px;position:sticky;top:80px;max-height:calc(100vh - 100px);display:flex;flex-direction:column}
+.tlist .in{flex:none}.tlist .rows{overflow:auto;margin-top:8px}
+.tlist button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:10px;text-align:left}
+.tlist button:hover{background:rgba(255,255,255,.04)}
+.tlist button.on{background:rgba(255,255,255,.09)}
+.tlist button span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.tlist button em{font-style:normal;font-size:12px;font-weight:800;min-width:22px;height:22px;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--mut)}
+.tlist button em.has{background:var(--red);color:#fff}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:22px}
+.add{display:grid;grid-template-columns:minmax(0,1fr) 170px minmax(0,.7fr) auto;gap:10px;align-items:start}
+@media(max-width:760px){.add{grid-template-columns:minmax(0,1fr)}}
+.hint{font-size:13px;color:var(--dim);margin-top:8px}
+.vitem{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.vitem .th{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000;border:0;padding:0}
+.vitem .th img{width:100%;height:100%;object-fit:cover}
+.vitem .th svg{position:absolute;left:50%;top:50%;width:36px;height:36px;margin:-18px;color:#fff;filter:drop-shadow(0 2px 8px #000)}
+.vitem .f{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px}
+.vitem .ord{display:flex;gap:4px}
+.vitem .ord .btn{width:36px;padding:0}
+@media(max-width:760px){.vitem{grid-template-columns:110px minmax(0,1fr)}.vitem .ord{grid-column:1/-1}.vitem .f{grid-template-columns:minmax(0,1fr)}}
+.builtin{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.03);border:1px dashed var(--line2);font-size:14px;color:var(--mut);margin-top:14px}
+.setup ol{padding-left:20px;margin:10px 0 0}.setup li{margin:0 0 12px}
+.check{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.check i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:12px;flex:none}
+.check i.y{background:var(--ok);color:#03150d}.check i.n{background:var(--red);color:#fff}
+code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;font-size:13px}
+.vmodal{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.85);display:grid;place-items:center;padding:16px}
+.vmodal .box{width:min(960px,100%);border-radius:16px;overflow:hidden;background:#000}
+.vmodal .fr{position:relative;aspect-ratio:16/9}.vmodal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vmodal .bar{display:flex;justify-content:flex-end;padding:10px;background:var(--s1)}
+@media(max-width:560px){.top{gap:8px;padding:0 12px}.brand b{font-size:18px;white-space:nowrap}.badge span{display:none}.badge{padding:0 10px}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140px);background:var(--ink);color:#0b0b0f;font-weight:700;padding:12px 20px;border-radius:999px;z-index:130;transition:transform .35s var(--ease);max-width:calc(100vw - 32px);text-align:center}
+.toast.on{transform:translate(-50%,0)}.toast.bad{background:#ff6a6e;color:#fff}
+</style>
+</head>
+<body>
+<div class="gate" id="gate">
+ <form id="gf" autocomplete="on">
+  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M27 13.5A9 9 0 1 0 27 26.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg><b>MCU <span>Codex</span></b></a>
+  <h1>Admin sign in</h1>
+  <p class="muted" style="margin:0 0 18px">Manage posters, character images, artwork and YouTube videos. Changes go live on the site as soon as they're saved.</p>
+  <input type="text" name="username" value="admin" autocomplete="username" class="hide" aria-hidden="true">
+  <label class="tiny" for="pw">Admin password</label>
+  <input class="in" id="pw" type="password" autocomplete="current-password" required style="margin-top:6px">
+  <p class="err" id="gerr" role="alert"></p>
+  <button class="btn red" style="width:100%;height:46px;margin-top:6px" id="gbtn">Sign in</button>
+  <div id="gsetup" class="hide" style="margin-top:18px"></div>
+ </form>
+</div>
+
+<div id="app" class="hide">
+ <header class="top">
+  <a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#e2232a"/><path d="M27 13.5A9 9 0 1 0 27 26.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg><b>MCU <span>Codex</span></b></a>
+  <span class="tiny vs">Admin</span><span class="sp"></span>
+  <span class="badge" id="st" role="status"><i></i><span>All changes live</span></span>
+  <a class="btn sm vs" href="/" target="_blank" rel="noopener">View site</a>
+  <button class="btn sm ghost" id="out">Sign out</button>
+ </header>
+ <div class="shell">
+  <nav class="side" id="side" aria-label="Admin sections"></nav>
+  <main id="main"></main>
+ </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="images.js"></script>
+<script src="ui.js"></script>
+<script>
+{
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],esc=UIDD.esc;
+const PC=["#9a9aa6","#e0353d","#ec7a2c","#d8b03c","#1fb8aa","#8d6ff4","#3e86f2"];
+const DEF=JSON.parse(JSON.stringify(window.IMG||{posters:{},characters:{},other:{}}));
+const BY={};T.forEach(t=>BY[t.id]=t);const ORDER=[...T].sort((a,b)=>a.d<b.d?-1:1);
+const OTHER=[["hero","Home page backdrop","Behind the next-release hero · 16:9, 2400×1350"],["saga_infinity","Infinity Saga panel","Sagas page · 16:9, 1600×900"],["saga_multiverse","Multiverse Saga panel","Sagas page · 16:9, 1600×900"],["universe_map","Universe map background","Universe page · 1000×620"],["upcoming_secret_wars","Avengers: Secret Wars card","Upcoming page · 16:9"],["upcoming_daredevil_s3","Daredevil: Born Again S3 card","Upcoming page · 16:9"],...EVENTS.map(e=>["event_"+e.id,"Narration: "+e.t,"Narration screen · 16:9, 1920×1080"]),...STONES.map(s=>["stone_"+s[0].toLowerCase(),s[0]+" Stone icon","Sagas page · 1:1 PNG, 256×256"])];
+const KINDS={posters:{label:"Posters",ar:"2/3",cw:"160px",max:1600,desc:"One poster per film and series, shown on the timeline, detail panels, watch guides and lists. 2:3 portrait works best.",slots:()=>ORDER.map(t=>[t.id,t.t,`${t.k==="film"?"Film":"Series"} · ${t.d.slice(0,4)}`])},
+ characters:{label:"Characters",ar:"1/1",cw:"150px",max:1000,desc:"Portraits for the characters page, relationship web and cast lists. Square or 4:5 portrait.",slots:()=>Object.entries(CH).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>[k,v,""])},
+ other:{label:"Other images",ar:"16/9",cw:"260px",max:2400,desc:"Backdrops and artwork used around the site.",slots:()=>OTHER}};
+const VT=[["trailer","Official trailer"],["teaser","Teaser"],["bts","Behind the scenes"],["clip","Clip"]];
+const ICO={img:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>',play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>',gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4m0 0-5 5m5-5 5 5M4 20h16"/></svg>',playf:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.55)"/><path d="M10 8v8l6-4z"/></svg>'};
+let KEY="",C={posters:{},characters:{},other:{},videos:{},updated:""},STATUS={},view="posters",filt={q:"",show:"all"},VSEL=ORDER.find(t=>t.id==="doom")?.id||ORDER[0].id;
+let tT;const toast=(m,bad)=>{const e=$("#toast");e.textContent=m;e.classList.toggle("bad",!!bad);e.classList.add("on");clearTimeout(tT);tT=setTimeout(()=>e.classList.remove("on"),2600)};
+const hdr=()=>({"x-admin-key":KEY});
+async function api(path,opt={}){const r=await fetch(path,{...opt,headers:{...(opt.headers||{}),...hdr()},cache:"no-store"});let j={};try{j=await r.json()}catch(e){}if(!r.ok)throw new Error(j.error||("Request failed ("+r.status+")"));return j}
+/* ---- save queue: every change publishes the whole content document ---- */
+let saveChain=Promise.resolve(),pending=0;
+function setStatus(kind,text){const b=$("#st");b.className="badge "+kind;b.lastChild.textContent=text}
+function save(){pending++;setStatus("saving","Saving…");saveChain=saveChain.then(async()=>{try{const j=await api("/api/content",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(C)});C.updated=j.content.updated;pending--;if(!pending)setStatus("","All changes live")}catch(e){pending--;setStatus("err","Not saved");toast(e.message,true);throw e}});return saveChain}
+/* ---- sign in ---- */
+function setupHTML(s){const row=(ok,t)=>`<div class="check"><i class="${ok?"y":"n"}">${ok?"✓":"!"}</i><span>${t}</span></div>`;
+ return `${row(s.configured,"Blob storage connected"+(s.configured?"":" — in Vercel: <b>Storage → Create → Blob</b>, connect it to this project, then redeploy."))}${row(s.password,"Admin password set"+(s.password?"":" — in Vercel: <b>Settings → Environment Variables</b>, add <code>ADMIN_PASSWORD</code>, then redeploy."))}`}
+async function probe(k){const r=await fetch("/api/content",{headers:k?{"x-admin-key":k}:{},cache:"no-store"});if(!r.ok&&r.status!==500)throw new Error("The admin API isn't reachable ("+r.status+"). Make sure this site is deployed on Vercel.");return r.json()}
+$("#gf").onsubmit=async e=>{e.preventDefault();const k=$("#pw").value;$("#gerr").textContent="";$("#gbtn").disabled=true;$("#gbtn").textContent="Checking…";
+ try{const s=await probe(k);STATUS=s;if(!s.configured||!s.password){$("#gsetup").innerHTML=`<b>Finish setup in Vercel</b>${setupHTML(s)}`;$("#gsetup").classList.remove("hide");$("#gerr").textContent="The admin panel needs two settings before you can sign in."}
+  else if(!s.authed)$("#gerr").textContent="That password isn't right.";
+  else{KEY=k;try{sessionStorage.setItem("mcu-admin",k)}catch(e){}start(s)}}
+ catch(err){$("#gerr").textContent=err.message}finally{$("#gbtn").disabled=false;$("#gbtn").textContent="Sign in"}};
+$("#out").onclick=()=>{try{sessionStorage.removeItem("mcu-admin")}catch(e){}location.reload()};
+function start(s){C=Object.assign({posters:{},characters:{},other:{},videos:{},updated:""},s.content||{});["posters","characters","other","videos"].forEach(k=>C[k]=C[k]||{});
+ $("#gate").classList.add("hide");$("#app").classList.remove("hide");side();render()}
+/* ---- navigation ---- */
+function side(){const n=k=>Object.keys(C[k]).length;const vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);
+ $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><div class="lab">Site</div><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
+ $$("#side [data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;filt={q:"",show:"all"};side();render();scrollTo(0,0)})}
+function render(){if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
+/* ---- image sections ---- */
+function current(kind,key){return C[kind][key]||DEF[kind][key]||""}
+function slotHTML(kind,[key,name,sub]){const custom=C[kind][key],u=current(kind,key),t=BY[key];
+ const ph=kind==="posters"&&t?`<div class="ph" style="color:${PC[t.ph]}55">${esc(t.t)}</div>`:`<div class="ph">${esc(name.split(/[ /:]+/).filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join("")||"·")}</div>`;
+ return `<div class="slot" data-key="${esc(key)}"><div class="pv">${u?`<img src="${esc(u)}" alt="" loading="lazy">`:ph}${custom?'<span class="tag live">Uploaded</span>':u?'<span class="tag">From images.js</span>':""}<div class="drop">Drop to upload</div></div>
+ <div class="meta"><b title="${esc(name)}">${esc(name)}</b><small>${esc(sub||key)}</small></div>
+ <div class="acts"><label class="btn sm">${ICO.up}${u?"Replace":"Upload"}<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" class="hide" data-up="${esc(key)}"></label>${custom?`<button class="btn sm danger" data-rm="${esc(key)}" aria-label="Remove image for ${esc(name)}" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>`:""}</div></div>`}
+function vImages(kind){const K=KINDS[kind],all=K.slots(),q=filt.q.toLowerCase();
+ const list=all.filter(([k,n,s])=>(!q||(n+" "+k+" "+(s||"")).toLowerCase().includes(q))&&(filt.show==="all"||(filt.show==="up"?C[kind][k]:!C[kind][k])));
+ $("#main").innerHTML=`<div class="head"><div><h1>${K.label}</h1><p>${K.desc} Uploads are resized and compressed in your browser, then go live straight away.</p></div><div class="tiny">${Object.keys(C[kind]).length} of ${all.length} uploaded</div></div>
+ <div class="tools"><input class="in" id="q" type="search" placeholder="Search ${K.label.toLowerCase()}" value="${esc(filt.q)}" aria-label="Search"><div class="seg" role="group" aria-label="Show"><button data-s="all" aria-pressed="${filt.show==="all"}">All</button><button data-s="up" aria-pressed="${filt.show==="up"}">Uploaded</button><button data-s="none" aria-pressed="${filt.show==="none"}">Not uploaded</button></div></div>
+ ${list.length?`<div class="grid" style="--ar:${K.ar};--cw:${K.cw}">${list.map(s=>slotHTML(kind,s)).join("")}</div>`:`<div class="empty">Nothing matches. Try another search.</div>`}`;
+ const qi=$("#q");qi.oninput=()=>{filt.q=qi.value;const p=qi.selectionStart;vImages(kind);const n=$("#q");n.focus();n.setSelectionRange(p,p)};
+ $$("[data-s]").forEach(b=>b.onclick=()=>{filt.show=b.dataset.s;vImages(kind)});
+ $$("[data-up]").forEach(inp=>inp.onchange=()=>{const f=inp.files[0];if(f)uploadTo(kind,inp.dataset.up,f);inp.value=""});
+ $$("[data-rm]").forEach(b=>b.onclick=()=>removeImg(kind,b.dataset.rm));
+ $$(".slot").forEach(sl=>{sl.ondragover=e=>{e.preventDefault();sl.classList.add("drag")};sl.ondragleave=()=>sl.classList.remove("drag");sl.ondrop=e=>{e.preventDefault();sl.classList.remove("drag");const f=[...e.dataTransfer.files].find(f=>f.type.startsWith("image/"));if(f)uploadTo(kind,sl.dataset.key,f);else toast("Drop an image file",true)}})}
+async function prep(file,max){if(file.type==="image/gif")return file;
+ let bmp;try{bmp=await createImageBitmap(file)}catch(e){throw new Error("That file couldn't be read as an image.")}
+ const s=Math.min(1,max/Math.max(bmp.width,bmp.height)),w=Math.round(bmp.width*s),h=Math.round(bmp.height*s);
+ const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(bmp,0,0,w,h);
+ const tb=(t,q)=>new Promise(r=>c.toBlob(r,t,q));let b=await tb("image/webp",.88);
+ if(!b||b.type!=="image/webp")b=await tb(file.type==="image/png"?"image/png":"image/jpeg",.9);
+ for(let q=.8;b&&b.size>4_200_000&&q>.4;q-=.15)b=await tb("image/webp",q)||b;return b}
+async function uploadTo(kind,key,file){const sl=$(`.slot[data-key="${CSS.escape(key)}"] .pv`);sl&&sl.insertAdjacentHTML("beforeend",'<div class="busy"><div><i></i>Uploading…</div></div>');
+ try{const blob=await prep(file,KINDS[kind].max);
+  const j=await api(`/api/upload?kind=${kind}&key=${encodeURIComponent(key)}`,{method:"POST",headers:{"content-type":blob.type},body:blob});
+  const old=C[kind][key];C[kind][key]=j.url;await save();
+  if(old)api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});
+  toast("Uploaded — live on the site");}
+ catch(e){toast(e.message,true)}finally{side();if(view===kind)vImages(kind)}}
+async function removeImg(kind,key){const old=C[kind][key];if(!old)return;delete C[kind][key];try{await save();api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});toast("Removed — the site shows the built-in artwork again")}catch(e){C[kind][key]=old}side();vImages(kind)}
+/* ---- videos ---- */
+function ytId(s){s=String(s||"").trim();if(/^[\w-]{11}$/.test(s))return s;try{const u=new URL(s);const h=u.hostname.replace(/^www\.|^m\./,"");
+ if(h==="youtu.be")return(u.pathname.slice(1).match(/^[\w-]{11}/)||[])[0]||null;
+ if(/youtube(-nocookie)?\.com$/.test(h)){if(u.searchParams.get("v"))return(u.searchParams.get("v").match(/^[\w-]{11}/)||[])[0]||null;const m=u.pathname.match(/\/(embed|shorts|live|v)\/([\w-]{11})/);return m?m[2]:null}}catch(e){}return null}
+const thumb=id=>`https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
+function vVideos(){const q=filt.q.toLowerCase();const list=ORDER.filter(t=>!q||t.t.toLowerCase().includes(q));const t=BY[VSEL],vs=C.videos[VSEL]||[];
+ $("#main").innerHTML=`<div class="head"><div><h1>YouTube videos</h1><p>Add trailers, teasers, behind-the-scenes and clips to any title. The first <b>Official trailer</b> becomes that title's main trailer across the site; everything plays in the site's built-in player.</p></div></div>
+ <div class="vgrid"><div class="tlist"><input class="in" id="q" type="search" placeholder="Search titles" value="${esc(filt.q)}" aria-label="Search titles"><div class="rows">${list.map(x=>{const n=(C.videos[x.id]||[]).length;return`<button data-t="${x.id}" class="${x.id===VSEL?"on":""}"><i class="dot" style="background:${PC[x.ph]}"></i><span>${esc(x.t)}</span><em class="${n?"has":""}">${n}</em></button>`}).join("")}</div></div>
+ <div class="panel"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline"><h2 style="font-size:34px;text-transform:uppercase">${esc(t.t)}</h2><span class="tiny">${t.d.slice(0,4)} · ${t.k==="film"?"Film":"Series"} · Phase ${t.ph||"—"}</span></div>
+  <form class="add" id="addf" style="margin-top:18px"><div><input class="in" id="yu" placeholder="Paste a YouTube link or video ID" aria-label="YouTube link" autocomplete="off"><p class="hint" id="yh">youtube.com/watch?v=…, youtu.be/…, /shorts/… or an 11-character ID</p></div><div id="yt" class="full"></div><input class="in" id="yl" placeholder="Label (optional)" maxlength="80" aria-label="Label"><button class="btn red" style="height:44px" id="yadd">Add video</button></form>
+  <div id="vl" style="margin-top:10px">${vs.length?vs.map((v,i)=>`<div class="vitem" data-i="${i}"><button class="th" data-pv="${v.yt}" aria-label="Preview"><img src="${thumb(v.yt)}" alt="" loading="lazy">${ICO.playf}</button><div class="f"><div id="vt${i}" class="full"></div><input class="in" data-lab="${i}" value="${esc(v.l)}" placeholder="Label (optional)" maxlength="80" aria-label="Label"><span class="tiny" style="grid-column:1/-1">youtu.be/${esc(v.yt)}${i===vs.findIndex(q=>q.t==="trailer")?" · <b style='color:var(--ok)'>Main trailer</b>":""}</span></div><div class="ord"><button class="btn sm" data-mv="-1" ${i?"":"disabled"} aria-label="Move up">↑</button><button class="btn sm" data-mv="1" ${i<vs.length-1?"":"disabled"} aria-label="Move down">↓</button><button class="btn sm danger" data-del aria-label="Remove video">✕</button></div></div>`).join(""):`<div class="empty" style="margin-top:8px">No videos added for this title yet.</div>`}</div>
+  ${YT[VSEL]&&!vs.some(v=>v.t==="trailer")?`<div class="builtin"><button class="th" data-pv="${YT[VSEL]}" style="width:96px;aspect-ratio:16/9;border:0;padding:0;border-radius:8px;overflow:hidden;position:relative;flex:none"><img src="${thumb(YT[VSEL])}" alt="" style="width:100%;height:100%;object-fit:cover"></button><span>Currently using the built-in official trailer. Add an <b>Official trailer</b> here to replace it.</span></div>`:""}
+ </div></div>`;
+ const qi=$("#q");qi.oninput=()=>{filt.q=qi.value;const p=qi.selectionStart;vVideos();const n=$("#q");n.focus();n.setSelectionRange(p,p)};
+ $$("[data-t]").forEach(b=>b.onclick=()=>{VSEL=b.dataset.t;vVideos();$("#main").scrollIntoView({block:"start"})});
+ UIDD.mount("yt",{items:VT,value:vs.some(v=>v.t==="trailer")?"clip":"trailer",label:"Video type"});
+ const yu=$("#yu");yu.oninput=()=>{const id=ytId(yu.value);$("#yh").innerHTML=!yu.value?"youtube.com/watch?v=…, youtu.be/…, /shorts/… or an 11-character ID":id?`Found video <b>${esc(id)}</b>`:"<span style='color:#ff9ea1'>That doesn't look like a YouTube link</span>"};
+ $("#addf").onsubmit=async e=>{e.preventDefault();const id=ytId(yu.value);if(!id){toast("Paste a YouTube link first",true);yu.focus();return}
+  const l=(C.videos[VSEL]=C.videos[VSEL]||[]);if(l.some(v=>v.yt===id)){toast("That video is already on this title",true);return}
+  l.push({t:$("#yt").value,yt:id,l:$("#yl").value.trim()});try{await save();toast("Video added — live on the site")}catch(err){l.pop()}side();vVideos()};
+ vs.forEach((v,i)=>UIDD.mount("vt"+i,{items:VT,value:v.t,label:"Video type",onChange:val=>{v.t=val;save();vVideos()}}));
+ $$("[data-lab]").forEach(inp=>{let tm;inp.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{vs[+inp.dataset.lab].l=inp.value.trim();save()},700)}});
+ $$(".vitem").forEach(row=>{const i=+row.dataset.i;
+  $$("[data-mv]",row).forEach(b=>b.onclick=()=>{const j=i+ +b.dataset.mv;[vs[i],vs[j]]=[vs[j],vs[i]];save();vVideos()});
+  $("[data-del]",row).onclick=()=>{const gone=vs.splice(i,1)[0];if(!vs.length)delete C.videos[VSEL];save().then(()=>toast("Video removed")).catch(()=>{});side();vVideos()}});
+ $$("[data-pv]").forEach(b=>b.onclick=e=>{e.preventDefault();preview(b.dataset.pv)})}
+function preview(id){const d=document.createElement("div");d.className="vmodal";d.innerHTML=`<div class="box"><div class="fr"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="bar"><button class="btn sm">Close</button></div></div>`;document.body.append(d);const c=()=>{d.remove();removeEventListener("keydown",k)},k=e=>{if(e.key==="Escape")c()};addEventListener("keydown",k);d.onclick=e=>{if(e.target===d||e.target.closest(".bar button"))c()};$(".bar button",d).focus()}
+/* ---- setup ---- */
+async function vSetup(){let s=STATUS;try{s=await probe(KEY)}catch(e){}
+ const n=k=>Object.keys(C[k]).length,vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);
+ $("#main").innerHTML=`<div class="head"><div><h1>Setup &amp; status</h1><p>How the admin panel is wired up, and what's currently live.</p></div></div>
+ <div class="panel setup"><h3 style="font-size:24px">Status</h3>${setupHTML(s)}<div class="check"><i class="y">✓</i><span>Last published: <b>${C.updated?new Date(C.updated).toLocaleString():"nothing yet"}</b></span></div>
+ <div class="check"><i class="y">✓</i><span>${n("posters")} posters · ${n("characters")} character images · ${n("other")} other images · ${vn} videos</span></div></div>
+ <div class="panel setup" style="margin-top:18px"><h3 style="font-size:24px">How it works</h3><ol>
+ <li>Uploads and video links are saved to this project's <b>Vercel Blob</b> store. Each save publishes a new version and keeps the last 10 as a backup.</li>
+ <li>The public site checks for new content when a page opens, every minute while it's open, and whenever the tab comes back into view. Visitors see changes within a minute, without a redeploy.</li>
+ <li>Anything you haven't uploaded falls back to <code>images.js</code> in the GitHub repo, then to the built-in artwork.</li>
+ <li>To change the password, update <code>ADMIN_PASSWORD</code> in Vercel and redeploy.</li></ol></div>`}
+/* ---- boot: resume a signed-in session ---- */
+(async()=>{let k="";try{k=sessionStorage.getItem("mcu-admin")||""}catch(e){}
+ if(!k){$("#pw").focus();try{const s=await probe("");STATUS=s;if(!s.configured||!s.password){$("#gsetup").innerHTML=`<b>Finish setup in Vercel</b>${setupHTML(s)}`;$("#gsetup").classList.remove("hide")}}catch(e){$("#gerr").textContent=e.message}return}
+ try{const s=await probe(k);STATUS=s;if(s.authed){KEY=k;start(s)}else{try{sessionStorage.removeItem("mcu-admin")}catch(e){}$("#pw").focus()}}catch(e){$("#gerr").textContent=e.message}})();
+}
+</script>
+</body>
+</html>
