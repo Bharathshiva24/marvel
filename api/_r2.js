@@ -51,3 +51,11 @@ export async function r2Del(key) {
   const r = await aws().fetch(endpoint(key), { method: "DELETE" });
   if (!r.ok && r.status !== 404) throw new Error(await why(r));
 }
+
+/** A short-lived signed URL the admin's browser can PUT a large file to directly (bypasses Vercel's 4.5 MB body limit). */
+export async function r2PresignPut(key, expires = 900) {
+  const u = new URL(endpoint(key));
+  u.searchParams.set("X-Amz-Expires", String(expires));
+  const signed = await aws().sign(u.toString(), { method: "PUT", aws: { signQuery: true } });
+  return signed.url;
+}

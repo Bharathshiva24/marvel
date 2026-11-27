@@ -200,6 +200,31 @@ async function api(path,opt={}){const r=await fetch(path,{...opt,headers:{...(op
 let saveChain=Promise.resolve(),pending=0;
 function setStatus(kind,text){const b=$("#st");b.className="badge "+kind;b.lastChild.textContent=text}
 function save(){pending++;setStatus("saving","Saving…");saveChain=saveChain.then(async()=>{try{const j=await api("/api/content",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(C)});C.updated=j.content.updated;pending--;if(!pending)setStatus("","All changes live")}catch(e){pending--;setStatus("err","Not saved");toast(e.message,true);throw e}});return saveChain}
+/* ---- home hero background video ---- */
+function vHero(){const v=C.other.hero_video||"",img=current("other","hero");
+ $("#main").innerHTML=`<div class="head"><div><h1>Home hero video</h1><p>A muted, looping background video behind the countdown at the top of the home page. It replaces the hero backdrop image; that image is still used as the first frame while the video loads, and for visitors who prefer reduced motion or are saving data.</p></div></div>
+ <div class="panel" style="max-width:900px">
+  <div style="position:relative;aspect-ratio:16/9;background:#05060a;border:1px solid var(--line2);border-radius:4px;overflow:hidden">${v?`<video src="${esc(v)}" ${img?`poster="${esc(img)}"`:""} autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>`:img?`<img src="${esc(img)}" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.6">`:""}<div style="position:absolute;left:14px;bottom:12px" class="tiny">${v?"Live on the home page":"No video yet — showing the backdrop image"}</div><div id="hvbar" class="hide" style="position:absolute;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.12)"><i style="display:block;height:100%;width:0;background:var(--red)"></i></div></div>
+  <p class="tiny" style="margin:14px 0">Best: MP4 (H.264), 1920×1080, 8–20 seconds that loop cleanly, no sound, under 15 MB. Up to 80 MB is accepted, but smaller files start faster on phones.</p>
+  <div class="brandacts"><label class="btn red">${ICO.up}${v?"Replace video":"Upload video"}<input type="file" class="hide" accept="video/mp4,video/webm" id="hvfile"></label>${v?`<button class="btn danger" id="hvrm">Remove</button>`:""}<span class="tiny" id="hvmsg" style="align-self:center"></span></div>
+  <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><input class="in" id="hvurl" type="url" placeholder="…or paste a direct .mp4 / .webm link" style="flex:1;min-width:240px"><button class="btn" id="hvset">Use link</button></div>
+ </div>`;
+ $("#hvfile").onchange=e=>{const f=e.target.files[0];e.target.value="";if(f)uploadHero(f)};
+ $("#hvset").onclick=async()=>{const u=$("#hvurl").value.trim();if(!/^https:\/\/\S+\.(mp4|webm)(\?\S*)?$/i.test(u))return toast("Paste a direct https link ending in .mp4 or .webm",true);await setHero(u)};
+ if($("#hvrm"))$("#hvrm").onclick=()=>setHero("")}
+async function setHero(u){const old=C.other.hero_video;if(u)C.other.hero_video=u;else delete C.other.hero_video;
+ try{await save();if(old&&old!==u)api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});toast(u?"Hero video is live":"Removed — the backdrop image is back")}catch(e){if(old)C.other.hero_video=old;else delete C.other.hero_video}
+ side();vHero()}
+async function uploadHero(f){if(!/^video\/(mp4|webm)$/.test(f.type))return toast("Use an MP4 or WebM video",true);if(f.size>80*1024*1024)return toast("The video must be under 80 MB",true);
+ const msg=$("#hvmsg"),bar=$("#hvbar");msg.textContent="Preparing…";
+ try{const j=await api("/api/video-upload",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({type:f.type,size:f.size})});
+  bar.classList.remove("hide");
+  await new Promise((ok,bad)=>{const x=new XMLHttpRequest();x.open("PUT",j.put);x.setRequestHeader("content-type",f.type);
+   x.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(e.loaded/e.total*100);bar.firstChild.style.width=p+"%";msg.textContent=`Uploading… ${p}%`}};
+   x.onload=()=>x.status>=200&&x.status<300?ok():bad(new Error("Upload failed ("+x.status+")"));
+   x.onerror=()=>bad(new Error("The upload was blocked. In Cloudflare → R2 → your bucket → Settings → CORS Policy, allow PUT from this site (see the README)."));x.send(f)});
+  msg.textContent="Saving…";await setHero(j.url)}
+ catch(e){msg.textContent="";bar&&bar.classList.add("hide");toast(e.message,true)}}
 /* ---- sign in ---- */
 function setupHTML(s){const row=(ok,t)=>`<div class="check"><i class="${ok?"y":"n"}">${ok?"✓":"!"}</i><span>${t}</span></div>`;
  return `${row(s.configured,"R2 storage connected"+(s.configured?"":" — in Vercel: <b>Settings → Environment Variables</b>, add the five <code>R2_…</code> values from the README, then redeploy."))}${row(s.password,"Admin password set"+(s.password?"":" — in Vercel: <b>Settings → Environment Variables</b>, add <code>ADMIN_PASSWORD</code>, then redeploy."))}`}
@@ -214,9 +239,9 @@ function start(s){C=Object.assign({posters:{},characters:{},other:{},planets:{},
  $("#gate").classList.add("hide");$("#app").classList.remove("hide");applyAdminBrand();side();render()}
 /* ---- navigation ---- */
 function side(){const n=k=>Object.keys(C[k]).length;const vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);
- $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"],["planets","globe"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><div class="lab">Site</div><button data-v="brand" class="${view==="brand"?"on":""}">${ICO.star}Logo &amp; sharing<em>${Object.keys(C.brand).length}/3</em></button><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
+ $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"],["planets","globe"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><button data-v="hero" class="${view==="hero"?"on":""}">${ICO.play}Home hero video<em>${C.other.hero_video?1:0}/1</em></button><div class="lab">Site</div><button data-v="brand" class="${view==="brand"?"on":""}">${ICO.star}Logo &amp; sharing<em>${Object.keys(C.brand).length}/3</em></button><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
  $$("#side [data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;filt={q:"",show:"all"};side();render();scrollTo(0,0)})}
-function render(){if(view==="brand")return vBrand();if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
+function render(){if(view==="hero")return vHero();if(view==="brand")return vBrand();if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
 /* ---- image sections ---- */
 function current(kind,key){return C[kind][key]||DEF[kind][key]||""}
 function slotHTML(kind,[key,name,sub]){const custom=C[kind][key],u=current(kind,key),t=BY[key];

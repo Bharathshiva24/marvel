@@ -16,6 +16,21 @@ The admin panel stores everything in a **Cloudflare R2** bucket.
 
 Moving from Vercel Blob: run `scripts/migrate-blob-to-r2.mjs` once (instructions at the top of the file). Keep `BLOB_READ_WRITE_TOKEN` set (or copy its value into `SESSION_SECRET`) so signed-in visitors keep their watchlists.
 
+### Home hero video uploads
+
+The admin page uploads the hero video straight to R2, so the bucket must accept uploads from the site. In **Cloudflare → R2 → your bucket → Settings → CORS Policy**, use:
+
+```json
+[
+  {
+    "AllowedOrigins": ["https://marvel-timeline.vercel.app"],
+    "AllowedMethods": ["GET", "HEAD", "PUT"],
+    "AllowedHeaders": ["content-type"],
+    "MaxAgeSeconds": 3600
+  }
+]
+```
+
 ## How content flows
 
 | Source | Used for | Priority |

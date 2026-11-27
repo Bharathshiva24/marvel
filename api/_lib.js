@@ -23,13 +23,15 @@ export function isAdmin(request) {
 }
 
 const KEY_RE = /^[\w-]{1,60}$/;
+// A pasted link for the hero video must be a direct https MP4/WebM file.
+const VIDEO_URL = /^https:\/\/[^\s"'<>]{4,500}\.(mp4|webm)(\?[^\s"'<>]{0,300})?$/i;
 
 /** Keep only well-formed fields so nothing unexpected is ever served to visitors. */
 export function cleanContent(body) {
   const out = { posters: {}, characters: {}, other: {}, planets: {}, brand: {}, videos: {} };
   for (const kind of KINDS) {
     const src = body && typeof body[kind] === "object" ? body[kind] : {};
-    for (const [k, v] of Object.entries(src).slice(0, 600)) if (KEY_RE.test(k) && isOurUrl(v) && (kind !== "brand" || BRAND_KEYS.includes(k))) out[kind][k] = v;
+    for (const [k, v] of Object.entries(src).slice(0, 600)) if (KEY_RE.test(k) && (isOurUrl(v) || (kind === "other" && k === "hero_video" && VIDEO_URL.test(v))) && (kind !== "brand" || BRAND_KEYS.includes(k))) out[kind][k] = v;
   }
   const vids = body && typeof body.videos === "object" ? body.videos : {};
   for (const [id, list] of Object.entries(vids).slice(0, 200)) {
