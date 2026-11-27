@@ -76,6 +76,8 @@ main{padding:28px clamp(16px,3vw,40px) 80px}
 @keyframes sp{to{transform:rotate(360deg)}}
 .pv .drop{position:absolute;inset:0;display:none;place-items:center;background:rgba(226,35,42,.35);font-weight:800}
 .slot.drag .drop{display:grid}
+.panel.social{grid-column:1/-1}.sgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}@media(max-width:900px){.sgrid{grid-template-columns:1fr}}
+.ogcard{border:1px solid var(--line2);background:#1f2c34;overflow:hidden;border-radius:2px;max-width:560px}.ogimg{aspect-ratio:1200/630;background:#0b0d14}.ogimg img{width:100%;height:100%;object-fit:cover;display:block}.ogtxt{padding:12px 14px;display:grid;gap:4px;color:#e9edef}.ogtxt b{font-size:15px}.ogtxt span{font-size:13px;color:#aebac1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ogtxt small{font-size:12px;color:#8696a0}
 .acts:has(+.acts2){padding-bottom:6px}.acts2{padding-top:0!important;margin-top:0!important;gap:6px}.acts2 .btn{flex:1;justify-content:center}.btn.ghost{background:transparent;border-color:var(--line);color:var(--mut)}.btn.ghost:hover{color:var(--ink);border-color:var(--line2)}.btn.ghost svg{width:14px;height:14px}
 .k-planets .pv{background:repeating-conic-gradient(#171a23 0 25%,#10121a 0 50%) 0 0/18px 18px}.k-planets .pv img{object-fit:contain!important;padding:8px}
 .meta{padding:12px 12px 6px}
@@ -212,7 +214,7 @@ function start(s){C=Object.assign({posters:{},characters:{},other:{},planets:{},
  $("#gate").classList.add("hide");$("#app").classList.remove("hide");applyAdminBrand();side();render()}
 /* ---- navigation ---- */
 function side(){const n=k=>Object.keys(C[k]).length;const vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);
- $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"],["planets","globe"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><div class="lab">Site</div><button data-v="brand" class="${view==="brand"?"on":""}">${ICO.star}Logo &amp; favicon<em>${Object.keys(C.brand).length}/2</em></button><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
+ $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"],["planets","globe"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><div class="lab">Site</div><button data-v="brand" class="${view==="brand"?"on":""}">${ICO.star}Logo &amp; sharing<em>${Object.keys(C.brand).length}/3</em></button><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
  $$("#side [data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;filt={q:"",show:"all"};side();render();scrollTo(0,0)})}
 function render(){if(view==="brand")return vBrand();if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
 /* ---- image sections ---- */
@@ -296,7 +298,7 @@ function applyAdminBrand(){const a=$(".top .brand");if(!a.dataset.def)a.dataset.
  const f=C.brand.favicon||"favicon.svg";$$('link[rel="icon"]').forEach(l=>l.setAttribute("href",f))}
 function vBrand(){const lg=C.brand.logo,fv=C.brand.favicon,fimg=(sz)=>fv?`<img src="${esc(fv)}" alt="" style="width:${sz}px;height:${sz}px">`:MARK.replace("<svg",`<svg style="width:${sz}px;height:${sz}px"`);
  const logoView=lg?`<img src="${esc(lg)}" alt="Logo preview">`:DEFLOGO;
- $("#main").innerHTML=`<div class="head"><div><h1>Logo &amp; favicon</h1><p>Replace the site's logo and browser icon. Changes go live within a minute. Remove an upload to go back to the built-in The Timeline mark.</p></div></div>
+ $("#main").innerHTML=`<div class="head"><div><h1>Logo, favicon &amp; sharing</h1><p>Replace the site's logo, browser icon and link preview image. Changes go live within a minute. Remove an upload to go back to the built-in The Timeline mark.</p></div></div>
  <div class="brandgrid">
  <div class="panel"><h3 style="font-size:26px">Logo</h3><p class="tiny" style="margin:6px 0 14px">Shown in the header on every page, 36 px tall (up to 200 px wide). Best as an SVG or a transparent PNG at least 600 px wide.</p>
   <div class="mock"><div class="mbar">${logoView}<span class="ghost"><i></i><i></i><i></i></span></div></div>
@@ -308,11 +310,19 @@ function vBrand(){const lg=C.brand.logo,fv=C.brand.favicon,fimg=(sz)=>fv?`<img s
   <div class="mock"><div class="tabs"><span class="tb on">${fimg(16)}<span>The Timeline</span></span><span class="tb">${ICO.img}<span>New tab</span></span></div><div class="favs">${[16,32,64,128].map(z=>`<div>${fimg(z)}${z}px</div>`).join("")}</div></div>
   <div class="drop" data-drop="favicon">Drop an image here, or use the button below</div>
   <div class="brandacts"><label class="btn red">${ICO.up}${fv?"Replace favicon":"Upload favicon"}<input type="file" class="hide" accept="image/svg+xml,image/png,image/webp,image/jpeg" data-bup="favicon"></label>${fv?`<button class="btn danger" data-brm="favicon">Remove</button>`:""}<span class="tiny" style="align-self:center">${fv?"Custom favicon is live":"Using the built-in icon"}</span></div></div>
+ <div class="panel social"><h3 style="font-size:26px">Social preview</h3><p class="tiny" style="margin:6px 0 14px">The image shown when the site's link is shared on WhatsApp, X, Facebook, LinkedIn, Slack and iMessage. Use a 1200 × 630 (1.91:1) image; anything else is cropped to fit from the centre. Keep text and faces away from the edges.</p>
+  <div class="sgrid"><div class="ogcard"><div class="ogimg">${C.brand.social?`<img src="${esc(C.brand.social)}" alt="Social preview">`:`<img src="/og-default.png" alt="Built-in social preview">`}</div><div class="ogtxt"><b>The Timeline</b><span>An interactive guide to the Marvel Cinematic Universe: timeline, watch order, what to watch first…</span><small>marvel-kappa-sepia.vercel.app</small></div></div>
+  <div><div class="drop" data-drop="social" style="margin-top:0">Drop an image here, or use the button below</div>
+  <div class="brandacts"><label class="btn red">${ICO.up}${C.brand.social?"Replace image":"Upload image"}<input type="file" class="hide" accept="image/png,image/webp,image/jpeg" data-bup="social"></label>${C.brand.social?`<button class="btn danger" data-brm="social">Remove</button>`:""}<span class="tiny" style="align-self:center">${C.brand.social?"Custom preview is live":"Using the built-in preview"}</span></div>
+  <p class="tiny" style="margin:12px 0 0">Apps cache previews. To see a new image straight away, share the link with something added to the end, like <code>?v=2</code>.</p></div></div></div>
  </div>`;
  $$("[data-bup]").forEach(i=>i.onchange=()=>{const f=i.files[0];if(f)uploadBrand(i.dataset.bup,f);i.value=""});
  $$("[data-brm]").forEach(b=>b.onclick=()=>removeBrand(b.dataset.brm));
  $$("[data-drop]").forEach(d=>{d.ondragover=e=>{e.preventDefault();d.classList.add("drag")};d.ondragleave=()=>d.classList.remove("drag");d.ondrop=e=>{e.preventDefault();d.classList.remove("drag");const f=[...e.dataTransfer.files].find(f=>f.type.startsWith("image/"));f?uploadBrand(d.dataset.drop,f):toast("Drop an image file",true)}})}
-async function brandBlob(key,file){if(file.type==="image/svg+xml"){if(file.size>1_000_000)throw new Error("That SVG is over 1 MB.");return file}
+async function brandBlob(key,file){if(key==="social"){let bmp;try{bmp=await createImageBitmap(file)}catch(e){throw new Error("That file couldn't be read as an image.")}
+  const W=1200,H=630,s=Math.max(W/bmp.width,H/bmp.height),w=bmp.width*s,h=bmp.height*s,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");g.fillStyle="#07080c";g.fillRect(0,0,W,H);g.drawImage(bmp,(W-w)/2,(H-h)/2,w,h);
+  let q=.88,b;do{b=await new Promise(r=>c.toBlob(r,"image/jpeg",q));q-=.1}while(b&&b.size>450_000&&q>.5);return b}
+ if(file.type==="image/svg+xml"){if(file.size>1_000_000)throw new Error("That SVG is over 1 MB.");return file}
  let bmp;try{bmp=await createImageBitmap(file)}catch(e){throw new Error("That file couldn't be read as an image.")}
  const max=key==="logo"?1200:512,s=Math.min(1,max/Math.max(bmp.width,bmp.height)),w=Math.round(bmp.width*s),h=Math.round(bmp.height*s);
  let cw=w,ch=h,dx=0,dy=0;if(key==="favicon"){const m=Math.max(w,h);cw=ch=m;dx=(m-w)/2;dy=(m-h)/2}
@@ -321,9 +331,9 @@ async function brandBlob(key,file){if(file.type==="image/svg+xml"){if(file.size>
 async function uploadBrand(key,file){const d=$(`[data-drop="${key}"]`);if(d)d.textContent="Uploading…";
  try{const blob=await brandBlob(key,file);const j=await api(`/api/upload?kind=brand&key=${key}`,{method:"POST",headers:{"content-type":blob.type},body:blob});
   const old=C.brand[key];C.brand[key]=j.url;await save();if(old)api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});
-  toast((key==="logo"?"Logo":"Favicon")+" updated — live on the site")}
+  toast(({logo:"Logo",favicon:"Favicon",social:"Social preview"})[key]+" updated — live on the site")}
  catch(e){toast(e.message,true)}finally{applyAdminBrand();side();if(view==="brand")vBrand()}}
-async function removeBrand(key){const old=C.brand[key];if(!old)return;delete C.brand[key];try{await save();api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});toast("Removed — the built-in "+(key==="logo"?"logo":"icon")+" is back")}catch(e){C.brand[key]=old}applyAdminBrand();side();vBrand()}
+async function removeBrand(key){const old=C.brand[key];if(!old)return;delete C.brand[key];try{await save();api(`/api/upload?url=${encodeURIComponent(old)}`,{method:"DELETE"}).catch(()=>{});toast("Removed — the built-in "+({logo:"logo",favicon:"icon",social:"preview"})[key]+" is back")}catch(e){C.brand[key]=old}applyAdminBrand();side();vBrand()}
 /* ---- setup ---- */
 async function vSetup(){let s=STATUS;try{s=await probe(KEY)}catch(e){}
  const n=k=>Object.keys(C[k]).length,vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);

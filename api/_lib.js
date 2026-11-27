@@ -1,7 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 
 export const KINDS = ["posters", "characters", "other", "planets", "brand"];
-export const BRAND_KEYS = ["logo", "favicon"];
+export const BRAND_KEYS = ["logo", "favicon", "social"];
 export const VIDEO_TYPES = ["trailer", "teaser", "bts", "clip"];
 
 export const json = (data, status = 200) =>
