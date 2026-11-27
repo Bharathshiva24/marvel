@@ -183,7 +183,7 @@ h3{font-size:24px}
 .spoil{position:relative;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);padding:12px 14px}
 .spoil.lock{cursor:pointer}
 .spoil.lock>*{filter:blur(7px);user-select:none}
-.spoil.lock::after{content:attr(data-l);position:absolute;inset:0;display:grid;place-items:center;font:700 13px var(--fb);color:var(--ink);text-align:center;padding:8px}
+.spoil.lock::after{content:attr(data-hint);position:absolute;inset:0;display:grid;place-items:center;font:700 13px var(--fb);color:var(--ink);text-align:center;padding:8px}
 @media(max-width:560px){.dhero{grid-template-columns:110px minmax(0,1fr);padding:22px 18px}.dhero .poster{font-size:16px}.dsec{padding:0 18px 22px}}
 /* ===== watch guide ===== */
 .targets{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#2a2e3a transparent}
@@ -365,6 +365,7 @@ const NOW=new Date(),released=t=>t.dt<=NOW;
 const FWD={};T.forEach(t=>t.cn.forEach(c=>(FWD[c]=FWD[c]||[]).push(t.id)));
 const KEY="mcu-codex-v2";let S={w:[],l:[],sp:false,mode:"release",z:null,lang:"en"};
 try{const o=JSON.parse(localStorage.getItem("mcu-codex-v1")||"null");if(o){S.w=o.w||[];S.l=o.l||[];S.sp=!!o.sp}Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+S.l=(S.l||[]).filter(id=>T.some(x=>x.id===id));S.w=(S.w||[]).filter(id=>T.some(x=>x.id===id));
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const isW=id=>S.w.includes(id),inL=id=>S.l.includes(id);
 /* ---- i18n ---- */
@@ -389,8 +390,8 @@ const IU=(k,key)=>{const v=(window.IMG&&IMG[k]&&IMG[k][key])||"";return v&&!/^\s
 const imgTag=(u,cls="")=>u?`<img ${cls?`class="${cls}"`:""} src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:"";
 function hash(s){let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0}
 let tT;function toast(m){const e=$("#toast");e.textContent=m;e.classList.add("on");clearTimeout(tT);tT=setTimeout(()=>e.classList.remove("on"),2200)}
-function toggleW(id){S.w=isW(id)?S.w.filter(x=>x!==id):[...S.w,id];save();refresh();toast(isW(id)?t("t_watched"):t("t_unwatched"))}
-function toggleL(id){S.l=inL(id)?S.l.filter(x=>x!==id):[...S.l,id];save();refresh();toast(inL(id)?t("t_added"):t("t_removed"))}
+function toggleW(id){if(!BY[id])return;S.w=isW(id)?S.w.filter(x=>x!==id):[...S.w,id];save();refresh();toast(isW(id)?t("t_watched"):t("t_unwatched"))}
+function toggleL(id){if(!BY[id])return;S.l=inL(id)?S.l.filter(x=>x!==id):[...S.l,id];save();refresh();toast(inL(id)?t("t_added"):t("t_removed"))}
 const ICON={play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>',pause:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.2"/><rect x="14" y="4" width="4" height="16" rx="1.2"/></svg>',prev:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 6v12l-10-6z"/></svg>',next:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 6v12l10-6z"/></svg>',x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6 6 18"/></svg>',check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m5 12 5 5 9-10"/></svg>',plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>',yt:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9L15.5 12z"/></svg>',mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'};
 /* ================= original poster art ================= */
 const FRC={avengers:"#e3262c",ironman:"#c9302c",cap:"#2f6fdd",thor:"#5aa0ff",hulk:"#3fae5a",gotg:"#ff7a3d",spider:"#e0313a",strange:"#ff9a2e",panther:"#8f5cff",antman:"#e04848",cm:"#3b78ff",widow:"#d33",cosmic:"#e8b43a",shang:"#e6c247",loki:"#2fc48a",wanda:"#e0365f",mutant:"#ffcc1f",ff:"#3e8dff",street:"#b31b1b",fury:"#4ba3a6",mystic:"#9b5cf5"};
@@ -422,7 +423,7 @@ function shell(){document.documentElement.lang=S.lang;
 function markNav(){$$(".nav a").forEach(a=>a.classList.toggle("on",a.dataset.v===cur));const a=$(`#nav2 a[data-v="${cur}"]`);a&&a.scrollIntoView({block:"nearest",inline:"center"})}
 function setLang(v){S.lang=v;save();loadTX();shell();const y=scrollY;if(cur==="watch")PEND=WG.id;if(cur==="characters")PEND=CG.id;stopVO();$("#main").innerHTML="";R[cur]();scrollTo(0,y);if(DR.id)openT(DR.id,true);translateAll()}
 $("#spoil").onclick=()=>{S.sp=!S.sp;save();shell();toast(S.sp?t("t_sp_on"):t("t_sp_off"));refresh()};
-const spoilBlock=html=>S.sp?`<div class="spoil">${html}</div>`:`<div class="spoil lock" tabindex="0" role="button" data-rv data-l="${esc(t("hidden"))}"><div>${html}</div></div>`;
+const spoilBlock=html=>S.sp?`<div class="spoil">${html}</div>`:`<div class="spoil lock" tabindex="0" role="button" data-rv data-hint="${esc(t("hidden"))}"><div>${html}</div></div>`;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-rv]");if(b){b.classList.remove("lock");b.removeAttribute("data-rv");b.removeAttribute("role")}});
 document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("[data-rv]")){e.preventDefault();e.target.click()}});
 /* ================= router ================= */
