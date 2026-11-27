@@ -674,7 +674,7 @@ function startCD(){clearInterval(cdT);const tick=()=>{const els=$$("[data-cd]");
 /* ================= POSTERFLIX PROMO ================= */
 const PF={url:"https://posterflix.in/search?q=marvel",items:null,req:null};
 const pfLink=(u,c)=>{try{const x=new URL(u);x.searchParams.set("utm_source","marvel-timeline");x.searchParams.set("utm_medium","referral");x.searchParams.set("utm_campaign",c);return x.href}catch(e){return PF.url}};
-function pfLoad(){return PF.req||(PF.req=fetch("/api/posterflix").then(r=>r.ok?r.json():{}).then(j=>{const a=(j&&Array.isArray(j.items)?j.items:[]).filter(i=>i&&/^https:\/\//.test(i.img)&&/^https:\/\/posterflix\.in\//.test(i.href));for(let k=a.length-1;k>0;k--){const r=Math.floor(Math.random()*(k+1));[a[k],a[r]]=[a[r],a[k]]}PF.all=a;PF.items=a.slice(0,4)}).catch(()=>{PF.items=[]}))}
+function pfLoad(){return PF.req||(PF.req=fetch("/api/posterflix?v=marvel").then(r=>r.ok?r.json():{}).then(j=>{const a=(j&&Array.isArray(j.items)?j.items:[]).filter(i=>i&&i.marvel!==false&&!/^dc$/i.test(i.brand||"")&&/^https:\/\//.test(i.img)&&/^https:\/\/posterflix\.in\//.test(i.href));for(let k=a.length-1;k>0;k--){const r=Math.floor(Math.random()*(k+1));[a[k],a[r]]=[a[r],a[k]]}PF.all=a;PF.items=a.slice(0,4)}).catch(()=>{PF.items=[]}))}
 function pfHide(root){root.querySelectorAll("img[data-pf]").forEach(i=>i.addEventListener("error",()=>{const c=i.closest("[data-pfc]");if(c)c.remove()},{once:true}))}
 async function drawPF(){const el=$("#pfx");if(!el)return;await pfLoad();if(!el.isConnected)return;const it=PF.items||[];
  const cta=`<a class="btn red" href="${esc(pfLink(PF.url,"home_section"))}" target="_blank" rel="noopener">${esc(t("pf_cta"))} →</a>`;
