@@ -251,6 +251,7 @@ List,Key,Name,Suggested file,Size / ratio,Shown in
 "Character","trask","Bolivar Trask","images/characters/bolivar-trask.jpg","1:1 or 4:5 · 600×600+","Characters page, relationship web, cast lists"
 "Other","hero","Home hero backdrop behind Avengers: Doomsday","images/other/hero.jpg","16:9, 2400×1350","Home hero backdrop behind Avengers: Doomsday"
 "Other","posterflix_wall","Posterflix poster wall","images/other/posterflix-wall.jpg","16:9, 2400×1350","Home page, behind the framed Marvel posters"
+"Other","posterflix_wall_mobile","Posterflix wall · mobile","images/other/posterflix-wall-mobile.jpg","Portrait, 1200×1700","Home page on phones, behind the poster carousel"
 "Other","saga_infinity","Infinity Saga panel background","images/other/saga-infinity.jpg","16:9, 1600×900","Infinity Saga panel background"
 "Other","saga_multiverse","Multiverse Saga panel background","images/other/saga-multiverse.jpg","16:9, 1600×900","Multiverse Saga panel background"
 "Other","universe_map","Universe map background","images/other/universe-map.jpg","1000×620 (or 16:10)","Universe map background"

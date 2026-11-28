@@ -254,6 +254,7 @@ characters:{
 other:{
   "hero":"", // Home hero backdrop behind Avengers: Doomsday — 16:9, 2400×1350
   "posterflix_wall":"", // Posterflix promo: empty wall behind the framed posters — 16:9, 2400×1350
+  "posterflix_wall_mobile":"", // Posterflix promo on phones — portrait, 1200×1700
   "saga_infinity":"", // Infinity Saga panel background — 16:9, 1600×900
   "saga_multiverse":"", // Multiverse Saga panel background — 16:9, 1600×900
   "universe_map":"", // Universe map background (full screen) — 16:9, 2560×1440
