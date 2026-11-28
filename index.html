@@ -543,20 +543,6 @@ footer .byme em{font-style:normal;font:600 14px var(--fb);color:var(--red2);marg
 /* Posterflix wall on a photo background: captions sit on a soft dark plate so they never clash with the furniture */
 .pfx .wall.photo .cap{display:inline-block;margin-top:14px;padding:10px 14px 12px;border-radius:8px;background:rgba(8,9,13,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-shadow:none}
 .pfx .wall.photo .pc{text-align:center}
-/* Posterflix Flex carousel (WebGL liquid lens, React Bits port in /flex-carousel.js). Falls back to the 3D ring without WebGL2. */
-let FCJS=null;const fcLoad=()=>FCJS||(FCJS=new Promise((ok,no)=>{if(window.FlexCarousel)return ok();const sc=document.createElement("script");sc.src="/flex-carousel.js?v=1";sc.async=true;sc.onload=()=>ok();sc.onerror=no;document.head.appendChild(sc)}));
-async function pfFlex(el){const ring=el.querySelector(".cc"),its=PF.items||[];
- if(!ring||its.length<3||!window.WebGL2RenderingContext){pfCC(el);return}
- try{await fcLoad()}catch(e){pfCC(el);return}if(!ring.isConnected)return;
- const box=document.createElement("div");box.className="fc";box.tabIndex=0;box.setAttribute("role","region");box.setAttribute("aria-roledescription","carousel");box.setAttribute("aria-label",t("pf_title"));
- ring.replaceWith(box);const cap=el.querySelector(".cccap"),pv=el.querySelector(".pfnav.prev"),nx=el.querySelector(".pfnav.next");
- const items=its.map(i=>{const v=(String(i.img).match(/[?&]v=([\w.-]+)/)||[])[1];return{src:`/api/pfimg?id=${encodeURIComponent(i.id)}${v?`&v=${v}`:""}`,alt:i.title+" poster",title:i.title,subtitle:i.medium}});
- const show=n=>{const i=its[n];if(!i)return;cap.innerHTML=`<b>${esc(i.title)}</b>${i.medium?`<small>${esc(i.medium)}</small>`:""}<a href="${esc(pfLink(i.href,"home_section"))}" target="_blank" rel="noopener">${esc(t("pf_view"))} →</a><span class="ccn">${String(n+1).padStart(2,"0")} <i>/</i> ${String(its.length).padStart(2,"0")}</span>`};
- const small=innerWidth<600;
- const fc=window.FlexCarousel(box,{items,preset:"liquid",settings:{cardHeight:small?.62:.66,gap:small?10:16,radius:2,intro:"rise",autoplay:true,interval:4,captureWheel:false,focusOnClick:true},onChange:n=>show(n),onReveal:()=>box.classList.add("on")});
- if(!fc){box.replaceWith(ring);pfCC(el);return}
- show(0);pv.onclick=()=>fc.step(-1);nx.onclick=()=>fc.step(1);
- const gone=new MutationObserver(()=>{if(!box.isConnected){fc.destroy();gone.disconnect()}});gone.observe(document.body,{childList:true,subtree:true})}
 /* Posterflix circular carousel */
 .pfx .cc{position:relative;height:clamp(400px,34vw,460px);perspective:2000px;perspective-origin:50% 42%;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);outline:none}
 .pfx .cc.drag{cursor:grabbing}.pfx .cc:focus-visible{box-shadow:inset 0 0 0 2px var(--red)}
@@ -791,6 +777,20 @@ function pfRail(el){const h=el.querySelector(".hang"),pv=el.querySelector(".pfna
  const upd=()=>{const over=h.scrollWidth>h.clientWidth+4;pv.hidden=nx.hidden=!over;pv.disabled=h.scrollLeft<4;nx.disabled=h.scrollLeft+h.clientWidth>=h.scrollWidth-4};
  const step=d=>{const c=h.querySelector(".pc");h.scrollBy({left:d*((c?c.getBoundingClientRect().width:220)+parseFloat(getComputedStyle(h).columnGap||0)),behavior:"smooth"})};
  pv.onclick=()=>step(-1);nx.onclick=()=>step(1);h.addEventListener("scroll",upd,{passive:true});addEventListener("resize",upd);h.querySelectorAll("img").forEach(i=>i.addEventListener("load",upd,{once:true}));upd();setTimeout(upd,600)}
+/* Posterflix Flex carousel (WebGL liquid lens, React Bits port in /flex-carousel.js). Falls back to the 3D ring without WebGL2. */
+let FCJS=null;const fcLoad=()=>FCJS||(FCJS=new Promise((ok,no)=>{if(window.FlexCarousel)return ok();const sc=document.createElement("script");sc.src="/flex-carousel.js?v=1";sc.async=true;sc.onload=()=>ok();sc.onerror=no;document.head.appendChild(sc)}));
+async function pfFlex(el){const ring=el.querySelector(".cc"),its=PF.items||[];
+ if(!ring||its.length<3||!window.WebGL2RenderingContext){pfCC(el);return}
+ try{await fcLoad()}catch(e){pfCC(el);return}if(!ring.isConnected)return;
+ const box=document.createElement("div");box.className="fc";box.tabIndex=0;box.setAttribute("role","region");box.setAttribute("aria-roledescription","carousel");box.setAttribute("aria-label",t("pf_title"));
+ ring.replaceWith(box);const cap=el.querySelector(".cccap"),pv=el.querySelector(".pfnav.prev"),nx=el.querySelector(".pfnav.next");
+ const items=its.map(i=>{const v=(String(i.img).match(/[?&]v=([\w.-]+)/)||[])[1];return{src:`/api/pfimg?id=${encodeURIComponent(i.id)}${v?`&v=${v}`:""}`,alt:i.title+" poster",title:i.title,subtitle:i.medium}});
+ const show=n=>{const i=its[n];if(!i)return;cap.innerHTML=`<b>${esc(i.title)}</b>${i.medium?`<small>${esc(i.medium)}</small>`:""}<a href="${esc(pfLink(i.href,"home_section"))}" target="_blank" rel="noopener">${esc(t("pf_view"))} →</a><span class="ccn">${String(n+1).padStart(2,"0")} <i>/</i> ${String(its.length).padStart(2,"0")}</span>`};
+ const small=innerWidth<600;
+ const fc=window.FlexCarousel(box,{items,preset:"liquid",settings:{cardHeight:small?.62:.66,gap:small?10:16,radius:2,intro:"rise",autoplay:true,interval:4,captureWheel:false,focusOnClick:true},onChange:n=>show(n),onReveal:()=>box.classList.add("on")});
+ if(!fc){box.replaceWith(ring);pfCC(el);return}
+ show(0);pv.onclick=()=>fc.step(-1);nx.onclick=()=>fc.step(1);
+ const gone=new MutationObserver(()=>{if(!box.isConnected){fc.destroy();gone.disconnect()}});gone.observe(document.body,{childList:true,subtree:true})}
 /* Posterflix circular carousel (inspired by React Bits Circular Carousel): a 3D ring you drag, swipe, arrow or tab through */
 function pfCC(el){const root=el.querySelector(".cc");if(!root)return;const ring=root.querySelector(".ccr"),cap=el.querySelector(".cccap"),pv=el.querySelector(".pfnav.prev"),nx=el.querySelector(".pfnav.next");
  const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;let cards=[],N=0,step=0,R=0,unit=1,cur=0,tgt=0,raf=0,last=0,front=-1,drag=null,moved=false,hover=false,auto=0,seen=true;
@@ -1257,7 +1257,7 @@ function rfInit(){if(matchMedia("(prefers-reduced-motion: reduce)").matches||!ma
  document.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse")return;const p=e.target.closest&&e.target.closest(".poster");
   if(p!==el){if(el&&!p)return leave();if(el){el.classList.remove("rfx");["--rx","--ry","--ro"].forEach(q=>el.style.removeProperty(q))}
    if(!p||p.offsetWidth<60||!p.querySelector(".rf")){el=null;return}el=p;st.o=0;p.classList.add("rfx")}
-  const r=el.getBoundingClientRect();st.tx=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));st.ty=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));st.to=1;run()},{passive:true});
+  if(!el.isConnected){el=null;return}const r=el.getBoundingClientRect();st.tx=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));st.ty=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));st.to=1;run()},{passive:true});
  document.addEventListener("pointerleave",leave);window.addEventListener("blur",leave);addEventListener("scroll",()=>{if(el&&st.to)leave()},{passive:true})}
 loadTX();shell();route();loadRemote();authInit();setInterval(loadRemote,60000);pfPopup();vsInit();rfInit();document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRemote()});
 if(window.claude&&typeof claude.use==="function"){
