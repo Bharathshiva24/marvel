@@ -200,6 +200,18 @@ async function api(path,opt={}){const r=await fetch(path,{...opt,headers:{...(op
 let saveChain=Promise.resolve(),pending=0;
 function setStatus(kind,text){const b=$("#st");b.className="badge "+kind;b.lastChild.textContent=text}
 function save(){pending++;setStatus("saving","Saving…");saveChain=saveChain.then(async()=>{try{const j=await api("/api/content",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(C)});C.updated=j.content.updated;pending--;if(!pending)setStatus("","All changes live")}catch(e){pending--;setStatus("err","Not saved");toast(e.message,true);throw e}});return saveChain}
+/* ---- visitor counter ---- */
+async function vStats(){$("#main").innerHTML=`<div class="head"><div><h1>Visitor counter</h1><p>The numbers shown under the home page hero. <b>Views</b> goes up once per page load; <b>watching now</b> counts people active in the last 5 minutes.</p></div></div><div class="panel" style="max-width:720px" id="stbox"><p class="tiny">Loading…</p></div>`;
+ let j={};try{j=await api("/api/stats")}catch(e){j={error:e.message}}
+ const box=$("#stbox");if(!box)return;
+ if(!j.configured){box.innerHTML=`<p>The counter database isn't connected. In Vercel: <b>Storage → Create → Upstash for Redis</b>, connect it to this project with the prefix <code>KV</code>, then redeploy.</p>`;return}
+ if(j.error){box.innerHTML=`<p class="tiny">${esc(j.error)}</p>`;return}
+ box.innerHTML=`<div style="display:flex;gap:40px;flex-wrap:wrap;margin-bottom:24px"><div><div class="tiny">Total views</div><div style="font:800 44px/1.1 var(--fd,inherit)">${j.views.toLocaleString()}</div></div><div><div class="tiny">Watching now</div><div style="font:800 44px/1.1 var(--fd,inherit)">${j.live.toLocaleString()}</div></div></div>
+ <label for="stv" style="display:block;font-weight:700;margin-bottom:6px">Set total views</label>
+ <p class="tiny" style="margin:0 0 10px">Use this once to carry over visits from before the counter was added, such as link clicks from your posts. New visits keep adding on top.</p>
+ <div style="display:flex;gap:10px;flex-wrap:wrap"><input class="in" id="stv" type="number" min="0" step="1" value="${j.views}" style="width:220px"><button class="btn red" id="sts">Save</button></div>`;
+ $("#sts").onclick=async()=>{const v=Math.floor(Number($("#stv").value));if(!(v>=0))return toast("Enter a whole number from 0 up",true);
+  try{await api("/api/stats",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify({views:v})});toast("Total views set to "+v.toLocaleString());vStats()}catch(e){toast(e.message,true)}}}
 /* ---- home hero background video ---- */
 function vHero(){const v=C.other.hero_video||"",img=current("other","hero");
  $("#main").innerHTML=`<div class="head"><div><h1>Home hero video</h1><p>A muted, looping background video behind the countdown at the top of the home page. It replaces the hero backdrop image; that image is still used as the first frame while the video loads, and for visitors who prefer reduced motion or are saving data.</p></div></div>
@@ -239,9 +251,9 @@ function start(s){C=Object.assign({posters:{},characters:{},other:{},planets:{},
  $("#gate").classList.add("hide");$("#app").classList.remove("hide");applyAdminBrand();side();render()}
 /* ---- navigation ---- */
 function side(){const n=k=>Object.keys(C[k]).length;const vn=Object.values(C.videos).reduce((a,l)=>a+l.length,0);
- $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"],["planets","globe"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><button data-v="hero" class="${view==="hero"?"on":""}">${ICO.play}Home hero video<em>${C.other.hero_video?1:0}/1</em></button><div class="lab">Site</div><button data-v="brand" class="${view==="brand"?"on":""}">${ICO.star}Logo &amp; sharing<em>${Object.keys(C.brand).length}/3</em></button><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
+ $("#side").innerHTML=`<div class="lab">Images</div>${[["posters","img"],["characters","user"],["other","layers"],["planets","globe"]].map(([k,i])=>`<button data-v="${k}" class="${view===k?"on":""}">${ICO[i]}${KINDS[k].label}<em>${n(k)}/${KINDS[k].slots().length}</em></button>`).join("")}<div class="lab">Video</div><button data-v="videos" class="${view==="videos"?"on":""}">${ICO.play}YouTube videos<em>${vn}</em></button><button data-v="hero" class="${view==="hero"?"on":""}">${ICO.play}Home hero video<em>${C.other.hero_video?1:0}/1</em></button><div class="lab">Site</div><button data-v="brand" class="${view==="brand"?"on":""}">${ICO.star}Logo &amp; sharing<em>${Object.keys(C.brand).length}/3</em></button><button data-v="stats" class="${view==="stats"?"on":""}">${ICO.user}Visitor counter</button><button data-v="setup" class="${view==="setup"?"on":""}">${ICO.gear}Setup &amp; status</button>`;
  $$("#side [data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;filt={q:"",show:"all"};side();render();scrollTo(0,0)})}
-function render(){if(view==="hero")return vHero();if(view==="brand")return vBrand();if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
+function render(){if(view==="stats")return vStats();if(view==="hero")return vHero();if(view==="brand")return vBrand();if(view==="videos")return vVideos();if(view==="setup")return vSetup();vImages(view)}
 /* ---- image sections ---- */
 function current(kind,key){return C[kind][key]||DEF[kind][key]||""}
 function slotHTML(kind,[key,name,sub]){const custom=C[kind][key],u=current(kind,key),t=BY[key];
