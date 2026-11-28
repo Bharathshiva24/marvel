@@ -240,11 +240,11 @@ characters:{
   "joe":"", // Joe McGillicuddy
   "mephisto":"", // Mephisto
   "jessica":"", // Jessica Jones
-  "sadie":"", // Role not yet revealed
+  "sadie":"", // Jean Grey (MCU)
   "jocasta":"", // Jocasta
   "paladin":"", // Paladin
   "raza":"", // Raza
-  "jean":"", // Jean Grey
+  "jean":"", // Jean Grey (Fox X-Men)
   "storm":"", // Ororo Munroe / Storm
   "rogue":"", // Rogue
   "stryker":"", // William Stryker
