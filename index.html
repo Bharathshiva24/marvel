@@ -538,6 +538,13 @@ footer .byme em{font-style:normal;font:600 14px var(--fb);color:var(--red2);marg
 /* Posterflix wall on a photo background: captions sit on a soft dark plate so they never clash with the furniture */
 .pfx .wall.photo .cap{display:inline-block;margin-top:14px;padding:10px 14px 12px;border-radius:8px;background:rgba(8,9,13,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-shadow:none}
 .pfx .wall.photo .pc{text-align:center}
+/* Visitor counter under the hero buttons */
+.vstat{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:20px;font:600 15px var(--fb);color:#c9c7c0}
+.vstat[hidden]{display:none}.vstat>span{display:inline-flex;align-items:center;gap:8px}
+.vstat .lv{color:#f4f2ec}.vstat .lv i{width:9px;height:9px;border-radius:50%;background:#2ecc71;animation:vsp 2s ease-out infinite}
+.vstat .vw svg{opacity:.8}
+@keyframes vsp{0%{box-shadow:0 0 0 0 rgba(46,204,113,.55)}100%{box-shadow:0 0 0 9px rgba(46,204,113,0)}}
+@media (prefers-reduced-motion:reduce){.vstat .lv i{animation:none}}
 </style>
 </head>
 <body>
@@ -715,6 +722,13 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-open],[dat
 let cdT;
 function cdHTML(ms){if(ms<=0)return`<div><b>${t("out_now")}</b></div>`;const d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60,s=Math.floor(ms/1e3)%60;return[[d,"days"],[h,"hours"],[m,"min"],[s,"sec"]].map(([v,l])=>`<div><b>${String(v).padStart(2,"0")}</b><small>${t(l)}</small></div>`).join("")}
 function startCD(){clearInterval(cdT);const tick=()=>{const els=$$("[data-cd]");if(!els.length){clearInterval(cdT);return}els.forEach(el=>el.innerHTML=cdHTML(new Date(el.dataset.cd+"T00:00:00")-new Date()))};tick();cdT=setInterval(tick,1000)}
+/* ================= VISITOR COUNTER ================= */
+const VS={data:null,sid:""};
+function vsSid(){if(VS.sid)return VS.sid;try{let x=sessionStorage.getItem("vs_sid");if(!x){x=(Math.random().toString(36).slice(2)+Date.now().toString(36)).slice(0,24);sessionStorage.setItem("vs_sid",x)}return VS.sid=x}catch(e){return VS.sid=(Math.random().toString(36).slice(2)+Date.now().toString(36)).slice(0,24)}}
+async function vsPing(hit){if(!hit&&document.hidden)return;try{const r=await fetch("/api/stats",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({sid:vsSid(),hit:!!hit}),keepalive:true});const j=await r.json();if(j.configured&&typeof j.views==="number"){VS.data=j;vsDraw()}}catch(e){}}
+function vsDraw(){const el=$("#vstat");if(!el||!VS.data)return;const f=n=>{try{return new Intl.NumberFormat(document.documentElement.lang||"en").format(n)}catch(e){return String(n)}};
+ el.innerHTML=`<span class="lv"><i aria-hidden="true"></i>${esc(t("st_live",{n:f(VS.data.live)}))}</span><span class="vw"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${esc(t("st_views",{n:f(VS.data.views)}))}</span>`;el.hidden=false}
+function vsInit(){if(!EMBED||/\/admin|\/migrate/.test(location.pathname))return;vsPing(true);setInterval(()=>vsPing(false),120000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)vsPing(false)})}
 /* ================= POSTERFLIX PROMO ================= */
 const PF={url:"https://posterflix.in/search?q=marvel",items:null,req:null};
 const pfLink=(u,c)=>{try{const x=new URL(u);x.searchParams.set("utm_source","marvel-timeline");x.searchParams.set("utm_medium","referral");x.searchParams.set("utm_campaign",c);return x.href}catch(e){return PF.url}};
@@ -744,7 +758,7 @@ function heroText(){const x=nextUp();const el=$("#hero");if(!el)return;
  $("#hb1").lastChild.textContent=t("hero_guide");$("#hb2").lastChild.textContent=t("hero_trailer");$("#hb3").textContent=t("hero_details")}
 function vTimeline(){
  const x=nextUp(),yrs=[...new Set(T.map(y=>y.dt.getFullYear()))].sort(),hu=IU("other","hero"),hv=heroVid();
- $("#main").innerHTML=`<div class="view"><section class="hero${hv?" hv":""}" id="hero">${hv?`<video class="bgimg bgvid" src="${esc(hv)}"${hu?` poster="${esc(hu)}"`:""} autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video><div class="hshade"></div>`:hu?imgTag(hu,"bgimg")+`<div class="hshade"></div>`:`<div class="bg">${art(x)}</div>`}<div class="wrap"><div><span class="kick"><i></i><span id="hk"></span></span><h1>${esc(x.t)}</h1><div class="date" id="hd"></div><div class="cd" data-cd="${x.d}"></div><div class="chips" style="gap:10px"><button class="btn red" id="hb1" data-guide="${x.id}">${ICON.check}<span></span></button><a class="btn" id="hb2" href="${trailer(x).u}"${trailer(x).a} target="_blank" rel="noopener">${ICON.yt}<span></span></a><button class="btn ghost" id="hb3" data-open="${x.id}"></button></div><p class="log" id="hl"></p></div><div class="art">${poster(x)}</div></div></section>
+ $("#main").innerHTML=`<div class="view"><section class="hero${hv?" hv":""}" id="hero">${hv?`<video class="bgimg bgvid" src="${esc(hv)}"${hu?` poster="${esc(hu)}"`:""} autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video><div class="hshade"></div>`:hu?imgTag(hu,"bgimg")+`<div class="hshade"></div>`:`<div class="bg">${art(x)}</div>`}<div class="wrap"><div><span class="kick"><i></i><span id="hk"></span></span><h1>${esc(x.t)}</h1><div class="date" id="hd"></div><div class="cd" data-cd="${x.d}"></div><div class="chips" style="gap:10px"><button class="btn red" id="hb1" data-guide="${x.id}">${ICON.check}<span></span></button><a class="btn" id="hb2" href="${trailer(x).u}"${trailer(x).a} target="_blank" rel="noopener">${ICON.yt}<span></span></a><button class="btn ghost" id="hb3" data-open="${x.id}"></button></div><p class="log" id="hl"></p><div class="vstat" id="vstat" aria-live="polite" hidden></div></div><div class="art">${poster(x)}</div></div></section>
  <section class="sec pfx" id="pfx" aria-label="Posterflix"></section>
  <section class="sec"><div class="wrap">
  <div class="head"><div><h2>${t("tl_title")}</h2><p class="lede">${esc(t("tl_lede",{f:T.filter(y=>y.k==="film").length,s:T.filter(y=>y.k!=="film").length}))}</p></div><div class="legend">${[1,2,3,4,5,6].map(p=>`<span><i style="width:10px;height:10px;border-radius:50%;background:${PC[p]}"></i>${t("phase",{n:p})}</span>`).join("")}</div></div>
@@ -759,7 +773,7 @@ function vTimeline(){
  <div class="strip"><div class="scroller" id="sc" tabindex="0" aria-label="${esc(t("tl_title"))}"><div class="track" id="tr"></div></div></div><div class="mini" id="mini" aria-hidden="true"></div>
  <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="tiny" id="tlcount"></span><span class="hint" style="margin:0">${t("tl_hint")}</span></div>
  </div></section></div>`;
- heroText();startCD();drawPF();
+ heroText();startCD();drawPF();vsDraw();
  if(innerWidth>760)$("#fbox").open=true;
  const fset=()=>{F.k=$("#fk").value;F.fr=$("#ffr").value;F.ch=$("#fch").value;F.y0=+$("#fy0").value;F.y1=+$("#fy1").value;F.w=$("#fw").value;drawTL()};
  dd("fk",[["all",t("films_series")],["film",t("films_only")],["series",t("series_only")]],F.k,fset,{label:t("filters")});
@@ -1148,7 +1162,7 @@ function closeAcct(){const p=$("#acpop");if(!p||p.hidden)return;p.hidden=true;$(
 $("#acct").onclick=e=>{e.stopPropagation();$("#acpop").hidden?openAcct():closeAcct()};
 document.addEventListener("click",e=>{if(e.target.closest("#lsi")){e.stopPropagation();openAcct();scrollTo({top:0,behavior:"smooth"});return}if(!e.target.closest("#acw"))closeAcct()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#acpop").hidden){closeAcct();$("#acct").focus()}});
-loadTX();shell();route();loadRemote();authInit();setInterval(loadRemote,60000);pfPopup();document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRemote()});
+loadTX();shell();route();loadRemote();authInit();setInterval(loadRemote,60000);pfPopup();vsInit();document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRemote()});
 if(window.claude&&typeof claude.use==="function"){
  claude.use("tts").then(x=>{TTS=x||null;if(cur==="videos"&&$("#vnote"))$("#vnote").textContent=TTS?"":t("vo_note");if(TTS&&TTS.onLine)TTS.onLine(({id})=>{if(!VO.on||!id)return;const[c,s]=String(id).split("-").map(Number);if(isNaN(c))return;VO.c=c;VO.s=s;syncVO(VO.chs[c]&&s===0)})}).catch(()=>{});
  claude.use("sample").then(x=>{SAMPLE=x||null;if(S.lang!=="en")translateAll()}).catch(()=>{if(S.lang!=="en")translateAll()});
