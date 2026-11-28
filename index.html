@@ -543,6 +543,27 @@ footer .byme em{font-style:normal;font:600 14px var(--fb);color:var(--red2);marg
 /* Posterflix wall on a photo background: captions sit on a soft dark plate so they never clash with the furniture */
 .pfx .wall.photo .cap{display:inline-block;margin-top:14px;padding:10px 14px 12px;border-radius:8px;background:rgba(8,9,13,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-shadow:none}
 .pfx .wall.photo .pc{text-align:center}
+/* Posterflix circular carousel */
+.pfx .cc{position:relative;height:clamp(400px,34vw,460px);perspective:2000px;perspective-origin:50% 42%;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);outline:none}
+.pfx .cc.drag{cursor:grabbing}.pfx .cc:focus-visible{box-shadow:inset 0 0 0 2px var(--red)}
+.pfx .ccv{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;opacity:0;transition:opacity .5s ease}
+.pfx .cc.ready .ccv{opacity:1}
+.pfx .ccr{position:relative;width:220px;aspect-ratio:584/816;transform-style:preserve-3d;will-change:transform}
+.pfx .ccc{position:absolute;inset:0;display:block;backface-visibility:hidden;-webkit-backface-visibility:hidden;-webkit-user-drag:none;transform-style:flat}
+.pfx .ccc .frame{height:100%;box-sizing:border-box;transition:box-shadow .3s}
+.pfx .ccc .frame::before{display:none}
+.pfx .ccc .mat img{pointer-events:none;-webkit-user-drag:none}
+.pfx .ccsh{position:absolute;inset:0;background:#05060a;opacity:calc(var(--d,0)*.78);pointer-events:none;border-radius:2px}
+.pfx .ccc.on .frame{box-shadow:0 2px 0 rgba(255,255,255,.08) inset,0 40px 70px rgba(0,0,0,.65),0 0 70px rgba(226,35,42,.16)}
+.pfx .cccap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:4px;margin:6px auto 0;width:max-content;max-width:min(92%,420px);padding:12px 20px 12px;border-radius:10px;background:rgba(8,9,13,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:center;animation:ccIn .5s ease}
+.pfx .cccap b{font:700 17px var(--fb)}.pfx .cccap small{font:500 13px var(--fb);color:var(--mut)}
+.pfx .cccap a{margin-top:4px;font:600 13px var(--fb);color:var(--red2);text-decoration:none}.pfx .cccap a:hover{text-decoration:underline}
+.pfx .cccap .ccn{margin-top:4px;font:600 11px var(--fb);letter-spacing:.08em;color:var(--mut);font-variant-numeric:tabular-nums}.pfx .cccap .ccn i{font-style:normal;opacity:.5}
+@keyframes ccIn{from{opacity:0;transform:translateY(6px)}}
+.pfx .wall .pfnav{top:calc(clamp(28px,5vw,64px) + clamp(400px,34vw,460px)/2 - 22px)}
+.pfx .wall.photo .pfnav{top:calc(clamp(36px,5vw,70px) + clamp(400px,34vw,460px)/2 - 22px)}
+@media(max-width:600px){.pfx .cc{height:400px;-webkit-mask-image:none;mask-image:none}.pfx .ccr{width:min(56vw,220px)}.pfx .wall .pfnav,.pfx .wall.photo .pfnav{top:auto;bottom:22px}.pfx .cccap{max-width:calc(100% - 110px)}}
+@media(prefers-reduced-motion:reduce){.pfx .cccap{animation:none}}
 /* Visitor counter under the hero buttons */
 .vstat{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:20px;font:600 15px var(--fb);color:#c9c7c0}
 .vstat[hidden]{display:none}.vstat>span{display:inline-flex;align-items:center;gap:8px}
@@ -741,11 +762,44 @@ function pfLoad(){return PF.req||(PF.req=fetch("/api/posterflix?v=hero2").then(r
 function pfHide(root){root.querySelectorAll("img[data-pf]").forEach(i=>i.addEventListener("error",()=>{const c=i.closest("[data-pfc]");if(c)c.remove()},{once:true}))}
 async function drawPF(){const el=$("#pfx");if(!el)return;await pfLoad();if(!el.isConnected)return;const it=PF.items||[];
  const cta=`<a class="btn red" href="${esc(pfLink(PF.url,"home_section"))}" target="_blank" rel="noopener">${esc(t("pf_cta"))} →</a>`;
- el.innerHTML=`<div class="wrap"><div class="head"><div><span class="kick">${esc(t("pf_kick"))}</span><h2>${esc(t("pf_title"))}</h2><p class="lede">${esc(t("pf_lede"))}</p></div>${it.length?cta:""}</div>${it.length?`<div class="wall${IU("other","posterflix_wall")?" photo":""}"${IU("other","posterflix_wall")?` style="--wallimg:url(&quot;${esc(IU("other","posterflix_wall"))}&quot;)"`:""}><button class="pfnav prev" type="button" aria-label="Previous posters" hidden>‹</button><button class="pfnav next" type="button" aria-label="More posters" hidden>›</button><div class="hang" tabindex="0" aria-label="${esc(t("pf_title"))}">${it.map(i=>`<a class="pc" data-pfc href="${esc(pfLink(i.href,"home_section"))}" target="_blank" rel="noopener"><div class="frame"><div class="mat"><img data-pf src="${esc(i.img)}" alt="${esc(i.title)} poster" loading="lazy" referrerpolicy="no-referrer"></div></div><div class="cap">${esc(i.title)}${i.medium?`<small>${esc(i.medium)}</small>`:""}<em>${esc(t("pf_view"))} →</em></div></a>`).join("")}</div></div>`:`<div class="ban"><div><b>${esc(t("pf_ban"))}</b><div class="tiny">posterflix.in</div></div>${cta}</div>`}</div>`;pfHide(el);pfRail(el)}
+ el.innerHTML=`<div class="wrap"><div class="head"><div><span class="kick">${esc(t("pf_kick"))}</span><h2>${esc(t("pf_title"))}</h2><p class="lede">${esc(t("pf_lede"))}</p></div>${it.length?cta:""}</div>${it.length?`<div class="wall${IU("other","posterflix_wall")?" photo":""}"${IU("other","posterflix_wall")?` style="--wallimg:url(&quot;${esc(IU("other","posterflix_wall"))}&quot;)"`:""}><button class="pfnav prev" type="button" aria-label="Previous poster">‹</button><button class="pfnav next" type="button" aria-label="Next poster">›</button><div class="cc" tabindex="0" role="region" aria-roledescription="carousel" aria-label="${esc(t("pf_title"))}"><div class="ccv"><div class="ccr">${it.map((i,n)=>`<a class="ccc" data-pfc data-n="${n}" href="${esc(pfLink(i.href,"home_section"))}" target="_blank" rel="noopener" draggable="false" aria-label="${esc(i.title)}"><div class="frame"><div class="mat"><img data-pf src="${esc(i.img)}" alt="${esc(i.title)} poster" loading="${n<4||n>it.length-4?"eager":"lazy"}" draggable="false" referrerpolicy="no-referrer"></div></div><i class="ccsh"></i></a>`).join("")}</div></div></div><div class="cccap" aria-live="polite"></div></div></div>`:`<div class="ban"><div><b>${esc(t("pf_ban"))}</b><div class="tiny">posterflix.in</div></div>${cta}</div>`}</div>`;pfHide(el);pfCC(el)}
 function pfRail(el){const h=el.querySelector(".hang"),pv=el.querySelector(".pfnav.prev"),nx=el.querySelector(".pfnav.next");if(!h)return;
  const upd=()=>{const over=h.scrollWidth>h.clientWidth+4;pv.hidden=nx.hidden=!over;pv.disabled=h.scrollLeft<4;nx.disabled=h.scrollLeft+h.clientWidth>=h.scrollWidth-4};
  const step=d=>{const c=h.querySelector(".pc");h.scrollBy({left:d*((c?c.getBoundingClientRect().width:220)+parseFloat(getComputedStyle(h).columnGap||0)),behavior:"smooth"})};
  pv.onclick=()=>step(-1);nx.onclick=()=>step(1);h.addEventListener("scroll",upd,{passive:true});addEventListener("resize",upd);h.querySelectorAll("img").forEach(i=>i.addEventListener("load",upd,{once:true}));upd();setTimeout(upd,600)}
+/* Posterflix circular carousel (inspired by React Bits Circular Carousel): a 3D ring you drag, swipe, arrow or tab through */
+function pfCC(el){const root=el.querySelector(".cc");if(!root)return;const ring=root.querySelector(".ccr"),cap=el.querySelector(".cccap"),pv=el.querySelector(".pfnav.prev"),nx=el.querySelector(".pfnav.next");
+ const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;let cards=[],N=0,step=0,R=0,unit=1,cur=0,tgt=0,raf=0,last=0,front=-1,drag=null,moved=false,hover=false,auto=0,seen=true;
+ const items=()=>(PF.items||[]).filter((_,n)=>ring.querySelector(`[data-n="${n}"]`));
+ const layout=()=>{cards=[...ring.querySelectorAll(".ccc")];N=cards.length;if(!N)return;step=360/N;const w=cards[0].offsetWidth||220,gap=innerWidth<600?14:34;
+  R=N<3?0:(w+gap)/(2*Math.tan(Math.PI/N));unit=step/(w+gap);cards.forEach((c,k)=>c.style.transform=`rotateY(${k*step}deg) translateZ(${R}px)`);paint(true)};
+ const idx=a=>((Math.round(a/step)%N)+N)%N;
+ const paint=force=>{ring.style.transform=`translateZ(${-R}px) rotateX(-4deg) rotateY(${-cur}deg)`;
+  cards.forEach((c,k)=>{let d=((k*step-cur)%360+540)%360-180;d=Math.abs(d);c.style.setProperty("--d",Math.min(1,d/95).toFixed(3));c.style.visibility=d>100?"hidden":"";c.tabIndex=-1});
+  const f=idx(cur);if(f!==front||force){front=f;const c=cards[f];if(c){c.tabIndex=0;cards.forEach(x=>x.classList.toggle("on",x===c));const n=+c.dataset.n,i=(PF.items||[])[n]||{};
+   cap.innerHTML=`<b>${esc(i.title||"")}</b>${i.medium?`<small>${esc(i.medium)}</small>`:""}<a href="${esc(c.href)}" target="_blank" rel="noopener">${esc(t("pf_view"))} →</a><span class="ccn">${String(f+1).padStart(2,"0")} <i>/</i> ${String(N).padStart(2,"0")}</span>`}}};
+ const loop=ts=>{const dt=Math.min(.05,(ts-(last||ts))/1000);last=ts;if(!drag){cur+=(tgt-cur)*(RM?1:Math.min(1,dt*7))}paint();if(drag||Math.abs(tgt-cur)>.02)raf=requestAnimationFrame(loop);else{cur=tgt;paint();raf=0;last=0}};
+ const kick=()=>{if(!raf){last=0;raf=requestAnimationFrame(loop)}};
+ const go=d=>{tgt=Math.round(tgt/step)*step+d*step;kick()};
+ const goTo=k=>{const a=k*step;let d=((a-cur)%360+540)%360-180;tgt=cur+d;tgt=Math.round(tgt/step)*step;kick()};
+ pv.onclick=()=>{go(-1);rest()};nx.onclick=()=>{go(1);rest()};
+ root.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){e.preventDefault();go(1);rest()}else if(e.key==="ArrowLeft"){e.preventDefault();go(-1);rest()}});
+ root.addEventListener("pointerdown",e=>{if(e.button)return;drag={x:e.clientX,y:e.clientY,a:cur,v:0,lx:e.clientX,lt:performance.now(),id:e.pointerId,on:false};moved=false;kick()});
+ addEventListener("pointermove",e=>{if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.on){if(Math.abs(dx)<6)return;if(Math.abs(dy)>Math.abs(dx)){drag=null;return}drag.on=true;moved=true;root.classList.add("drag")}
+  const now=performance.now();drag.v=(e.clientX-drag.lx)/Math.max(1,now-drag.lt);drag.lx=e.clientX;drag.lt=now;cur=drag.a-dx*unit;tgt=cur},{passive:true});
+ const up=()=>{if(!drag)return;if(drag.on){tgt=Math.round((cur-drag.v*unit*260)/step)*step;root.classList.remove("drag")}drag=null;rest();kick()};
+ addEventListener("pointerup",up);addEventListener("pointercancel",up);
+ root.addEventListener("click",e=>{const c=e.target.closest(".ccc");if(moved){e.preventDefault();moved=false;return}if(c&&+cards.indexOf(c)!==front){e.preventDefault();goTo(cards.indexOf(c));rest()}});
+ root.addEventListener("wheel",e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&Math.abs(e.deltaX)>2){e.preventDefault();cur+=e.deltaX*unit*.6;tgt=Math.round(cur/step)*step;kick();rest()}},{passive:false});
+ root.addEventListener("focusin",e=>{const c=e.target.closest(".ccc");if(c&&cards.indexOf(c)!==front)goTo(cards.indexOf(c))});
+ /* gentle auto-spin; pauses on hover, focus, drag, when off-screen or tab hidden */
+ const rest=()=>{clearInterval(auto);if(RM||N<2)return;auto=setInterval(()=>{if(!hover&&!drag&&seen&&!document.hidden&&!root.contains(document.activeElement))go(1)},3800)};
+ el.addEventListener("pointerenter",e=>{if(e.pointerType==="mouse")hover=true});el.addEventListener("pointerleave",()=>hover=false);
+ if("IntersectionObserver"in window)new IntersectionObserver(([en])=>seen=en.isIntersecting).observe(root);
+ new MutationObserver(()=>layout()).observe(ring,{childList:true});
+ let rz;addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(layout,120)});
+ layout();requestAnimationFrame(()=>{root.classList.add("ready");layout()});rest()}
 function pfPopup(){if(!EMBED||/\/admin|\/migrate/.test(location.pathname))return;try{if(sessionStorage.getItem("pf_pop"))return}catch(e){}
  setTimeout(async()=>{await pfLoad();if(document.querySelector(".pfpop")||$("#drawer.on"))return;const it=(PF.all||[]).filter(i=>i.marvel).slice(0,3),d=document.createElement("div");d.className="pfpop";d.setAttribute("role","dialog");d.setAttribute("aria-label",t("pf_pop_title"));
   d.innerHTML=`<button class="x" aria-label="${esc(t("close"))}">×</button><h3>${esc(t("pf_pop_title"))}</h3><p>${esc(t("pf_pop_text"))}</p>${it.length?`<div class="th">${it.map(i=>`<img data-pf src="${esc(i.img)}" alt="${esc(i.title)}" referrerpolicy="no-referrer">`).join("")}</div>`:""}<div class="row"><a class="btn red" href="${esc(pfLink(PF.url,"popup"))}" target="_blank" rel="noopener">${esc(t("pf_pop_cta"))}</a><button class="later">${esc(t("pf_later"))}</button></div>`;
