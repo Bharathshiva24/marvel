@@ -293,35 +293,15 @@ h3{font-size:24px}
 .spoil.lock>*{filter:blur(7px);user-select:none}
 .spoil.lock::after{content:attr(data-hint);position:absolute;inset:0;display:grid;place-items:center;font:700 13px var(--fb);color:var(--ink);text-align:center;padding:8px}
 @media(max-width:560px){.dhero{grid-template-columns:110px minmax(0,1fr);padding:22px 18px}.dhero .poster{font-size:16px}.dsec{padding:0 18px 22px}}
-/* detail popup right-side options */
-.dvsw{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:6px;padding:10px clamp(22px,4vw,56px);background:rgba(10,11,15,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.dvsw button{font:600 12px var(--fb);padding:6px 12px;border-radius:999px;border:1px solid var(--line2);background:none;color:var(--mut)}
-.dvsw button[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
+/* detail popup: lead characters on the right */
 .dhero.hs{grid-template-columns:clamp(150px,16vw,220px) minmax(0,1fr) minmax(300px,440px)}
 .dside{align-self:stretch;min-width:0}
 @media(max-width:1099px){.dhero.hs{grid-template-columns:clamp(110px,16vw,220px) minmax(0,1fr)}.dside{grid-column:1/-1}}
-.dtr{position:relative;display:block;align-self:end;aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1px solid var(--line2);box-shadow:0 24px 60px rgba(0,0,0,.55);color:#fff}
-.dtr img,.dtr .ph,.dtr .ph *{width:100%;height:100%;object-fit:cover;display:block}
-.dtr::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.8))}
-.dtr .play{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:50%;display:grid;place-items:center;background:rgba(229,9,20,.92);box-shadow:0 10px 30px rgba(229,9,20,.45);z-index:1;transition:transform .25s var(--ease)}
-.dtr:hover .play{transform:translate(-50%,-50%) scale(1.08)}
-.dtr .cap{position:absolute;left:14px;right:14px;bottom:12px;z-index:1;display:flex;justify-content:space-between;align-items:baseline;font:700 15px var(--fb)}.dtr .cap small{font:600 12px var(--fb);color:#cfcac2}
-.dfacts{align-self:end;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line2);border-radius:8px;overflow:hidden}
-.dfacts div{background:rgba(12,13,18,.82);backdrop-filter:blur(8px);padding:14px 12px}
-.dfacts b{display:block;font:900 34px/1 var(--fd);letter-spacing:.01em}.dfacts span{display:block;margin-top:6px;font:500 12px var(--fb);color:var(--mut)}
 .dcast{align-self:end;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .dcast button{position:relative;padding:0;border:1px solid var(--line2);border-radius:8px;overflow:hidden;background:#151821;aspect-ratio:3/4;color:#fff;text-align:left}
 .dcast img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s var(--ease)}.dcast button:hover img{transform:scale(1.05)}
 .dcast .ini{display:grid;place-items:center;height:100%}.dcast .ini .av{width:56px;height:56px;font-size:18px}
 .dcast .cap{position:absolute;inset:auto 0 0;padding:28px 8px 8px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85))}.dcast b{display:block;font:700 12px/1.2 var(--fb)}.dcast small{display:block;font:500 11px var(--fb);color:#cfcac2;margin-top:2px}
-.dconn{align-self:end}
-.dconn .row{display:flex;align-items:center;gap:8px}
-.dconn i{font-style:normal;color:var(--mut)}
-.dconn .dc{flex:1;min-width:0;max-width:96px;padding:0;border:0;background:none;color:var(--ink);text-align:left}
-.dconn .dc .poster{font-size:11px;transition:transform .25s var(--ease)}.dconn .dc:hover .poster{transform:translateY(-3px)}
-.dconn .dc.me{max-width:116px}.dconn .dc.me .poster{box-shadow:0 0 0 2px var(--red)}
-.dconn .dc small{display:block;margin-top:6px;font:600 11px/1.25 var(--fb);color:var(--mut);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.dconn .lbl{display:flex;justify-content:space-between;margin-top:8px;font:700 11px var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--red2)}
 /* ===== watch guide ===== */
 .targets{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#2a2e3a transparent}
 .targets button{flex:none;width:112px;border:0;background:none;padding:0;scroll-snap-align:start;text-align:left;color:var(--ink)}
@@ -736,30 +716,14 @@ function openPlayer(yt,pid,label){const x=BY[pid];const d=document.createElement
  document.body.append(d);stopVO();const close=()=>{d.remove();document.removeEventListener("keydown",k,true)};const k=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};
  document.addEventListener("keydown",k,true);d.onclick=e=>{if(e.target===d||e.target.closest(".x"))close()};$(".x",d).focus()}
 document.addEventListener("click",e=>{const a=e.target.closest("[data-play]");if(!a||e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();e.stopPropagation();openPlayer(a.dataset.play,a.dataset.pid,a.dataset.pl)},true);
-/* Detail popup: right-side panel options (preview: A trailer, B facts, C cast, D connections) */
-let DV=(()=>{try{const q=new URLSearchParams(location.search).get("dv");return /^[abcd]$/.test(q||"")?q:(localStorage.getItem("dv")||"a")}catch(e){return "a"}})();
-function dSide(x,back,fwd,pc){
- if(DV==="a"){const tr=trailer(x),vid=((VID[x.id]||[]).find(v=>v.t==="trailer")||{}).yt||YT[x.id];
-  return `<a class="dside dtr" href="${tr.u}"${tr.a} target="_blank" rel="noopener" aria-label="${esc(tr.l)}">${vid?`<img src="https://i.ytimg.com/vi/${esc(vid)}/hqdefault.jpg" alt="" loading="lazy">`:`<div class="ph">${IU("posters",x.id)?imgTag(IU("posters",x.id)):art(x)}</div>`}<span class="play">${ICON.yt.replace("<svg",'<svg width="34" height="34"')}</span><span class="cap"><b>${esc(tr.l)}</b><small>YouTube</small></span></a>`}
- if(DV==="b"){const up=x.dt>NOW,days=Math.ceil((x.dt-NOW)/864e5);const f=[
-   up?[days,"days to go"]:[x.dt.getFullYear(),"released"],
-   [x.ext?"—":"#"+(x.rank+1),"in story order"],
-   x.rt?[x.rt,"minutes"]:x.ep?[x.ep,"episodes"]:["TBA","runtime"],
-   [pc.length,pc.length===1?"post-credit scene":"post-credit scenes"],
-   [back.length,"titles it builds on"],[fwd.length,"titles it leads into"]];
-  return `<div class="dside dfacts">${f.map(([n,l])=>`<div><b>${esc(String(n))}</b><span>${esc(l)}</span></div>`).join("")}</div>`}
- if(DV==="c"){const cs=x.cast.map(c=>c.split("|")).filter(([a,ch])=>ch&&CH[ch]).slice(0,4);if(!cs.length)return "";
-  return `<div class="dside dcast">${cs.map(([a,ch])=>{const u=IU("characters",ch);return`<button data-char="${ch}">${u?`<img src="${esc(u)}" alt="" loading="lazy">`:`<span class="ini">${av(ch)}</span>`}<span class="cap"><b>${esc(CH[ch].split(" / ")[0])}</b><small>${esc(a)}</small></span></button>`}).join("")}</div>`}
- const mini=(y,me)=>`<button class="dc${me?" me":""}" ${me?"disabled":`data-open="${y.id}"`}>${poster(y,false)}<small>${esc(y.t)}</small></button>`;
- const b2=back.slice(-2),f2=fwd.slice(0,2);if(!b2.length&&!f2.length)return "";
- return `<div class="dside dconn"><div class="row">${b2.map(y=>mini(y)).join("")}${b2.length?'<i>→</i>':""}${mini(x,true)}${f2.length?'<i>→</i>':""}${f2.map(y=>mini(y)).join("")}</div><div class="lbl"><span>${b2.length?"Builds on":""}</span><span>${f2.length?"Leads into":""}</span></div></div>`}
-function dvSwitch(){return `<div class="dvsw" role="group" aria-label="Right side preview">${[["a","Trailer"],["b","Facts"],["c","Cast"],["d","Connections"]].map(([k,l])=>`<button data-dv="${k}" aria-pressed="${DV===k}">${k.toUpperCase()} · ${l}</button>`).join("")}</div>`}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-dv]");if(!b)return;DV=b.dataset.dv;try{localStorage.setItem("dv",DV)}catch(_){}if(DR.id){const d=$("#drawer"),st=d.scrollTop;openT(DR.id,true);d.scrollTop=st}});
+/* Detail popup: the four lead characters fill the right side of the header */
+function dSide(x){const cs=x.cast.map(c=>c.split("|")).filter(([a,ch])=>ch&&CH[ch]).slice(0,4);if(!cs.length)return "";
+ return `<div class="dside dcast">${cs.map(([a,ch])=>{const u=IU("characters",ch);return`<button data-char="${ch}">${u?`<img src="${esc(u)}" alt="" loading="lazy">`:`<span class="ini">${av(ch)}</span>`}<span class="cap"><b>${esc(CH[ch].split(" / ")[0])}</b><small>${esc(a)}</small></span></button>`}).join("")}</div>`}
 function openT(id,quiet){const x=BY[id];if(!x)return;DR.id=id;const d=$("#drawer");
  const back=x.cn.map(c=>BY[c]).filter(Boolean),fwd=(FWD[id]||[]).map(c=>BY[c]);
  const link=y=>`<button class="chip" data-open="${y.id}"><span class="dot" style="background:${PC[y.ph]}"></span>${esc(y.t)}</button>`;
  const tr=trailer(x),pc=L(x,"pc")||[],sp=L(x,"sp");
- d.innerHTML=`${dvSwitch()}<div class="dhero hs"><div class="bg">${IU("posters",x.id)?imgTag(IU("posters",x.id)):art(x)}</div><button class="x" data-close aria-label="${esc(t("close"))}">${ICON.x}</button>${poster(x)}<div><div class="tiny">${sagaL(x)} · ${phL(x)}</div><h2>${esc(x.t)}</h2><div class="meta"><span>${x.up?t("releases",{d:fmt(x)}):fmt(x)}</span><span>${kindL(x)}</span><span>${lenL(x)}</span><span>${esc(t("set_in",{e:L(x,"era")}))}</span>${x.ext?"":`<span>${t("story_no",{n:x.rank+1})}</span>`}</div></div>${dSide(x,back,fwd,pc)}</div>
+ d.innerHTML=`<div class="dhero hs"><div class="bg">${IU("posters",x.id)?imgTag(IU("posters",x.id)):art(x)}</div><button class="x" data-close aria-label="${esc(t("close"))}">${ICON.x}</button>${poster(x)}<div><div class="tiny">${sagaL(x)} · ${phL(x)}</div><h2>${esc(x.t)}</h2><div class="meta"><span>${x.up?t("releases",{d:fmt(x)}):fmt(x)}</span><span>${kindL(x)}</span><span>${lenL(x)}</span><span>${esc(t("set_in",{e:L(x,"era")}))}</span>${x.ext?"":`<span>${t("story_no",{n:x.rank+1})}</span>`}</div></div>${dSide(x)}</div>
  <div class="dsec"><div class="actions"><a class="btn red" href="${tr.u}"${tr.a} target="_blank" rel="noopener">${ICON.yt}${esc(tr.l)}</a><button class="btn" aria-pressed="${isW(id)}" data-w="${id}">${isW(id)?ICON.check+t("watched"):t("mark_watched")}</button><button class="btn" aria-pressed="${inL(id)}" data-l="${id}">${inL(id)?ICON.check+t("on_list"):ICON.plus+t("add_list")}</button></div>
  <div class="chips" style="margin-top:6px"><button class="chip" data-guide="${id}">${t("watch_before")}</button>${x.ext?"":`<button class="chip" data-vo="${id}">${t("narrate")}</button><button class="chip" data-ontl="${id}">${t("show_tl")}</button>`}</div>
  <div class="dcols"><div class="dcol">
