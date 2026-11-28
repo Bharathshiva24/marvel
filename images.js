@@ -168,6 +168,87 @@ characters:{
   "ramonda":"", // Ramonda
   "sharon":"", // Sharon Carter
   "aldrich":"", // Aldrich Killian
+  "stane":"", // Obadiah Stane / Iron Monger
+  "betty":"", // Betty Ross
+  "blonsky":"", // Emil Blonsky / Abomination
+  "sterns":"", // Samuel Sterns / The Leader
+  "hammer":"", // Justin Hammer
+  "vanko":"", // Ivan Vanko / Whiplash
+  "odin":"", // Odin
+  "selvig":"", // Erik Selvig
+  "heimdall":"", // Heimdall
+  "phillips":"", // Col. Chester Phillips
+  "howard":"", // Howard Stark
+  "hansen":"", // Maya Hansen
+  "malekith":"", // Malekith
+  "frigga":"", // Frigga
+  "pierce":"", // Alexander Pierce
+  "cross":"", // Darren Cross / Yellowjacket
+  "melina":"", // Melina Vostokoff
+  "taskmaster":"", // Antonia Dreykov / Taskmaster
+  "may":"", // May Parker
+  "christine":"", // Christine Palmer
+  "ancient":"", // The Ancient One
+  "kaecilius":"", // Kaecilius
+  "grandmaster":"", // Grandmaster
+  "foster":"", // Bill Foster
+  "yonrogg":"", // Yon-Rogg
+  "maria":"", // Maria Rambeau
+  "lawson":"", // Wendy Lawson / Supreme Intelligence
+  "renslayer":"", // Ravonna Renslayer
+  "watcher":"", // Uatu / The Watcher
+  "darcy":"", // Darcy Lewis
+  "woo":"", // Jimmy Woo
+  "katy":"", // Katy
+  "xialing":"", // Xu Xialing
+  "jiang":"", // Ying Nan
+  "thena":"", // Thena
+  "ajak":"", // Ajak
+  "kingo":"", // Kingo
+  "sprite":"", // Sprite
+  "dane":"", // Dane Whitman
+  "harrow":"", // Arthur Harrow
+  "layla":"", // Layla El-Faouly / Scarlet Scarab
+  "khonshu":"", // Khonshu
+  "america":"", // America Chavez
+  "kamran":"", // Kamran
+  "muneeba":"", // Muneeba Khan
+  "yusuf":"", // Yusuf Khan
+  "zeus":"", // Zeus
+  "jack":"", // Jack Russell / Werewolf by Night
+  "elsa":"", // Elsa Bloodstone
+  "bacon":"", // Kevin Bacon (himself)
+  "evolutionary":"", // The High Evolutionary
+  "adam":"", // Adam Warlock
+  "gravik":"", // Gravik
+  "giah":"", // G'iah
+  "falsworth":"", // Sonya Falsworth
+  "darbenn":"", // Dar-Benn
+  "ob":"", // Ouroboros (O.B.)
+  "skully":"", // Skully
+  "paradox":"", // Mr. Paradox
+  "laura":"", // Laura Kinney / X-23
+  "rio":"", // Rio Vidal / Death
+  "kale":"", // Jennifer Kale
+  "lilia":"", // Lilia Calderu
+  "joaquin":"", // Joaquin Torres / Falcon
+  "isaiah":"", // Isaiah Bradley
+  "sidewinder":"", // Seth Voelker / Sidewinder
+  "karen":"", // Karen Page
+  "heather":"", // Heather Glenn
+  "hood":"", // Parker Robbins / The Hood
+  "joe":"", // Joe McGillicuddy
+  "mephisto":"", // Mephisto
+  "jessica":"", // Jessica Jones
+  "sadie":"", // Role not yet revealed
+  "jocasta":"", // Jocasta
+  "paladin":"", // Paladin
+  "raza":"", // Raza
+  "jean":"", // Jean Grey
+  "storm":"", // Ororo Munroe / Storm
+  "rogue":"", // Rogue
+  "stryker":"", // William Stryker
+  "trask":"", // Bolivar Trask
 },
 /* ---------- 3. OTHER IMAGES ---------- */
 other:{
