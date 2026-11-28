@@ -755,7 +755,7 @@ function openT(id,quiet){const x=BY[id];if(!x)return;DR.id=id;const d=$("#drawer
  <h3>${t("why")}</h3><p>${esc(L(x,"why"))}</p>
  <h3>${x.k==="film"?t("director"):t("director_sr")}</h3><p>${esc(x.dir)}</p>
  <h3>${t("post_credits")}</h3>${pc.length?spoilBlock(pc.length===1?`<p style="margin:0">${esc(pc[0])}</p>`:`<ol style="margin:0;padding-left:18px">${pc.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>`):`<p class="muted">${x.up?t("not_released"):t("none_listed")}</p>`}
- <h3>${t("nav_videos")}</h3><div class="chips">${vids(x).map(v=>`<a class="chip" href="${v.u}"${v.a} target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="16" height="16"')} ${esc(v.l)}</a>`).join("")}</div><p class="hint">${t("yt_note")}</p></div><div class="dcol">
+ <h3>${t("nav_videos")}</h3><div class="chips">${vids(x).map(v=>`<a class="chip" href="${v.u}"${v.a} target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="16" height="16"')} ${esc(v.l)}</a>`).join("")}</div></div><div class="dcol">
  <h3>${t("cast")}</h3><table class="cast"><tbody>${x.cast.map(c=>{const[a,ch]=c.split("|");return`<tr><td>${ch&&CH[ch]?av(ch):'<span class="av" style="background:#262a35">·</span>'}${esc(a)}</td><td>${ch&&CH[ch]?`<button data-char="${ch}">${esc(CH[ch])}</button>`:'<span class="muted">—</span>'}</td></tr>`}).join("")}</tbody></table>
  ${back.length?`<h3>${t("builds_on")}</h3><div class="chips">${back.map(link).join("")}</div>`:""}
  ${fwd.length?`<h3>${t("leads_into")}</h3><div class="chips">${fwd.map(link).join("")}</div>`:""}
