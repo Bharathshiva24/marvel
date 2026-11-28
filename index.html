@@ -261,14 +261,19 @@ h3{font-size:24px}
 /* ===== drawer ===== */
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
 .scrim.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(640px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:80;transform:translateX(104%);transition:transform .45s var(--ease);overflow:auto;overscroll-behavior:contain;box-shadow:-30px 0 80px rgba(0,0,0,.6)}
-.drawer.on{transform:none}
-.dhero{position:relative;padding:28px 28px 24px;display:grid;grid-template-columns:160px minmax(0,1fr);gap:22px;align-items:end;overflow:hidden;isolation:isolate}
+.drawer{position:fixed;inset:clamp(12px,3.2vw,48px);max-width:1280px;margin:0 auto;background:var(--s1);border:1px solid var(--line2);border-radius:10px;z-index:80;opacity:0;visibility:hidden;transform:translateY(18px) scale(.985);transition:opacity .3s ease,transform .4s var(--ease),visibility 0s linear .4s;overflow:auto;overscroll-behavior:contain;box-shadow:0 40px 120px rgba(0,0,0,.75)}
+.drawer.on{opacity:1;visibility:visible;transform:none;transition:opacity .3s ease,transform .4s var(--ease),visibility 0s}
+.dhero{position:relative;padding:clamp(28px,4vw,56px) clamp(22px,4vw,56px) 28px;display:grid;grid-template-columns:clamp(150px,16vw,220px) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:end;overflow:hidden;isolation:isolate}
+.drawer .dsec{padding:0 clamp(22px,4vw,56px) 40px}
+.dcols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 clamp(28px,4vw,64px)}
+@media(max-width:900px){.dcols{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){.drawer{inset:0;border-radius:0;border:0}}
+@media(prefers-reduced-motion:reduce){.drawer{transform:none}}
 .dhero .bg{position:absolute;inset:-20%;z-index:-2;filter:blur(36px) brightness(.5) saturate(1.3)}
 .dhero .bg svg,.dhero .bg img{width:100%;height:100%;object-fit:cover}
 .dhero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 30%,var(--s1))}
 .dhero .poster{font-size:24px}
-.dhero h2{font-size:clamp(32px,4vw,44px);text-transform:uppercase;font-weight:900}
+.dhero h2{font-size:clamp(32px,4.4vw,64px);text-transform:uppercase;font-weight:900}
 .x{position:absolute;right:14px;top:14px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);background:rgba(0,0,0,.45);backdrop-filter:blur(8px);display:grid;place-items:center;z-index:2}
 .x svg{width:18px;height:18px}
 .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
@@ -709,14 +714,16 @@ function openT(id,quiet){const x=BY[id];if(!x)return;DR.id=id;const d=$("#drawer
  d.innerHTML=`<div class="dhero"><div class="bg">${IU("posters",x.id)?imgTag(IU("posters",x.id)):art(x)}</div><button class="x" data-close aria-label="${esc(t("close"))}">${ICON.x}</button>${poster(x)}<div><div class="tiny">${sagaL(x)} · ${phL(x)}</div><h2>${esc(x.t)}</h2><div class="meta"><span>${x.up?t("releases",{d:fmt(x)}):fmt(x)}</span><span>${kindL(x)}</span><span>${lenL(x)}</span><span>${esc(t("set_in",{e:L(x,"era")}))}</span>${x.ext?"":`<span>${t("story_no",{n:x.rank+1})}</span>`}</div></div></div>
  <div class="dsec"><div class="actions"><a class="btn red" href="${tr.u}"${tr.a} target="_blank" rel="noopener">${ICON.yt}${esc(tr.l)}</a><button class="btn" aria-pressed="${isW(id)}" data-w="${id}">${isW(id)?ICON.check+t("watched"):t("mark_watched")}</button><button class="btn" aria-pressed="${inL(id)}" data-l="${id}">${inL(id)?ICON.check+t("on_list"):ICON.plus+t("add_list")}</button></div>
  <div class="chips" style="margin-top:6px"><button class="chip" data-guide="${id}">${t("watch_before")}</button>${x.ext?"":`<button class="chip" data-vo="${id}">${t("narrate")}</button><button class="chip" data-ontl="${id}">${t("show_tl")}</button>`}</div>
+ <div class="dcols"><div class="dcol">
  <h3>${t("story")}</h3><p>${esc(L(x,"log"))}</p>${sp?spoilBlock(`<b>${t("full_story")}:</b> ${esc(sp)}`):""}
  <h3>${t("why")}</h3><p>${esc(L(x,"why"))}</p>
  <h3>${x.k==="film"?t("director"):t("director_sr")}</h3><p>${esc(x.dir)}</p>
+ <h3>${t("post_credits")}</h3>${pc.length?spoilBlock(pc.length===1?`<p style="margin:0">${esc(pc[0])}</p>`:`<ol style="margin:0;padding-left:18px">${pc.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>`):`<p class="muted">${x.up?t("not_released"):t("none_listed")}</p>`}
+ <h3>${t("nav_videos")}</h3><div class="chips">${vids(x).map(v=>`<a class="chip" href="${v.u}"${v.a} target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="16" height="16"')} ${esc(v.l)}</a>`).join("")}</div><p class="hint">${t("yt_note")}</p></div><div class="dcol">
  <h3>${t("cast")}</h3><table class="cast"><tbody>${x.cast.map(c=>{const[a,ch]=c.split("|");return`<tr><td>${ch&&CH[ch]?av(ch):'<span class="av" style="background:#262a35">·</span>'}${esc(a)}</td><td>${ch&&CH[ch]?`<button data-char="${ch}">${esc(CH[ch])}</button>`:'<span class="muted">—</span>'}</td></tr>`}).join("")}</tbody></table>
  ${back.length?`<h3>${t("builds_on")}</h3><div class="chips">${back.map(link).join("")}</div>`:""}
  ${fwd.length?`<h3>${t("leads_into")}</h3><div class="chips">${fwd.map(link).join("")}</div>`:""}
- <h3>${t("post_credits")}</h3>${pc.length?spoilBlock(pc.length===1?`<p style="margin:0">${esc(pc[0])}</p>`:`<ol style="margin:0;padding-left:18px">${pc.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>`):`<p class="muted">${x.up?t("not_released"):t("none_listed")}</p>`}
- <h3>${t("nav_videos")}</h3><div class="chips">${vids(x).map(v=>`<a class="chip" href="${v.u}"${v.a} target="_blank" rel="noopener">${ICON.yt.replace("<svg",'<svg width="16" height="16"')} ${esc(v.l)}</a>`).join("")}</div><p class="hint">${t("yt_note")}</p></div>`;
+ </div></div></div>`;
  d.classList.add("on");$("#scrim").classList.add("on");if(!quiet){d.scrollTop=0;setTimeout(()=>$(".x",d).focus(),60)}}
 function closeT(){DR.id=null;$("#drawer").classList.remove("on");$("#scrim").classList.remove("on")}
 $("#scrim").onclick=closeT;
