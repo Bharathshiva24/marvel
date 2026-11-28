@@ -736,7 +736,7 @@ function vsDraw(){const el=$("#vstat");if(!el||!VS.data)return;const f=n=>{try{r
  el.innerHTML=`<span class="lv"><i aria-hidden="true"></i>${esc(t("st_live",{n:f(VS.data.live)}))}</span><span class="vw"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${esc(t("st_views",{n:f(VS.data.views)}))}</span>`;el.hidden=false}
 function vsInit(){if(!EMBED||/\/admin|\/migrate/.test(location.pathname))return;vsPing(true);setInterval(()=>vsPing(false),120000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)vsPing(false)})}
 /* ================= POSTERFLIX PROMO ================= */
-const PF={url:"https://posterflix.in/search?q=marvel",items:null,req:null};
+const PF={url:"https://posterflix.in/search?q=superhero",items:null,req:null};
 const pfLink=(u,c)=>{try{const x=new URL(u);x.searchParams.set("utm_source","marvel-timeline");x.searchParams.set("utm_medium","referral");x.searchParams.set("utm_campaign",c);return x.href}catch(e){return PF.url}};
 function pfLoad(){return PF.req||(PF.req=fetch("/api/posterflix?v=hero2").then(r=>r.ok?r.json():{}).then(j=>{const a=(j&&Array.isArray(j.items)?j.items:[]).filter(i=>i&&i.marvel!==false&&!/^dc$/i.test(i.brand||"")&&/^https:\/\//.test(i.img)&&/^https:\/\/posterflix\.in\//.test(i.href));for(let k=a.length-1;k>0;k--){const r=Math.floor(Math.random()*(k+1));[a[k],a[r]]=[a[r],a[k]]}PF.all=a;PF.items=a}).catch(()=>{PF.items=[]}))}
 function pfHide(root){root.querySelectorAll("img[data-pf]").forEach(i=>i.addEventListener("error",()=>{const c=i.closest("[data-pfc]");if(c)c.remove()},{once:true}))}

@@ -1,9 +1,9 @@
 // GET /api/posterflix → { url, items:[{ id, title, img, full, href, by, medium }] }
 // Reads Posterflix's own catalog (the POSTERS list in /app/catalog.<hash>.js) and returns its Superheroes
-// category, which is what posterflix.in/search?q=marvel shows, minus DC-inspired pieces. Shuffled on each load.
+// category, which is what posterflix.in/search?q=superhero shows, minus DC-inspired pieces. Shuffled on each load.
 // Cached at Vercel's edge for an hour. If Posterflix can't be read, the last known Marvel posters are used.
 const ORIGIN = "https://posterflix.in";
-const PAGE = ORIGIN + "/search?q=marvel";
+const PAGE = ORIGIN + "/search?q=superhero";
 const UA = { "user-agent": "Mozilla/5.0 (compatible; TheTimelineBot/1.0; +https://marvel-timeline.vercel.app)" };
 const FALLBACK = [
   { id: "handprint", title: "The Handprint", medium: "Distressed photo-realism" },
@@ -15,7 +15,7 @@ const FALLBACK = [
   { id: "rainbowroad", title: "Rainbow Road to the Arena", medium: "Synthwave sci-fi art" },
   { id: "hulk", title: "The Gentle Giant", medium: "Hyperreal minimal render" },
 ];
-// Posterflix's "marvel" search shows its Superheroes category. These DC-inspired pieces are left out.
+// Posterflix's "superhero" search shows its Superheroes category. These DC-inspired pieces are left out.
 const SKIP = new Set(["flash", "superman", "batman"]);
 const ID = /^[a-z0-9-]{1,60}$/;
 
